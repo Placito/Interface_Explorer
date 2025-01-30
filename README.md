@@ -1,41 +1,55 @@
-# Interface_Explorer
+# Interface Explorer
 
-I developed this application using the Rust programming language in combination with the Tauri framework.  
+Interface Explorer is a desktop application developed using the **Rust** programming language and the **Tauri** framework. It leverages **React** for the frontend and is powered by **Vite** for a fast development experience.
+
+---
+
+## About the Project
+
+This application provides detailed insights into your system's network interfaces and allows for managing IP addresses seamlessly.
 
 ---
 
 ## Features
 
-1. **List of Network Interfaces**  
-   Displays all interfaces (active/inactive) with the following details:  
-   - Name  
-   - Type (Wi-Fi/Ethernet)  
-   - Status (active/inactive)  
-   - MAC address  
+### 1. **List of Network Interfaces**
+Displays all network interfaces (active/inactive) with the following details:
+- **Name**  
+- **Type** (Wi-Fi/Ethernet)  
+- **Status** (active/inactive)  
+- **MAC Address**
 
-2. **Interface Selection**  
-   Allows the user to select a specific network interface.
+### 2. **Interface Selection**
+Enables users to select a specific network interface for detailed management.
 
-3. **IP Address Listing**  
-   Lists all IP addresses configured on the selected interface.
+### 3. **IP Address Listing**
+Lists all IP addresses (both IPv4 and IPv6) configured on the selected network interface.
 
-4. **IPv4 Address Management**  
-   Enables the following operations on the selected interface:  
-   - Create IPv4 addresses  
-   - Delete IPv4 addresses  
-   - Modify existing IPv4 addresses
+### 4. **IPv4 Address Management**
+Offers the following operations for IPv4 addresses on the selected interface:
+- **Create IPv4 addresses**  
+- **Delete IPv4 addresses**  
+- **Modify existing IPv4 addresses**
 
-----
+---
 
-## To get started:
-  cd "Interface Explorer"
-  bun install
-  bun run tauri dev
-  # Tauri + React
+## Getting Started
 
-This template should help get you started developing with Tauri and React in Vite.
+### Prerequisites
+Make sure you have the following installed on your system:
+- **Rust**  
+- **Bun** ([Installation Guide](https://bun.sh/))  
+- **Node.js** (optional, for additional development tooling)
 
-## Recommended IDE Setup
+---
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+### Installation & Setup
 
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/Interface_Explorer.git
+   cd Interface_Explorer
+2. Install Dependencies using Bun:
+   ``bun install```
+3. Start development server:
+   ``bun run tauri dev```
