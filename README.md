@@ -50,6 +50,6 @@ Make sure you have the following installed on your system:
    git clone https://github.com/yourusername/Interface_Explorer.git
    cd Interface_Explorer
 2. Install Dependencies using Bun:
-   ``bun install```
+   ``bun install``
 3. Start development server:
-   ``bun run tauri dev```
+   ``bun run tauri dev``
