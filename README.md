@@ -17,7 +17,7 @@ Displays all network interfaces (active/inactive) with the following details:
 - **Name**  
 - **Type** (Wi-Fi/Ethernet)  
 - **Status** (active/inactive)  
-- **MAC Address**
+- **MAC Address** (Media Access Control)
 
 ### 2. **Interface Selection**
 Enables users to select a specific network interface for detailed management.

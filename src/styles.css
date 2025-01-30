@@ -1,0 +1,72 @@
+/* Center the content */
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  /* Button styles */
+  .button {
+    background-color: rgb(84, 31, 47);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 16px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
+  }
+  
+  .button:hover {
+    background-color: rgb(198, 29, 33);
+  }
+  
+  /* Button container to space them out horizontally */
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  /* Table Styles */
+  .table-container {
+    margin-top: 20px;
+  }
+  
+  table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: rgb(84, 31, 47);
+    color: white;
+  }
+  
+  td {
+    border-top: 1px solid rgb(84, 31, 47);
+  }
+  
+  .no-interfaces {
+    text-align: center;
+    font-size: 18px;
+    color: #6b7280; /* Tailwind gray-600 */
+  }
+  
+  /* Header Styling */
+  h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333; /* Dark text */
+  }
+  
