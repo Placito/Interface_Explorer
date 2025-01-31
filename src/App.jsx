@@ -189,9 +189,12 @@ function App() {
         <div className="button-container">
           <button
             onClick={() => {
-              togglePanelVisibility();
-              handleButtonClick("display");
-              saveInterfaces();
+              togglePanelVisibility(); // Toggle the visibility of the panel
+              handleButtonClick("display"); // Track the active button
+              // Call saveInterfaces only when the panel is shown
+              if (!isPanelVisible) { // Only save when panel is being shown
+                saveInterfaces();
+              }
             }}
             className={`button ${activeButton === "display" ? "active" : ""}`}
           >

@@ -1,10 +1,10 @@
+use std::env;
 use std::fs;
 use std::path::PathBuf;
 use serde::{Serialize, Deserialize};
 use tauri::command;
 use pnet::datalink; // For listing network interfaces
 use tauri::Config;
-use tauri::api::path; // For file path utilities
 
 // Network data structure
 #[derive(Serialize, Deserialize)]
@@ -16,11 +16,14 @@ struct NetworkInterface {
     ipv4_address: Option<String>,
 }
 
-// Path to save JSON file
-fn get_data_file_path(config: &Config) -> PathBuf {
-    path::app_data_dir(config) 
-        .expect("Failed to get app data directory")
-        .join("network_interfaces.json")
+// Path to save JSON file (to the root of your repository)
+fn get_data_file_path() -> PathBuf {
+    // Get the current working directory (the root of your repo)
+    let current_dir = env::current_dir()
+        .expect("Failed to get current directory");
+
+    // Return the path to the JSON file in the root of the repo
+    current_dir.join("network_interfaces.json")
 }
 
 // List network interfaces
@@ -60,9 +63,9 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
 
 // Save interfaces in a JSON file
 #[command]
-fn save_network_interfaces(interfaces: Vec<NetworkInterface>, config: tauri::State<'_, tauri::Config>) -> Result<(), String> {
+fn save_network_interfaces(interfaces: Vec<NetworkInterface>) -> Result<(), String> {
     // Get the correct file path where JSON should be saved
-    let file_path = get_data_file_path(&config);
+    let file_path = get_data_file_path(); // Get path in root repo
     println!("Saving to file: {:?}", file_path); // Log the path
 
     // Serialize the network interfaces to JSON
@@ -76,11 +79,10 @@ fn save_network_interfaces(interfaces: Vec<NetworkInterface>, config: tauri::Sta
     Ok(())
 }
 
-
 // Load interfaces from a JSON file
 #[command]
-fn load_network_interfaces(config: tauri::State<'_, tauri::Config>) -> Result<Vec<NetworkInterface>, String> {
-    let file_path = get_data_file_path(&config);
+fn load_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
+    let file_path = get_data_file_path(); // Get path in root repo
 
     if !file_path.exists() {
         return Ok(Vec::new()); // Return empty if the file doesn't exist
@@ -97,7 +99,6 @@ fn load_network_interfaces(config: tauri::State<'_, tauri::Config>) -> Result<Ve
 
 fn main() {
     tauri::Builder::default()
-        .manage(tauri::Config::default()) // Manages the `Config` state
         .invoke_handler(tauri::generate_handler![
             list_network_interfaces,
             save_network_interfaces,
