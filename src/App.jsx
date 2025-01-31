@@ -25,6 +25,7 @@ function App() {
     const value = e.target.value.toLowerCase();
     setQuery(value); // Set the search query
 
+    // Filter interfaces based on the search query
     const filtered = interfaces.filter((iface) =>
       iface.name.toLowerCase().includes(value) ||
       iface.status.toLowerCase().includes(value) ||
@@ -97,6 +98,16 @@ function App() {
                 onChange={handleFilterChange}
               />
               <i className="fa-solid fa-magnifying-glass search-icon"></i>
+              {/* Autocomplete dropdown */}
+              {query && filteredInterfaces.length > 0 && (
+                <ul className="autocomplete-dropdown">
+                  {filteredInterfaces.map((iface, index) => (
+                    <li key={index} onClick={() => setQuery(iface.name)}>
+                      {iface.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>
