@@ -40,6 +40,18 @@
   margin-bottom: 20px;
 }
 
+.button_Actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.button_Icon {
+  color: rgb(84, 31, 47);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
 /* Table Styles */
 .table-container {
   margin-top: 20px;

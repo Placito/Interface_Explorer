@@ -222,18 +222,20 @@ function App() {
                       <td>{iface.ip_address || "N/A"}</td>
                       <td>{iface.ipv4_address || "N/A"}</td>
                       <td>
-                        <button
-                          onClick={() => handleUpdate(iface)}
-                          className="button update-button"
-                        >
-                          Update
-                        </button>
-                        <button
-                          onClick={() => handleDelete(iface)}
-                          className="button delete-button"
-                        >
-                          Delete
-                        </button>
+                        <div className="button_Actions">
+                          <button
+                            onClick={() => handleUpdate(iface)}
+                            className="button_Icon"
+                          >
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button
+                            onClick={() => handleDelete(iface)}
+                            className="button_Icon"
+                          >
+                            <i class="fa-solid fa-trash-can"></i>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
