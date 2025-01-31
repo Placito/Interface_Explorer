@@ -42,19 +42,25 @@ function App() {
     setQuery(value);
   
     const filtered = interfaces.filter((iface) => {
-      if (value === "active" && iface.status?.toLowerCase() === "active") return true;
-      if (value === "inactive" && iface.status?.toLowerCase() === "inactive") return true;
-      if (value === "wifi" && iface.interface_type?.toLowerCase().includes("wi-fi")) return true;
-      if (value === "eth" && iface.interface_type?.toLowerCase().includes("eth")) return true;
+      // Strictly include only active interfaces if "active" is typed
+      if (value === "active") return iface.status?.toLowerCase() === "active";
   
+      // Strictly include only inactive interfaces if "inactive" is typed
+      if (value === "inactive") return iface.status?.toLowerCase() === "inactive";
+  
+      // Filters for "wifi" or "eth" queries
+      if (value === "wifi") return iface.interface_type?.toLowerCase().includes("wi-fi");
+      if (value === "eth") return iface.interface_type?.toLowerCase().includes("eth");
+  
+      // General match for other queries
       return matchesFilter(iface, value);
     });
-
+  
     setFilteredInterfaces(filtered);
-
+  
     // Show the dropdown only if there are results and the query is not empty
     setIsDropdownVisible(value.length > 0 && filtered.length > 0);
-  };
+  };  
 
   // Handle key down event for Enter key
   const handleKeyDown = (e) => {
@@ -172,20 +178,26 @@ function App() {
               {isDropdownVisible && (
                 <ul className="autocomplete-dropdown">
                   {filteredInterfaces.map((iface, index) => (
-                    <li key={index} onClick={() => {
-                      setSelectedInterface(iface);
-                      setQuery(iface.name); // Update query to selected interface name
-                      setIsDropdownVisible(false); // Hide dropdown after selection
-                    }}>
+                    <li
+                      key={index}
+                      onClick={() => {
+                        setSelectedInterface(iface);
+                        setQuery(iface.name); // Update query to selected interface name
+                        setIsDropdownVisible(false); // Hide dropdown after selection
+                      }}
+                    >
                       {highlightMatch(iface.name)}
-                      {/* Display extra info like 'active' or 'wifi' */}
-                      {query === 'active' && iface.status === 'active' && (
+                      {/* Add labels for active/inactive status */}
+                      {query === "active" && iface.status?.toLowerCase() === "active" && (
                         <span> (Active)</span>
                       )}
-                      {query === 'wifi' && iface.interface_type.toLowerCase().includes('wifi') && (
+                      {query === "inactive" && iface.status?.toLowerCase() === "inactive" && (
+                        <span> (Inactive)</span>
+                      )}
+                      {query === "wifi" && iface.interface_type?.toLowerCase().includes("wi-fi") && (
                         <span> (Wi-Fi)</span>
                       )}
-                      {query === 'eth' && iface.interface_type.toLowerCase().includes('eth') && (
+                      {query === "eth" && iface.interface_type?.toLowerCase().includes("eth") && (
                         <span> (Ethernet)</span>
                       )}
                     </li>
