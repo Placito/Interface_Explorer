@@ -23,7 +23,6 @@ fn get_data_file_path(config: &Config) -> PathBuf {
 }
 
 // List network interfaces
-// Ethernet: Refers to a wired network connection (e.g., eth0). ; Loopback: Refers to the network interface used for internal communication within the same machine (e.g., lo, also known as localhost). ; 
 #[command]
 fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
     let mut interfaces = Vec::new();
@@ -31,7 +30,7 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
     for iface in datalink::interfaces() {
         let name = &iface.name; 
         let interface_type = match iface.is_up() {
-            true => if iface.is_loopback() { "Loopback" } else { "Ethernet" },
+            true => if iface.is_loopback() { "Wi-Fi" } else { "Ethernet" },
             // If the interface is not up, the type is labeled as Unknown.
             false => "Unknown",
         };
