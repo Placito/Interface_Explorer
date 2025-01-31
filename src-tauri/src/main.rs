@@ -4,6 +4,7 @@ use serde::{Serialize, Deserialize};
 use tauri::command;
 use pnet::datalink; // For listing network interfaces
 use tauri::Config;
+use tauri::api::path; // For file path utilities
 
 // Network data structure
 #[derive(Serialize, Deserialize)]
@@ -17,7 +18,7 @@ struct NetworkInterface {
 
 // Path to save JSON file
 fn get_data_file_path(config: &Config) -> PathBuf {
-    tauri::api::path::app_data_dir(config) 
+    path::app_data_dir(config) 
         .expect("Failed to get app data directory")
         .join("network_interfaces.json")
 }
@@ -60,15 +61,21 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
 // Save interfaces in a JSON file
 #[command]
 fn save_network_interfaces(interfaces: Vec<NetworkInterface>, config: tauri::State<'_, tauri::Config>) -> Result<(), String> {
+    // Get the correct file path where JSON should be saved
     let file_path = get_data_file_path(&config);
+    println!("Saving to file: {:?}", file_path); // Log the path
+
+    // Serialize the network interfaces to JSON
     let json_data = serde_json::to_string_pretty(&interfaces)
         .map_err(|e| format!("Failed to serialize data: {}", e))?;
 
+    // Write the JSON data to the file
     fs::write(&file_path, json_data)
-        .map_err(|e| format!("Failed to write file: {}", e))?;
+        .map_err(|e| format!("Failed to write to file: {}", e))?;
 
     Ok(())
 }
+
 
 // Load interfaces from a JSON file
 #[command]
