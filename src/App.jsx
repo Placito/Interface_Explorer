@@ -109,15 +109,21 @@ function App() {
                 placeholder="Search by Name, Status, MAC, or IP"
                 value={query}
                 onChange={handleFilterChange}
+                onKeyDown={handleKeyDown}
               />
               <i className="fa-solid fa-magnifying-glass search-icon"></i>
               {/* Autocomplete dropdown */}
-              {query && filteredInterfaces.length > 0 && (
+              {isDropdownVisible && (
+
                 <ul className="autocomplete-dropdown">
                   {filteredInterfaces.map((iface, index) => (
-                    <li key={index} onClick={() => setQuery(iface.name)}>
+                    <li key={index} onClick={() => {
+                      setSelectedInterface(iface);
+                      setQuery(iface.name); // Update query to selected interface name
+                      setIsDropdownVisible(false); // Hide dropdown after selection
+                    }}>
                       {iface.name}
-                    </li>
+                  </li>
                   ))}
                 </ul>
               )}
@@ -125,7 +131,8 @@ function App() {
           </div>
         </div>
 
-        {isPanelVisible && (
+        {/* Display selected interface details */}
+        {selectedInterface && (
           <div className="table-container">
             {filteredInterfaces.length > 0 ? (
               <table>
@@ -139,15 +146,13 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredInterfaces.map((iface, index) => (
-                    <tr key={index}>
-                      <td>{iface.name}</td>
-                      <td>{iface.interface_type}</td>
-                      <td>{iface.status}</td>
-                      <td>{iface.mac_address || "N/A"}</td>
-                      <td>{iface.ip_address || "N/A"}</td>
-                    </tr>
-                  ))}
+                  <tr >
+                    <td>{selectedInterface.name}</td>
+                    <td>{selectedInterface.interface_type}</td>
+                    <td>{selectedInterface.status}</td>
+                    <td>{selectedInterface.mac_address || "N/A"}</td>
+                    <td>{selectedInterface.ip_address || "N/A"}</td>
+                  </tr>
                 </tbody>
               </table>
             ) : (
