@@ -20,6 +20,15 @@
   }
   
   .button:hover {
+    background-color: rgb(200, 40, 50);
+  }
+  
+  .button:active {
+    background-color: rgb(198, 29, 33);
+  }
+  
+  /* Add this class to keep the background color after click */
+  .button.active {
     background-color: rgb(198, 29, 33);
   }
   
@@ -70,3 +79,14 @@
     color: #333; /* Dark text */
   }
   
+  /* filters */
+  .filters-container {
+    margin: 20px 0;
+  }
+  
+  .filters input {
+    margin: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
