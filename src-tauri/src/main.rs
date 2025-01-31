@@ -17,7 +17,7 @@ struct NetworkInterface {
 
 // Path to save JSON file
 fn get_data_file_path(config: &Config) -> PathBuf {
-    tauri::api::path::app_data_dir(config) // Pass config to the function
+    tauri::api::path::app_data_dir(config) 
         .expect("Failed to get app data directory")
         .join("network_interfaces.json")
 }

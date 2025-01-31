@@ -15,6 +15,7 @@ function App() {
   const fetchInterfaces = async () => {
     try {
       const result = await invoke("list_network_interfaces");
+      console.log(result); // Check what the result contains
       setInterfaces(result);
       setFilteredInterfaces(result);
     } catch (error) {
@@ -22,20 +23,45 @@ function App() {
     }
   };
 
-  // Filter interfaces based on query
   const handleFilterChange = (e) => {
-    const value = e.target.value.toLowerCase();
+    const value = e.target.value.trim().toLowerCase(); // Remove any leading/trailing spaces and make case-insensitive
     setQuery(value); // Set the search query
 
-    const filtered = interfaces.filter((iface) =>
-      iface.name.toLowerCase().includes(value) ||
-      iface.status.toLowerCase().includes(value) ||
-      (iface.mac_address || "").toLowerCase().includes(value) ||
-      (iface.ip_address || "").toLowerCase().includes(value)
-    );
+    // Filter based on query for names, types, or statuses
+    const filtered = interfaces.filter((iface) => {
+      const mac = iface.mac_address ? iface.mac_address.toLowerCase().trim() : "";
+      const ip = iface.ip_address ? iface.ip_address.toLowerCase().trim() : "";
+      const status = iface.status ? iface.status.toLowerCase().trim() : "";
+      const name = iface.name ? iface.name.toLowerCase().trim() : "";
+      const interfaceType = iface.interface_type ? iface.interface_type.toLowerCase().trim() : "";
+
+      // Check for specific keywords like 'active', 'wifi', 'eth', etc.
+      if (value === 'active' && status.toLowerCase() === 'active') {
+        return true;
+      }
+      if (value === 'inactive' && status.toLowerCase() === 'inactive') {
+        return true;
+      }
+      if (value === 'wifi' && interfaceType.includes('wi-fi')) {
+        return true;
+      }
+      if (value === 'eth' && interfaceType.includes('eth')) {
+        return true;
+      }
+
+      // Otherwise, match name, status, MAC, or IP
+      return (
+        name.includes(value) ||
+        status.includes(value) ||
+        mac.includes(value) ||
+        ip.includes(value)
+      );
+    });
 
     setFilteredInterfaces(filtered);
-    setIsDropdownVisible(filtered.length > 0); // Show dropdown if there are results
+
+    // Show the dropdown only if there are results and the query is not empty
+    setIsDropdownVisible(value.length > 0 && filtered.length > 0);
   };
 
   // Handle key down event for Enter key
@@ -52,6 +78,9 @@ function App() {
   // Toggle the visibility of the panel
   const togglePanelVisibility = () => {
     setIsPanelVisible((prev) => !prev);
+    setSelectedInterface(null); // Clear selected interface when toggling visibility
+    setQuery(""); // Reset search query
+    setFilteredInterfaces(interfaces); // Reset the filtered list
   };
 
   // Set the clicked button as active
@@ -63,6 +92,27 @@ function App() {
   useEffect(() => {
     fetchInterfaces();
   }, []);
+
+  // Define saveInterfaces function 
+  const saveInterfaces = async () => {
+    try {
+        // Call the Tauri command to save interfaces
+        await invoke('save_network_interfaces', { interfaces: interfaces });
+        console.log("Interfaces saved successfully!");
+    } catch (error) {
+        console.error("Error saving interfaces:", error);
+    }
+  };
+
+  // Highlight the matched text in the query
+  const highlightMatch = (text) => {
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.split(regex).map((part, index) =>
+      part.toLowerCase() === query.toLowerCase() ? (
+        <span key={index} style={{ backgroundColor: 'yellow' }}>{part}</span>
+      ) : part
+    );
+  };
 
   return (
     <div className="center">
@@ -77,14 +127,7 @@ function App() {
             }}
             className={`button ${activeButton === "display" ? "active" : ""}`}
           >
-            {isPanelVisible ? (
-              "Hide Network Interfaces"
-            ) : (
-              <>
-                <i className="fas fa-glass-martini" style={{ marginRight: "8px" }}></i>
-                Show Network Interfaces
-              </>
-            )}
+            {isPanelVisible ? "Hide Network Interfaces" : "Show Network Interfaces"}
           </button>
           <button
             onClick={() => {
@@ -94,7 +137,6 @@ function App() {
             }}
             className={`button ${activeButton === "save" ? "active" : ""}`}
           >
-            <i className="fas fa-save" style={{ marginRight: "8px" }}></i>
             Save Interfaces
           </button>
         </div>
@@ -106,7 +148,7 @@ function App() {
               <input
                 type="text"
                 className="glass-input"
-                placeholder="Search by Name, Status, MAC, or IP"
+                placeholder="Search by Name, Status, MAC, IP, Active, Wi-Fi, etc."
                 value={query}
                 onChange={handleFilterChange}
                 onKeyDown={handleKeyDown}
@@ -114,7 +156,6 @@ function App() {
               <i className="fa-solid fa-magnifying-glass search-icon"></i>
               {/* Autocomplete dropdown */}
               {isDropdownVisible && (
-
                 <ul className="autocomplete-dropdown">
                   {filteredInterfaces.map((iface, index) => (
                     <li key={index} onClick={() => {
@@ -122,8 +163,18 @@ function App() {
                       setQuery(iface.name); // Update query to selected interface name
                       setIsDropdownVisible(false); // Hide dropdown after selection
                     }}>
-                      {iface.name}
-                  </li>
+                      {highlightMatch(iface.name)}
+                      {/* Display extra info like 'active' or 'wifi' */}
+                      {query === 'active' && iface.status === 'active' && (
+                        <span> (Active)</span>
+                      )}
+                      {query === 'wifi' && iface.interface_type.toLowerCase().includes('wifi') && (
+                        <span> (Wi-Fi)</span>
+                      )}
+                      {query === 'eth' && iface.interface_type.toLowerCase().includes('eth') && (
+                        <span> (Ethernet)</span>
+                      )}
+                    </li>
                   ))}
                 </ul>
               )}
@@ -131,8 +182,8 @@ function App() {
           </div>
         </div>
 
-        {/* Display selected interface details */}
-        {selectedInterface && (
+        {/* Display network interfaces when panel is visible */}
+        {isPanelVisible && (
           <div className="table-container">
             {filteredInterfaces.length > 0 ? (
               <table>
@@ -146,18 +197,46 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr >
-                    <td>{selectedInterface.name}</td>
-                    <td>{selectedInterface.interface_type}</td>
-                    <td>{selectedInterface.status}</td>
-                    <td>{selectedInterface.mac_address || "N/A"}</td>
-                    <td>{selectedInterface.ip_address || "N/A"}</td>
-                  </tr>
+                  {filteredInterfaces.map((iface, index) => (
+                    <tr key={index}>
+                      <td>{iface.name}</td>
+                      <td>{iface.interface_type}</td>
+                      <td>{iface.status}</td>
+                      <td>{iface.mac_address || "N/A"}</td>
+                      <td>{iface.ip_address || "N/A"}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             ) : (
               <p className="no-interfaces">No interfaces found.</p>
             )}
+          </div>
+        )}
+
+        {/* Display selected interface details */}
+        {selectedInterface && (
+          <div className="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>MAC</th>
+                  <th>IP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{selectedInterface.name}</td>
+                  <td>{selectedInterface.interface_type}</td>
+                  <td>{selectedInterface.status}</td>
+                  <td>{selectedInterface.mac_address || "N/A"}</td>
+                  <td>{selectedInterface.ip_address || "N/A"}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         )}
       </div>

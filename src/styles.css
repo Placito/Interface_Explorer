@@ -1,149 +1,154 @@
 /* Center the content */
 .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-  }
-  
-  /* Button styles */
-  .button {
-    background-color: rgb(84, 31, 47);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 16px;
-    box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
-  }
-  
-  .button:hover {
-    background-color: rgb(200, 40, 50);
-  }
-  
-  .button:active {
-    background-color: rgb(198, 29, 33);
-  }
-  
-  /* Add this class to keep the background color after click */
-  .button.active {
-    background-color: rgb(198, 29, 33);
-  }
-  
-  /* Button container to space them out horizontally */
-  .button-container {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-  
-  /* Table Styles */
-  .table-container {
-    margin-top: 20px;
-  }
-  
-  table {
-    width: 100%;
-    margin: 0 auto;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    padding: 12px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: rgb(84, 31, 47);
-    color: white;
-  }
-  
-  td {
-    border-top: 1px solid rgb(84, 31, 47);
-  }
-  
-  .no-interfaces {
-    text-align: center;
-    font-size: 18px;
-    color: #6b7280; /* Tailwind gray-600 */
-  }
-  
-  /* Header Styling */
-  h1 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333; /* Dark text */
-  }
-  
-  /* Wrapper for the input and icon */
-  .search-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 70%;
-    margin: auto;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 
-  .glass-input {
-    padding: 8px 32px 8px 12px; /* Adjust padding to make space for the icon */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 800px;
-  }
+/* Button styles */
+.button {
+  background-color: rgb(84, 31, 47);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
+}
 
-  .search-icon {
-    position: absolute;
-    right: 12px;
-    color: #aaa;
-    pointer-events: none; /* Prevent the icon from being clicked */
-  }
+.button:hover {
+  background-color: rgb(200, 40, 50);
+}
 
-  /* Autocomplete dropdown */
-  .autocomplete-dropdown {
-    position: absolute;
-    top: 33%;
-    left: 30%;
-    width: 310px;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 4px;
-    max-height: 200px;
-    z-index: 10;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background: rgb(31, 30, 30);
-    color: #fff;
-    padding-left: 0;
-  }
+.button:active {
+  background-color: rgb(198, 29, 33);
+}
 
-  .autocomplete-dropdown li {
-    padding: 8px;
-    cursor: pointer;
-    list-style-type: none; 
-  }
+/* Add this class to keep the background color after click */
+.button.active {
+  background-color: rgb(198, 29, 33);
+}
 
-  .autocomplete-dropdown li:hover {
-    background-color: #f0f0f0;
-    width: 95%;
-    color: #000;
-  }
+/* Button container to space them out horizontally */
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
 
+/* Table Styles */
+.table-container {
+  margin-top: 20px;
+  max-height: 400px; /* Limit the table's height */
+  overflow-y: auto; /* Allow scrolling if the table is too long */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
 
-  /* filters */
-  .filters-container {
-    margin: 20px 0;
-  }
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-  .filters input {
-    margin: 5px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 300px;
-    box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
-  }
+th, td {
+  padding: 12px;
+  text-align: left;
+}
 
+th {
+  background-color: rgb(84, 31, 47);
+  color: white;
+}
 
+td {
+  border-top: 1px solid rgb(84, 31, 47);
+}
+
+.no-interfaces {
+  text-align: center;
+  font-size: 18px;
+  color: #6b7280; /* Tailwind gray-600 */
+}
+
+/* Header Styling */
+h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333; /* Dark text */
+}
+
+/* Wrapper for the input and icon */
+.search-container {
+  align-items: center;
+  width: 85%;
+  margin: auto;
+  z-index: 0;
+}
+
+.glass-input {
+  position: relative;
+  padding: 8px 32px 8px 12px; /* Adjust padding to make space for the icon */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 400px;
+  z-index: 1;
+}
+
+.search-icon {
+  position: absolute;
+  top: 185px;
+  right: 30%;  
+  z-index: 2;
+  color: #aaa;
+  pointer-events: none; /* Prevent the icon from being clicked */
+}
+
+/* Autocomplete dropdown */
+.autocomplete-dropdown {
+  position: absolute;
+  top: 33%;
+  left: 29%;
+  width: 314px;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 4px;
+  max-height: 200px;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: rgb(31, 30, 30);
+  color: #fff;
+  padding-left: 0;
+  overflow-y: auto; /* Ensure the dropdown can scroll if needed */
+}
+
+.autocomplete-dropdown li {
+  padding: 8px;
+  cursor: pointer;
+  list-style-type: none;
+}
+
+.autocomplete-dropdown li:hover {
+  background-color: #f0f0f0;
+  width: 95%;
+  color: #000;
+}
+
+/* filters */
+.filters-container {
+  margin: 20px 0;
+}
+
+.filters input {
+  margin: 5px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 300px;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
+}
