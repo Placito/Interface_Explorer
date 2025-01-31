@@ -79,14 +79,44 @@
     color: #333; /* Dark text */
   }
   
+    /* Wrapper for the input and icon */
+.search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 70%;
+}
+
+.glass-input {
+  width: 100%;
+  padding: 8px 32px 8px 12px; /* Adjust padding to make space for the icon */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  color: #aaa;
+  pointer-events: none; /* Prevent the icon from being clicked */
+}
+
   /* filters */
   .filters-container {
     margin: 20px 0;
   }
   
+  .filters {
+    align-items: center;
+  }
+
   .filters input {
     margin: 5px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 300px;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
   }
+
+
