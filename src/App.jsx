@@ -114,7 +114,7 @@ function App() {
               />
               <i className="fa-solid fa-magnifying-glass search-icon"></i>
               {/* Autocomplete dropdown */}
-              {query && filteredInterfaces.length > 0 && (
+              {isDropdownVisible && (
                 <ul className="autocomplete-dropdown">
                   {filteredInterfaces.map((iface, index) => (
                     <li key={index} onClick={() => {
