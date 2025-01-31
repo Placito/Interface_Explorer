@@ -396,16 +396,24 @@ function App() {
                       <td>{iface.name}</td>
                       <td>{iface.interface_type}</td>
                       <td>{iface.status}</td>
-                      <td>{iface.mac_address}</td>
-                      <td>{iface.ip_address}</td>
-                      <td>{iface.ipv4_address}</td>
+                      <td>{iface.mac_address || "N/A"}</td>
+                      <td>{iface.ip_address || "N/A"}</td>
+                      <td>{iface.ipv4_address || "N/A"}</td>
                       <td>
-                        <button onClick={() => handleUpdate(iface)}>
-                          Update
-                        </button>
-                        <button onClick={() => handleDelete(iface)}>
-                          Delete
-                        </button>
+                        <div className="button_Actions">
+                          <button
+                            className="button_Icon"
+                            onClick={() => handleUpdate(iface)}
+                          >
+                            <i class="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button
+                            className="button_Icon"
+                            onClick={() => handleDelete(iface)}
+                          >
+                            <i class="fa-solid fa-trash-can"></i>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

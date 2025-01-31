@@ -46,7 +46,7 @@
 }
 
 .button_Icon {
-  color: rgb(84, 31, 47);
+  color: rgb(198, 29, 33);
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -168,23 +168,21 @@ h1 {
 
 /* styles for the adding form */
 .add-interface-form {
-  width: 100%;
-  box-sizing: border-box;
+  width: 90%;
 }
 
 .add-interface-form table {
-  width: 100%;
   border-collapse: collapse;
 }
 
 .add-interface-form table td {
-  padding: 8px;
+  padding: 0px;
+  background-color: rgb(84, 31, 47);
   text-align: left;
-  vertical-align: top;
 }
 
 .add-interface-form table td input {
-  width: 100%;
+  width: 92%;
   padding: 8px;
   margin-top: 5px;
   border: 1px solid #ccc;
@@ -194,18 +192,20 @@ h1 {
 .add-interface-form table td label {
   font-weight: bold;
   display: block;
-}
+  color: #fff;
+  padding: 8px;
+  margin: 0;
+  width: 100px;
+} 
 
 .add-interface-form table td button {
   padding: 10px 15px;
-  background-color: #4CAF50;
+  background-color: rgb(198, 29, 33);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   width: 100%;
-}
-
-.add-interface-form table td button:hover {
-  background-color: #45a049;
+  margin-top: 
 }
