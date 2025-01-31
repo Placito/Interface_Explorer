@@ -168,7 +168,7 @@ h1 {
 
 /* styles for the adding form */
 .add-interface-form {
-  width: 90%;
+  width: 100%;
 }
 
 .add-interface-form table {
@@ -207,5 +207,5 @@ h1 {
   border-radius: 4px;
   cursor: pointer;
   width: 100%;
-  margin-top: 
+  margin-top: 5px;
 }

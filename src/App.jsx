@@ -108,13 +108,14 @@ function App() {
   // Define saveInterfaces function
   const saveInterfaces = async () => {
     try {
-      // Call the Tauri command to save interfaces
+      // Ensure interfaces is being passed as an array of NetworkInterface objects
       await invoke("save_network_interfaces", { interfaces: interfaces });
       console.log("Interfaces saved successfully!");
     } catch (error) {
       console.error("Error saving interfaces:", error);
     }
   };
+
 
   // Highlight the matched text in the query
   const highlightMatch = (text) => {
@@ -190,22 +191,13 @@ function App() {
             onClick={() => {
               togglePanelVisibility();
               handleButtonClick("display");
+              saveInterfaces();
             }}
             className={`button ${activeButton === "display" ? "active" : ""}`}
           >
             {isPanelVisible
               ? "Hide Network Interfaces"
               : "Show Network Interfaces"}
-          </button>
-          <button
-            onClick={() => {
-              saveInterfaces();
-              togglePanelVisibility();
-              handleButtonClick("save");
-            }}
-            className={`button ${activeButton === "save" ? "active" : ""}`}
-          >
-            Save Interfaces
           </button>
           <button
             onClick={() => {
@@ -292,6 +284,7 @@ function App() {
                           name="name"
                           value={newInterface.name}
                           onChange={handleInputChange}
+                          placeholder="name"
                         />
                       </td>
                     </tr>
@@ -305,6 +298,7 @@ function App() {
                           name="interface_type"
                           value={newInterface.interface_type}
                           onChange={handleInputChange}
+                          placeholder="type of interface"
                         />
                       </td>
                     </tr>
@@ -318,6 +312,7 @@ function App() {
                           name="status"
                           value={newInterface.status}
                           onChange={handleInputChange}
+                          placeholder="Status (active/inactive)"
                         />
                       </td>
                     </tr>
@@ -331,6 +326,7 @@ function App() {
                           name="mac_address"
                           value={newInterface.mac_address}
                           onChange={handleInputChange}
+                          placeholder="MAC address"
                         />
                       </td>
                     </tr>
@@ -344,6 +340,7 @@ function App() {
                           name="ip_address"
                           value={newInterface.ip_address}
                           onChange={handleInputChange}
+                          placeholder="IP address"
                         />
                       </td>
                     </tr>
@@ -357,6 +354,7 @@ function App() {
                           name="ipv4_address"
                           value={newInterface.ipv4_address}
                           onChange={handleInputChange}
+                          placeholder="IPv4 address"
                         />
                       </td>
                     </tr>
@@ -405,13 +403,13 @@ function App() {
                             className="button_Icon"
                             onClick={() => handleUpdate(iface)}
                           >
-                            <i class="fa-solid fa-pen-to-square"></i>
+                            <i className="fa-solid fa-pen-to-square"></i>
                           </button>
                           <button
                             className="button_Icon"
                             onClick={() => handleDelete(iface)}
                           >
-                            <i class="fa-solid fa-trash-can"></i>
+                            <i className="fa-solid fa-trash-can"></i>
                           </button>
                         </div>
                       </td>
