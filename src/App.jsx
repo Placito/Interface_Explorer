@@ -8,6 +8,8 @@ function App() {
   const [activeButton, setActiveButton] = useState(null);
   const [filteredInterfaces, setFilteredInterfaces] = useState([]);
   const [query, setQuery] = useState(''); // Single query state for search
+  const [selectedInterface, setSelectedInterface] = useState(null); // Track selected interface
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Manage dropdown visibility
 
   // Fetch network interfaces
   const fetchInterfaces = async () => {
@@ -25,7 +27,6 @@ function App() {
     const value = e.target.value.toLowerCase();
     setQuery(value); // Set the search query
 
-    // Filter interfaces based on the search query
     const filtered = interfaces.filter((iface) =>
       iface.name.toLowerCase().includes(value) ||
       iface.status.toLowerCase().includes(value) ||
@@ -34,6 +35,18 @@ function App() {
     );
 
     setFilteredInterfaces(filtered);
+    setIsDropdownVisible(filtered.length > 0); // Show dropdown if there are results
+  };
+
+  // Handle key down event for Enter key
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && filteredInterfaces.length > 0) {
+      // When Enter is pressed, select the first item in the filtered list
+      const selected = filteredInterfaces[0];
+      setSelectedInterface(selected); // Set selected interface
+      setQuery(selected.name); // Update the query with the selected name
+      setIsDropdownVisible(false); // Hide the dropdown
+    }
   };
 
   // Toggle the visibility of the panel
@@ -96,50 +109,49 @@ function App() {
                 placeholder="Search by Name, Status, MAC, or IP"
                 value={query}
                 onChange={handleFilterChange}
+                onKeyDown={handleKeyDown} // Add onKeyDown to listen for Enter
               />
               <i className="fa-solid fa-magnifying-glass search-icon"></i>
-              {/* Autocomplete dropdown */}
-              {query && filteredInterfaces.length > 0 && (
-                <ul className="autocomplete-dropdown">
-                  {filteredInterfaces.map((iface, index) => (
-                    <li key={index} onClick={() => setQuery(iface.name)}>
-                      {iface.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
+            {isDropdownVisible && (
+              <ul className="autocomplete-dropdown">
+                {filteredInterfaces.map((iface, index) => (
+                  <li key={index} onClick={() => {
+                    setSelectedInterface(iface);
+                    setQuery(iface.name); // Update query to selected interface name
+                    setIsDropdownVisible(false); // Hide dropdown after selection
+                  }}>
+                    {iface.name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
 
-        {isPanelVisible && (
+        {/* Display selected interface details */}
+        {selectedInterface && (
           <div className="table-container">
-            {filteredInterfaces.length > 0 ? (
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>MAC</th>
-                    <th>IP</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredInterfaces.map((iface, index) => (
-                    <tr key={index}>
-                      <td>{iface.name}</td>
-                      <td>{iface.interface_type}</td>
-                      <td>{iface.status}</td>
-                      <td>{iface.mac_address || "N/A"}</td>
-                      <td>{iface.ip_address || "N/A"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p className="no-interfaces">No interfaces found.</p>
-            )}
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>MAC</th>
+                  <th>IP</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{selectedInterface.name}</td>
+                  <td>{selectedInterface.interface_type}</td>
+                  <td>{selectedInterface.status}</td>
+                  <td>{selectedInterface.mac_address || "N/A"}</td>
+                  <td>{selectedInterface.ip_address || "N/A"}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         )}
       </div>
