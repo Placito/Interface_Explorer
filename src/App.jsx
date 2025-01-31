@@ -27,7 +27,6 @@ function App() {
     const value = e.target.value.toLowerCase();
     setQuery(value); // Set the search query
 
-    // Filter interfaces based on the search query
     const filtered = interfaces.filter((iface) =>
       iface.name.toLowerCase().includes(value) ||
       iface.status.toLowerCase().includes(value) ||
@@ -110,20 +109,15 @@ function App() {
                 placeholder="Search by Name, Status, MAC, or IP"
                 value={query}
                 onChange={handleFilterChange}
-                onKeyDown={handleKeyDown}
               />
               <i className="fa-solid fa-magnifying-glass search-icon"></i>
               {/* Autocomplete dropdown */}
-              {isDropdownVisible && (
+              {query && filteredInterfaces.length > 0 && (
                 <ul className="autocomplete-dropdown">
                   {filteredInterfaces.map((iface, index) => (
-                    <li key={index} onClick={() => {
-                    setSelectedInterface(iface);
-                    setQuery(iface.name); // Update query to selected interface name
-                    setIsDropdownVisible(false); // Hide dropdown after selection
-                  }}>
-                    {iface.name}
-                  </li>
+                    <li key={index} onClick={() => setQuery(iface.name)}>
+                      {iface.name}
+                    </li>
                   ))}
                 </ul>
               )}
@@ -131,8 +125,7 @@ function App() {
           </div>
         </div>
 
-         {/* Display selected interface details */}
-         {selectedInterface && (
+        {isPanelVisible && (
           <div className="table-container">
             {filteredInterfaces.length > 0 ? (
               <table>
@@ -146,13 +139,15 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                    <tr >
-                    <td>{selectedInterface.name}</td>
-                    <td>{selectedInterface.interface_type}</td>
-                    <td>{selectedInterface.status}</td>
-                    <td>{selectedInterface.mac_address || "N/A"}</td>
-                    <td>{selectedInterface.ip_address || "N/A"}</td>
+                  {filteredInterfaces.map((iface, index) => (
+                    <tr key={index}>
+                      <td>{iface.name}</td>
+                      <td>{iface.interface_type}</td>
+                      <td>{iface.status}</td>
+                      <td>{iface.mac_address || "N/A"}</td>
+                      <td>{iface.ip_address || "N/A"}</td>
                     </tr>
+                  ))}
                 </tbody>
               </table>
             ) : (
