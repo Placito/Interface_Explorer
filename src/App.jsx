@@ -23,39 +23,31 @@ function App() {
     }
   };
 
+  const matchesFilter = (iface, value) => {
+    const fields = [
+      iface.mac_address,
+      iface.ip_address,
+      iface.ipv4_address,
+      iface.status,
+      iface.name,
+      iface.interface_type,
+    ];
+    const lowerValue = value.toLowerCase();
+  
+    return fields.some((field) => field?.toLowerCase().trim().includes(lowerValue));
+  };
+  
   const handleFilterChange = (e) => {
-    const value = e.target.value.trim().toLowerCase(); // Remove any leading/trailing spaces and make case-insensitive
-    setQuery(value); // Set the search query
-
-    // Filter based on query for names, types, or statuses
+    const value = e.target.value.trim().toLowerCase();
+    setQuery(value);
+  
     const filtered = interfaces.filter((iface) => {
-      const mac = iface.mac_address ? iface.mac_address.toLowerCase().trim() : "";
-      const ip = iface.ip_address ? iface.ip_address.toLowerCase().trim() : "";
-      const status = iface.status ? iface.status.toLowerCase().trim() : "";
-      const name = iface.name ? iface.name.toLowerCase().trim() : "";
-      const interfaceType = iface.interface_type ? iface.interface_type.toLowerCase().trim() : "";
-
-      // Check for specific keywords like 'active', 'wifi', 'eth', etc.
-      if (value === 'active' && status.toLowerCase() === 'active') {
-        return true;
-      }
-      if (value === 'inactive' && status.toLowerCase() === 'inactive') {
-        return true;
-      }
-      if (value === 'wifi' && interfaceType.includes('wi-fi')) {
-        return true;
-      }
-      if (value === 'eth' && interfaceType.includes('eth')) {
-        return true;
-      }
-
-      // Otherwise, match name, status, MAC, or IP
-      return (
-        name.includes(value) ||
-        status.includes(value) ||
-        mac.includes(value) ||
-        ip.includes(value)
-      );
+      if (value === "active" && iface.status?.toLowerCase() === "active") return true;
+      if (value === "inactive" && iface.status?.toLowerCase() === "inactive") return true;
+      if (value === "wifi" && iface.interface_type?.toLowerCase().includes("wi-fi")) return true;
+      if (value === "eth" && iface.interface_type?.toLowerCase().includes("eth")) return true;
+  
+      return matchesFilter(iface, value);
     });
 
     setFilteredInterfaces(filtered);
@@ -114,6 +106,28 @@ function App() {
     );
   };
 
+  // funtion for delete
+  const handleDelete = (ifaceToDelete) => {
+    // Remove the interface from the list
+    const updatedInterfaces = filteredInterfaces.filter(
+      (iface) => iface !== ifaceToDelete
+    );
+    setFilteredInterfaces(updatedInterfaces);
+    setInterfaces(updatedInterfaces); // Update the original list if needed
+  };
+
+  // function for update
+  const handleUpdate = (ifaceToUpdate) => {
+    const updatedName = prompt("Enter the new name:", ifaceToUpdate.name);
+    if (updatedName) {
+      const updatedInterfaces = filteredInterfaces.map((iface) =>
+        iface === ifaceToUpdate ? { ...iface, name: updatedName } : iface
+      );
+      setFilteredInterfaces(updatedInterfaces);
+      setInterfaces(updatedInterfaces); // Update the original list if needed
+    }
+  };  
+
   return (
     <div className="center">
       <div className="p-4">
@@ -148,7 +162,7 @@ function App() {
               <input
                 type="text"
                 className="glass-input"
-                placeholder="Search by Name, Status, MAC, IP, Active, Wi-Fi, etc."
+                placeholder="Search by Name, Status, Type, etc..."
                 value={query}
                 onChange={handleFilterChange}
                 onKeyDown={handleKeyDown}
@@ -194,6 +208,8 @@ function App() {
                     <th>Status</th>
                     <th>MAC</th>
                     <th>IP</th>
+                    <th>IPv4</th>
+                    <th>Actions</th> {/* New column for buttons */}
                   </tr>
                 </thead>
                 <tbody>
@@ -204,6 +220,21 @@ function App() {
                       <td>{iface.status}</td>
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
+                      <td>{iface.ipv4_address || "N/A"}</td>
+                      <td>
+                        <button
+                          onClick={() => handleUpdate(iface)}
+                          className="button update-button"
+                        >
+                          Update
+                        </button>
+                        <button
+                          onClick={() => handleDelete(iface)}
+                          className="button delete-button"
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -225,6 +256,7 @@ function App() {
                   <th>Status</th>
                   <th>MAC</th>
                   <th>IP</th>
+                  <th>IPv4</th>
                 </tr>
               </thead>
               <tbody>
@@ -234,6 +266,7 @@ function App() {
                   <td>{selectedInterface.status}</td>
                   <td>{selectedInterface.mac_address || "N/A"}</td>
                   <td>{selectedInterface.ip_address || "N/A"}</td>
+                  <td>{selectedInterface.ipv4_address || "N/A"}</td>
                 </tr>
               </tbody>
             </table>

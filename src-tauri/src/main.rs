@@ -12,7 +12,7 @@ struct NetworkInterface {
     interface_type: String,
     status: String,
     mac_address: Option<String>,
-    ip_address: Option<String>,
+    ipv4_address: Option<String>,
 }
 
 // Path to save JSON file
@@ -28,29 +28,34 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
     let mut interfaces = Vec::new();
 
     for iface in datalink::interfaces() {
-        let name = &iface.name; 
-        let interface_type = match iface.is_up() {
-            true => if iface.is_loopback() { "Wi-Fi" } else { "Ethernet" },
-            // If the interface is not up, the type is labeled as Unknown.
-            false => "Unknown",
+        let name = &iface.name;
+        let interface_type = if iface.is_up() {
+            if iface.is_loopback() {
+                "Wi-Fi"
+            } else {
+                "Ethernet"
+            }
+        } else {
+            "Unknown"
         };
-        let status = if iface.is_up() { "active" } else { "inactive" }; 
-        println!("Interface {} status: {}", name, status); // Log the status for debugging
+        let status = if iface.is_up() { "active" } else { "inactive" };
         let mac_address = iface.mac.map(|mac| mac.to_string());
-        let ip_address = iface.ips.first().map(|ip| ip.to_string());
-    
+
+        // Extract IPv4 and IPv6 addresses
+        let ipv4_address = iface.ips.iter()
+            .find_map(|ip| if ip.is_ipv4() { Some(ip.ip().to_string()) } else { None });
+
         interfaces.push(NetworkInterface {
-            name: name.to_string(), 
+            name: name.to_string(),
             interface_type: interface_type.to_string(),
             status: status.to_string(),
             mac_address,
-            ip_address,
+            ipv4_address,
         });
-    }    
+    }
 
     Ok(interfaces)
 }
-
 
 // Save interfaces in a JSON file
 #[command]
@@ -71,7 +76,7 @@ fn load_network_interfaces(config: tauri::State<'_, tauri::Config>) -> Result<Ve
     let file_path = get_data_file_path(&config);
 
     if !file_path.exists() {
-        return Ok(Vec::new()); // Retorna vazio se o arquivo não existir
+        return Ok(Vec::new()); // Return empty if the file doesn't exist
     }
 
     let json_data = fs::read_to_string(&file_path)
@@ -94,4 +99,3 @@ fn main() {
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
-

@@ -72,6 +72,7 @@ td {
   text-align: center;
   font-size: 18px;
   color: #6b7280; /* Tailwind gray-600 */
+  border: none !important; /* Avoid border conflicts */
 }
 
 /* Header Styling */
@@ -103,7 +104,7 @@ h1 {
 .search-icon {
   position: absolute;
   top: 185px;
-  right: 30%;  
+  right: 31%;  
   z-index: 2;
   color: #aaa;
   pointer-events: none; /* Prevent the icon from being clicked */
@@ -113,7 +114,7 @@ h1 {
 .autocomplete-dropdown {
   position: absolute;
   top: 33%;
-  left: 29%;
+  left: 30%;
   width: 314px;
   border: 1px solid #ccc;
   border-top: none;
