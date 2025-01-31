@@ -13,7 +13,7 @@ This application provides detailed insights into your system's network interface
 ## Features
 
 ### 1. **List of Network Interfaces**
-Displays all network interfaces (active/inactive) with the following details:
+Displays all network interfaces (active/inactive) on a system, with the following details:
 - **Name**  
 - **Type** (Wi-Fi/Ethernet)  
 - **Status** (active/inactive)  
@@ -53,3 +53,6 @@ Make sure you have the following installed on your system:
    ``bun install``
 3. Start development server:
    ``bun run tauri dev``
+
+---
+
