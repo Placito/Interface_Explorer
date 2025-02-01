@@ -24,4 +24,8 @@ dist-ssr
 *.sw?
 
 # file with the data
+<<<<<<< HEAD
 src-tauri/save_network_interfaces.json
+=======
+/src-tauri/save_network_interfaces.json
+>>>>>>> origin/main

@@ -1,0 +1,10 @@
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/libsqlformat-4c4fa7d8d45df716.rmeta: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/formatter.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/indentation.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/inline_block.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/params.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/tokenizer.rs
+
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/sqlformat-4c4fa7d8d45df716.d: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/formatter.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/indentation.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/inline_block.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/params.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/tokenizer.rs
+
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/lib.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/formatter.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/indentation.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/inline_block.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/params.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.1.8/src/tokenizer.rs:
