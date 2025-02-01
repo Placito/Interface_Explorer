@@ -8,15 +8,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1", features = [] }
+tauri-build = { version = "1.4", features = [] }  
 
 [dependencies]
-pnet = "0.32.0"
+pnet = "0.32.0"  
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tauri = { version = "1.0", features = [ "shell-open"] }
-
+tauri = { version = "1.4", features = ["shell-open"] } 
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
-custom-protocol = ["tauri/custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]  # Kept the same

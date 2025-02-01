@@ -4,7 +4,6 @@ use std::path::PathBuf;
 use serde::{Serialize, Deserialize};
 use tauri::command;
 use pnet::datalink; // For listing network interfaces
-use tauri::Config;
 
 // Network data structure
 #[derive(Serialize, Deserialize)]
@@ -60,6 +59,7 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
 
     Ok(interfaces)
 }
+
 
 // Save interfaces in a JSON file
 #[command]

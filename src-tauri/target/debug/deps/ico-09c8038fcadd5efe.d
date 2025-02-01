@@ -1,0 +1,12 @@
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/libico-09c8038fcadd5efe.rmeta: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/macros.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/bmpdepth.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/icondir.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/image.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/restype.rs
+
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/libico-09c8038fcadd5efe.rlib: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/macros.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/bmpdepth.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/icondir.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/image.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/restype.rs
+
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/ico-09c8038fcadd5efe.d: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/macros.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/bmpdepth.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/icondir.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/image.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/restype.rs
+
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/lib.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/macros.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/bmpdepth.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/icondir.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/image.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ico-0.4.0/src/restype.rs:
