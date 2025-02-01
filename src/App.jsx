@@ -4,14 +4,14 @@ import "./styles.css"; // Import the CSS file
 
 function App() {
   const [interfaces, setInterfaces] = useState([]);
-  const [isPanelVisible, setIsPanelVisible] = useState(false); // Panel visibility for interfaces table
+  const [isPanelVisible, setIsPanelVisible] = useState(false);
   const [activeButton, setActiveButton] = useState(null);
-  const [activeInput, setActiveInput] = useState(null); // track active input
+  const [activeInput, setActiveInput] = useState(null);
   const [filteredInterfaces, setFilteredInterfaces] = useState([]);
-  const [query, setQuery] = useState(""); // Single query state for search
-  const [selectedInterface, setSelectedInterface] = useState(null); // Track selected interface
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false); // Manage dropdown visibility
-  const [isFormVisible, setIsFormVisible] = useState(false); // Manage form visibility
+  const [query, setQuery] = useState("");
+  const [selectedInterface, setSelectedInterface] = useState(null);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const [newInterface, setNewInterface] = useState({
     name: "",
     interface_type: "",
@@ -20,14 +20,13 @@ function App() {
     ip_address: "",
     ipv4_address: "",
   });
-  const [editableIpv4s, setEditableIpv4s] = useState({}); // Track which interface is editable
-  const [ipv4Temp, setIpv4Temp] = useState(!""); // Store temp IPv4 value
+  const [editableIpv4s, setEditableIpv4s] = useState({});
+  const [ipv4Temp, setIpv4Temp] = useState(""); // Fixed to an empty string
 
-  // Fetch network interfaces
   const fetchInterfaces = async () => {
     try {
       const result = await invoke("list_network_interfaces");
-      console.log(result); // Check what the result contains
+      console.log(result);
       setInterfaces(result);
       setFilteredInterfaces(result);
     } catch (error) {
@@ -56,63 +55,49 @@ function App() {
     setQuery(value);
 
     const filtered = interfaces.filter((iface) => {
-      // Strictly include only active interfaces if "active" is typed
       if (value === "active") return iface.status?.toLowerCase() === "active";
-
-      // Strictly include only inactive interfaces if "inactive" is typed
       if (value === "inactive")
         return iface.status?.toLowerCase() === "inactive";
-
-      // Filters for "wifi" or "eth" queries
       if (value === "wifi")
         return iface.interface_type?.toLowerCase().includes("wi-fi");
       if (value === "eth")
         return iface.interface_type?.toLowerCase().includes("eth");
-
-      // General match for other queries
       return matchesFilter(iface, value);
     });
 
     setFilteredInterfaces(filtered);
-
-    // Show the dropdown only if there are results and the query is not empty
     setIsDropdownVisible(value.length > 0 && filtered.length > 0);
   };
 
-  // Handle key down event for Enter key
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && filteredInterfaces.length > 0) {
-      // When Enter is pressed, select the first item in the filtered list
       const selected = filteredInterfaces[0];
-      setSelectedInterface(selected); // Set selected interface
-      setQuery(selected.name); // Update the query with the selected name
-      setIsDropdownVisible(false); // Hide the dropdown
+      setSelectedInterface(selected);
+      setQuery(selected.name);
+      setIsDropdownVisible(false);
     }
   };
 
-  // Toggle the visibility of the panel
   const togglePanelVisibility = () => {
     if (isFormVisible) {
-      setIsFormVisible(false); // Close the form if it's open
+      setIsFormVisible(false);
     } else {
-      setIsPanelVisible((prev) => !prev); // Toggle the visibility of the interfaces table
+      setIsPanelVisible((prev) => !prev);
     }
-    setSelectedInterface(null); // Clear selected interface when toggling visibility
-    setQuery(""); // Reset search query
-    setFilteredInterfaces(interfaces); // Reset filtered list
+    setSelectedInterface(null);
+    setQuery("");
+    setFilteredInterfaces(interfaces);
   };
 
-  // Set the clicked button as active
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
   };
 
   const handleAddInterfaceClick = () => {
-    setIsFormVisible(true); // Ensure the form appears
-    setIsPanelVisible(false); // Hide the interfaces table when adding a new one
+    setIsFormVisible(true);
+    setIsPanelVisible(false);
     setActiveButton("save");
-  
-    // Reset form inputs to ensure a clean form
+
     setNewInterface({
       name: "",
       interface_type: "",
@@ -123,19 +108,15 @@ function App() {
     });
   };
 
-  
-  // Inside the submit handler (when user submits the form to add a new interface)
   const handleAddInterface = async () => {
-  
     try {
       const updatedInterfaces = [...interfaces, newInterface];
-  
-      await invoke("save_network_interfaces", { interfaces: updatedInterfaces });
-  
+      await invoke("save_network_interfaces", {
+        interfaces: updatedInterfaces,
+      });
       setInterfaces(updatedInterfaces);
       setFilteredInterfaces(updatedInterfaces);
-  
-      // Reset form after successful submission
+
       setNewInterface({
         name: "",
         interface_type: "",
@@ -144,24 +125,19 @@ function App() {
         ip_address: "",
         ipv4_address: "",
       });
-  
+
       console.log("New interface added successfully!");
     } catch (error) {
       console.error("Error adding new interface:", error);
     }
   };
-  
-  
 
-  // Fetch interfaces when the component mounts
   useEffect(() => {
     fetchInterfaces();
   }, []);
 
-  // Define saveInterfaces function
   const saveInterfaces = async () => {
     try {
-      // Ensure interfaces is being passed as an array of NetworkInterface objects
       await invoke("save_network_interfaces", { interfaces: interfaces });
       console.log("Interfaces saved successfully!");
     } catch (error) {
@@ -169,7 +145,6 @@ function App() {
     }
   };
 
-  // Highlight the matched text in the query
   const highlightMatch = (text) => {
     const regex = new RegExp(`(${query})`, "gi");
     return text.split(regex).map((part, index) =>
@@ -183,17 +158,15 @@ function App() {
     );
   };
 
-  // Function for delete
   const handleDeleteIPv4 = async (ifaceToUpdate) => {
     const updatedInterfaces = filteredInterfaces.map((iface) =>
       iface === ifaceToUpdate ? { ...iface, ipv4_address: "N/A" } : iface
     );
-  
+
     try {
-      // Save the updated list to the backend
-      await invoke("save_network_interfaces", { interfaces: updatedInterfaces });
-  
-      // Update frontend state
+      await invoke("save_network_interfaces", {
+        interfaces: updatedInterfaces,
+      });
       setFilteredInterfaces(updatedInterfaces);
       setInterfaces(updatedInterfaces);
       console.log("IPv4 address deleted successfully!");
@@ -201,13 +174,11 @@ function App() {
       console.error("Error deleting IPv4 address:", error);
     }
   };
-  
 
-  // Enable editing mode for a specific row
   const handleEditClick = (index, ipv4Value) => {
     setEditableIpv4s((prev) => ({ ...prev, [index]: true }));
-    setIpv4Temp(ipv4Value || ""); // Store current IPv4 value
-    setActiveInput(index); // Set the active input to the clicked index
+    setIpv4Temp(ipv4Value || "");
+    setActiveInput(index);
   };
 
   const handleInputChange = (e) => {
@@ -219,27 +190,22 @@ function App() {
     setActiveInput(name);
   };
 
-  // Handle update on input change
   const handleUpdate = (e, index) => {
-    setIpv4Temp(e.target.value); // Update temp IPv4 state
+    setIpv4Temp(e.target.value);
   };
 
-  // Save updated IPv4 and exit edit mode
   const handleKeyDownIPv4 = async (e, index, ifaceToUpdate) => {
     if (e.key === "Enter") {
       const updatedInterfaces = filteredInterfaces.map((iface, i) =>
         i === index ? { ...iface, ipv4_address: ipv4Temp } : iface
       );
-  
+
       try {
-        // Send the updated list back to the backend to save it
-        await invoke("save_network_interfaces", { interfaces: updatedInterfaces });
-  
-        // Update frontend state
+        await invoke("save_network_interfaces", {
+          interfaces: updatedInterfaces,
+        });
         setFilteredInterfaces(updatedInterfaces);
         setInterfaces(updatedInterfaces);
-  
-        // Exit editing mode for this interface
         setEditableIpv4s((prev) => ({ ...prev, [index]: false }));
         console.log("IPv4 address updated successfully!");
       } catch (error) {
@@ -247,7 +213,6 @@ function App() {
       }
     }
   };
-  
 
   return (
     <div className="center">
@@ -257,11 +222,9 @@ function App() {
         <div className="button-container">
           <button
             onClick={() => {
-              togglePanelVisibility(); // Toggle the visibility of the panel
-              handleButtonClick("display"); // Track the active button
-              // Call saveInterfaces only when the panel is shown
+              togglePanelVisibility();
+              handleButtonClick("display");
               if (!isPanelVisible) {
-                // Only save when panel is being shown
                 saveInterfaces();
               }
             }}
@@ -272,7 +235,7 @@ function App() {
               : "Show Network Interfaces"}
           </button>
           <button
-            onClick={handleAddInterfaceClick} 
+            onClick={handleAddInterfaceClick}
             className={`button ${activeButton === "save" ? "active" : ""}`}
           >
             Add Interface
@@ -282,7 +245,7 @@ function App() {
         <div className="filters-container">
           <h3>Select an Interface:</h3>
           <div className="filters">
-            <div className="search-container">
+            <div>
               <input
                 type="text"
                 className="glass-input"
@@ -291,8 +254,6 @@ function App() {
                 onChange={handleFilterChange}
                 onKeyDown={handleKeyDown}
               />
-              <i className="fa-solid fa-magnifying-glass search-icon"></i>
-              {/* Autocomplete dropdown */}
               {isDropdownVisible && (
                 <ul className="autocomplete-dropdown">
                   {filteredInterfaces.map((iface, index) => (
@@ -300,28 +261,11 @@ function App() {
                       key={index}
                       onClick={() => {
                         setSelectedInterface(iface);
-                        setQuery(iface.name); // Update query to selected interface name
-                        setIsDropdownVisible(false); // Hide dropdown after selection
+                        setQuery(iface.name);
+                        setIsDropdownVisible(false);
                       }}
                     >
                       {highlightMatch(iface.name)}
-                      {/* Add labels for active/inactive status */}
-                      {query === "active" &&
-                        iface.status?.toLowerCase() === "active" && (
-                          <span> (Active)</span>
-                        )}
-                      {query === "inactive" &&
-                        iface.status?.toLowerCase() === "inactive" && (
-                          <span> (Inactive)</span>
-                        )}
-                      {query === "wifi" &&
-                        iface.interface_type
-                          ?.toLowerCase()
-                          .includes("wi-fi") && <span> (Wi-Fi)</span>}
-                      {query === "eth" &&
-                        iface.interface_type?.toLowerCase().includes("eth") && (
-                          <span> (Ethernet)</span>
-                        )}
                     </li>
                   ))}
                 </ul>
@@ -330,11 +274,38 @@ function App() {
           </div>
         </div>
 
-        {/* Add new interface form */}
+        {selectedInterface && (
+          <div className="selected-interface-details">
+            <h3>Selected Interface Details</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>MAC Address</th>
+                  <th>IP Address</th>
+                  <th>IPv4 Address</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{selectedInterface.name}</td>
+                  <td>{selectedInterface.interface_type}</td>
+                  <td>{selectedInterface.status}</td>
+                  <td>{selectedInterface.mac_address || "N/A"}</td>
+                  <td>{selectedInterface.ip_address || "N/A"}</td>
+                  <td>{selectedInterface.ipv4_address || "N/A"}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+
         {isFormVisible && (
           <div className="add-interface-form">
             <h2>Add New Interface</h2>
-            <div className="table-container">
+            <div>
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -429,16 +400,17 @@ function App() {
                     </tr>
                     <tr>
                       <td colSpan="2">
-                      <div className="button_container">
-                        <button type="submit" className="button">
-                          Save Interface
-                        </button>
-                        <button
-                          onClick={() => setIsFormVisible(false)}
-                          className="button" >
+                        <div className="button_container">
+                          <button type="submit" className="button">
+                            Save Interface
+                          </button>
+                          <button
+                            onClick={() => setIsFormVisible(false)}
+                            className="button"
+                          >
                             Cancel
                           </button>
-                      </div>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -448,9 +420,8 @@ function App() {
           </div>
         )}
 
-        {/* Display network interfaces when panel is visible */}
         {isPanelVisible && (
-          <div className="table-container">
+          <div >
             {filteredInterfaces.length > 0 ? (
               <table>
                 <thead>
@@ -461,7 +432,9 @@ function App() {
                     <th title="Media Access Control">MAC</th>
                     <th title="IP address">IP</th>
                     <th title="Internet Protocol version 4">IPv4</th>
-                    <th title="Actions performe on the IPv4 atribute">Actions</th>
+                    <th title="Actions performe on the IPv4 atribute">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -520,7 +493,7 @@ function App() {
                 </tbody>
               </table>
             ) : (
-              <p>No interfaces found.</p>
+              <div>No interfaces available</div>
             )}
           </div>
         )}

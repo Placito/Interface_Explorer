@@ -53,14 +53,6 @@
 }
 
 /* Table Styles */
-.table-container {
-  margin-top: 80px;
-  max-height: 400px; /* Limit the table's height */
-  overflow-y: auto; /* Allow scrolling if the table is too long */
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -96,45 +88,20 @@ h1 {
   color: #333; 
 }
 
-/* Wrapper for the input and icon */
-.search-container {
-  position: fixed;  
-  top: 160px;     
-  left: 50%;        
-  transform: translateX(-50%); 
-  width: 85%;
-  max-width: 400px; 
-}
-
 /* The input element inside the search-container */
 .glass-input {
-  position: relative;
   padding: 8px 32px 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
-  max-width: 100%; 
+  box-sizing: border-box;
+  font-size: 16px;
   z-index: 1;
 }
 
-/* The search icon inside the input field */
-.search-icon {
-  position: absolute;
-  top: 50%;          
-  right: 50px;       
-  transform: translateY(-50%); /* Adjust to center it vertically */
-  z-index: 2;
-  color: #aaa;
-  pointer-events: none; /* Prevent the icon from being clicked */
-}
-
-
 /* Autocomplete dropdown */
 .autocomplete-dropdown {
-  position: absolute;
-  top: 33%;
-  left: 30%;
-  width: 314px;
+  width: 299px;
   border: 1px solid #ccc;
   border-top: none;
   border-radius: 4px;
@@ -145,6 +112,9 @@ h1 {
   color: #fff;
   padding-left: 0;
   overflow-y: auto; /* Ensure the dropdown can scroll if needed */
+  margin-top: -1%;
+  margin-left: 22.5%;
+  
 }
 
 .autocomplete-dropdown li {
@@ -159,10 +129,6 @@ h1 {
   color: #000;
 }
 
-/* filters */
-.filters-container {
-  margin: 20px 0;
-}
 
 .filters input {
   margin: 5px;

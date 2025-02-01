@@ -138,5 +138,12 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null
+  },
+  {
+    "name": "1",
+    "interface_type": "1",
+    "status": "1",
+    "mac_address": "1",
+    "ipv4_address": "1"
   }
 ]
