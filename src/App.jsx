@@ -20,7 +20,8 @@ function App() {
     ipv4_address: "",
   });
   const [editableIpv4s, setEditableIpv4s] = useState({}); // Track which interface is editable
-  const [ipv4Temp, setIpv4Temp] = useState(newInterface.ipv4_address); // Temporary state for IPv4
+  const [ipv4Temp, setIpv4Temp] = useState(!""); // Store temp IPv4 value
+
 
   // Fetch network interfaces
   const fetchInterfaces = async () => {
@@ -89,14 +90,6 @@ function App() {
     }
   };
 
-  // Handle key down event for Enter key for the editable IPv4 field
-  const handleKeyDownIPv4 = (e, ifaceIndex) => {
-    if (e.key === "Enter" && editableIpv4s[ifaceIndex]) {
-      // When Enter is pressed, save the new IPv4 address
-      handleSaveIpv4(ifaceIndex, ipv4Temp);
-    }
-  };
-
   // Toggle the visibility of the panel
   const togglePanelVisibility = () => {
     if (isFormVisible) {
@@ -162,33 +155,29 @@ function App() {
   };
   
 
-  // Function for update
-  const handleUpdate = (e, ifaceToUpdate) => {
-    const { name, value } = e.target; // Get the input field name and value
-    const updatedInterfaces = filteredInterfaces.map((iface) =>
-      iface === ifaceToUpdate ? { ...iface, [name]: value } : iface
+  // Enable editing mode for a specific row
+const handleEditClick = (index, ipv4Value) => {
+  setEditableIpv4s((prev) => ({ ...prev, [index]: true }));
+  setIpv4Temp(ipv4Value || ""); // Store current IPv4 value
+};
+
+// Handle update on input change
+const handleUpdate = (e, index) => {
+  setIpv4Temp(e.target.value); // Update temp IPv4 state
+};
+
+// Save updated IPv4 and exit edit mode
+const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
+  if (e.key === "Enter") {
+    const updatedInterfaces = filteredInterfaces.map((iface, i) =>
+      i === index ? { ...iface, ipv4_address: ipv4Temp } : iface
     );
-  
+
     setFilteredInterfaces(updatedInterfaces);
-    setInterfaces(updatedInterfaces); // Update the original list if needed
-  };
-  
-  // button click handlers to toggle the editability for the specific interface
-  const handleSaveIpv4 = (ifaceIndex, newIpv4) => {
-    // Save the new IPv4 and reset the edit mode for this interface
-    const updatedInterfaces = filteredInterfaces.map((iface, index) => {
-      if (index === ifaceIndex) {
-        return { ...iface, ipv4_address: newIpv4 };
-      }
-      return iface;
-    });
-  
-    setFilteredInterfaces(updatedInterfaces);
-    setEditableIpv4s((prevState) => ({
-      ...prevState,
-      [ifaceIndex]: false, // Disable edit mode after saving
-    }));
-  };
+    setInterfaces(updatedInterfaces); // Update the original list
+    setEditableIpv4s((prev) => ({ ...prev, [index]: false })); // Exit edit mode
+  }
+};
   
   
   return (
@@ -411,18 +400,23 @@ function App() {
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
                       <td>
-                        {editableIpv4s[index] ? (
-                          <input
-                            type="text"
-                            value={ipv4Temp}
-                            onChange={(e) => handleUpdate(e, iface)} // Update on input change
-                            placeholder="IPv4 address"
-                            onKeyDown={(e) => handleKeyDownIPv4(e, index)} 
-                          />
-                        ) : (
-                          <span>{iface.ipv4_address || "N/A"}</span>
-                        )}
-                      </td>
+  {editableIpv4s[index] ? (
+    <input
+      type="text"
+      value={ipv4Temp}
+      onChange={(e) => handleUpdate(e, index)} // Update on input change
+      placeholder="IPv4 address"
+      onKeyDown={(e) => handleKeyDownIPv4(e, index, iface)} // Save on Enter key press
+      onBlur={() => setEditableIpv4s((prev) => ({ ...prev, [index]: false }))} // Close input when clicking outside
+      autoFocus
+    />
+  ) : (
+    <span onClick={() => handleEditClick(index, iface.ipv4_address)}>
+      {iface.ipv4_address || "N/A"}
+    </span>
+  )}
+</td>
+
                       <td>
                         <div className="button_Actions">
                           <button
