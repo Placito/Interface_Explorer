@@ -21,17 +21,17 @@
     "ipv4_address": null
   },
   {
-    "name": "anpi1",
-    "interface_type": "Ethernet",
-    "status": "active",
-    "mac_address": "b2:0d:fe:23:7c:67",
-    "ipv4_address": null
-  },
-  {
     "name": "anpi0",
     "interface_type": "Ethernet",
     "status": "active",
     "mac_address": "b2:0d:fe:23:7c:66",
+    "ipv4_address": null
+  },
+  {
+    "name": "anpi1",
+    "interface_type": "Ethernet",
+    "status": "active",
+    "mac_address": "b2:0d:fe:23:7c:67",
     "ipv4_address": null
   },
   {
@@ -88,20 +88,20 @@
     "interface_type": "Ethernet",
     "status": "active",
     "mac_address": "80:a9:97:2c:28:41",
-    "ipv4_address": null
+    "ipv4_address": "192.168.1.68"
   },
   {
     "name": "awdl0",
     "interface_type": "Ethernet",
     "status": "active",
-    "mac_address": "0a:dc:e1:76:51:f4",
+    "mac_address": "66:ea:aa:bb:73:f4",
     "ipv4_address": null
   },
   {
     "name": "llw0",
     "interface_type": "Ethernet",
     "status": "active",
-    "mac_address": "0a:dc:e1:76:51:f4",
+    "mac_address": "66:ea:aa:bb:73:f4",
     "ipv4_address": null
   },
   {
