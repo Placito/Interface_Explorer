@@ -59,17 +59,23 @@ Make sure you have the following installed on your system:
 ### For Development
 
 1. Install Dependencies using Bun:
-   ``bun install``
-2. Build the project: (running cargo buil without changing to same directory of cargo.toml file)
+   ```bash
+   bun install
+   ```
+2. Build the project: (running cargo build without changing to the same directory of Cargo.toml file)
 
    2.1. Just compile Rust backend
    ```bash
-   cargo build --manifest-path src-tauri/Cargo.toml 
+   cargo build --manifest-path src-tauri/Cargo.toml
+   ```
 
    2.2. When you are ready to release the full app
    ```bash
-   cargo tauri build --manifest-path src-tauri/Cargo.toml 
+   cargo tauri build --manifest-path src-tauri/Cargo.toml
+   ```
 
 3. Start development server:
-   ``bun run tauri dev``
+   ```bash
+   bun run tauri dev
+   ```
 
