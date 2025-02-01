@@ -26,7 +26,8 @@ Enables users to select a specific network interface for detailed management.
 Lists all IP addresses (both IPv4 and IPv6) configured on the selected network interface.
 
 ### 4. **IPv4 Address Management**
-Offers the following operations for IPv4 addresses on the selected interface:
+The list of network interfaces is stored in a JSON file, allowing you to add, update, and delete entries.
+For small or simple applications, this approach works perfectly fine and doesn't require the overhead of setting up a database:
 - **Create IPv4 addresses**  
 - **Delete IPv4 addresses**  
 - **Modify existing IPv4 addresses**
