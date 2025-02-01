@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api";
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./styles.css"; // Import the CSS file
 
 function App() {
@@ -22,6 +22,9 @@ function App() {
   });
   const [editableIpv4s, setEditableIpv4s] = useState({});
   const [ipv4Temp, setIpv4Temp] = useState(""); // Fixed to an empty string
+  const [gateway, setGateway] = useState('');
+  const [dns, setDns] = useState('');
+  const inputRef = useRef(null);  // Create a ref for the input element
 
   const fetchInterfaces = async () => {
     try {
@@ -105,6 +108,8 @@ function App() {
       mac_address: "",
       ip_address: "",
       ipv4_address: "",
+      gateway: "",
+      dns: "",
     });
   };
 
@@ -124,6 +129,8 @@ function App() {
         mac_address: "",
         ip_address: "",
         ipv4_address: "",
+        gateway: "",
+        dns: "",
       });
 
       console.log("New interface added successfully!");
@@ -214,6 +221,16 @@ function App() {
     }
   };
 
+  // function to handle the gateway input - Gateways provide connectivity between two or more networks, convert data and information sent from a network into a format compatible with the receiving network.
+  const handleGatewayChange = (e) => {
+    setGateway(e.target.value);  // Update gateway state
+  };
+
+  // function to handle the DNS (Domain Name System) input
+  const handleDnsChange = (e) => {
+    setDns(e.target.value);  // Update DNS state
+  };
+
   return (
     <div className="center">
       <div className="p-4">
@@ -253,6 +270,7 @@ function App() {
                 value={query}
                 onChange={handleFilterChange}
                 onKeyDown={handleKeyDown}
+                ref={inputRef} 
               />
               {isDropdownVisible && (
                 <ul className="autocomplete-dropdown">
@@ -276,16 +294,20 @@ function App() {
 
         {selectedInterface && (
           <div className="selected-interface-details">
-            <h3>Selected Interface Details</h3>
             <table>
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>Type</th>
                   <th>Status</th>
-                  <th>MAC Address</th>
-                  <th>IP Address</th>
-                  <th>IPv4 Address</th>
+                  <th title="Media Access Control">MAC</th>
+                  <th title="IP address">IP</th>
+                  <th>Gateway</th>
+                  <th title="Domain Name System">DNS</th>
+                  <th title="Internet Protocol version 4">IPv4</th>
+                  <th title="Actions performe on the IPv4 atribute">
+                      Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -295,7 +317,29 @@ function App() {
                   <td>{selectedInterface.status}</td>
                   <td>{selectedInterface.mac_address || "N/A"}</td>
                   <td>{selectedInterface.ip_address || "N/A"}</td>
+                  <td>{selectedInterface.gateway|| "N/A"}</td>
+                  <td>{selectedInterface.dns || "N/A"}</td>
                   <td>{selectedInterface.ipv4_address || "N/A"}</td>
+                  <td>
+                        <div className="button_Actions">
+                          <button
+                            onClick={() =>
+                              handleEditClick(index, iface.ipv4_address)
+                            }
+                            className={`button_Icon nputFormatted ${
+                              activeInput === "display" ? "active" : ""
+                            }`}
+                          >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteIPv4(iface)}
+                            className="button_Icon"
+                          >
+                            <i className="fa-solid fa-trash-can"></i>
+                          </button>
+                        </div>
+                      </td>
                 </tr>
               </tbody>
             </table>
@@ -358,7 +402,7 @@ function App() {
                     </tr>
                     <tr>
                       <td>
-                        <label htmlFor="mac_address">MAC Address</label>
+                        <label htmlFor="mac_address">MAC</label>
                       </td>
                       <td>
                         <input
@@ -366,7 +410,7 @@ function App() {
                           name="mac_address"
                           value={newInterface.mac_address}
                           onChange={handleInputChange}
-                          placeholder="MAC address"
+                          placeholder="MAC (Media Access Control)"
                         />
                       </td>
                     </tr>
@@ -397,7 +441,35 @@ function App() {
                           placeholder="IPv4 address"
                         />
                       </td>
-                    </tr>
+                      </tr>
+                      <tr>
+                      <td>
+                        <label htmlFor="gateway">Gateway</label>
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          name="gateway"
+                          value={newInterface.gateway}
+                          onChange={handleInputChange}
+                          placeholder="Gateway"
+                        />
+                      </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <label htmlFor="dns">DNS</label>
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            name="dns"
+                            value={newInterface.dns}
+                            onChange={handleInputChange}
+                            placeholder="DNS (Domain Name System)"
+                          />
+                        </td>
+                      </tr>
                     <tr>
                       <td colSpan="2">
                         <div className="button_container">
@@ -426,15 +498,17 @@ function App() {
               <table>
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th title="Media Access Control">MAC</th>
-                    <th title="IP address">IP</th>
-                    <th title="Internet Protocol version 4">IPv4</th>
-                    <th title="Actions performe on the IPv4 atribute">
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th title="Media Access Control">MAC</th>
+                  <th title="IP address">IP</th>
+                  <th>Gateway</th>
+                  <th title="Domain Name System">DNS</th>
+                  <th title="Internet Protocol version 4">IPv4</th>
+                  <th title="Actions performe on the IPv4 atribute">
                       Actions
-                    </th>
+                  </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -445,6 +519,8 @@ function App() {
                       <td>{iface.status}</td>
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
+                      <td>{iface.gateway|| "N/A"}</td>
+                      <td>{iface.dns || "N/A"}</td>
                       <td>
                         {editableIpv4s[index] ? (
                           <input

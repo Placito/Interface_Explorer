@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::env;
 use std::fs;
 use std::path::PathBuf;
-use tauri::command; // For listing network interfaces
+use tauri::command;
 
 // Network data structure
 #[derive(Serialize, Deserialize)]
@@ -13,6 +13,8 @@ struct NetworkInterface {
     status: String,
     mac_address: Option<String>,
     ipv4_address: Option<String>,
+    gateway: Option<String>,  // New field for Gateway
+    dns: Option<String>,      // New field for DNS
 }
 
 // Path to save JSON file (to the root of your repository)
@@ -52,6 +54,8 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
             status: status.to_string(),
             mac_address,
             ipv4_address,
+            gateway: None,  // Gateway and DNS can be None for now
+            dns: None,
         });
     }
 
@@ -69,7 +73,6 @@ fn save_network_interfaces(interfaces: Vec<NetworkInterface>) -> Result<(), Stri
 }
 
 // Load interfaces from a JSON file
-// It reads the saved network interfaces from the JSON file
 #[command]
 fn load_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
     let file_path = get_data_file_path();
@@ -112,6 +115,22 @@ fn delete_ipv4_address(index: usize) -> Result<(), String> {
     save_network_interfaces(interfaces) // Save changes
 }
 
+// Update the Gateway and DNS of a network interface and save to the JSON file
+#[command]
+fn update_gateway_dns(index: usize, gateway: Option<String>, dns: Option<String>) -> Result<(), String> {
+    let mut interfaces = load_network_interfaces()?; // Load existing interfaces
+
+    if index >= interfaces.len() {
+        return Err("Invalid interface index".to_string());
+    }
+
+    // Update Gateway and DNS
+    interfaces[index].gateway = gateway;
+    interfaces[index].dns = dns;
+
+    save_network_interfaces(interfaces) // Save changes
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
@@ -119,7 +138,8 @@ fn main() {
             save_network_interfaces,
             load_network_interfaces,
             update_ipv4_address,
-            delete_ipv4_address
+            delete_ipv4_address,
+            update_gateway_dns  // Add the new command here
         ])
         .run(tauri::generate_context!())
         .expect("Error while running Tauri application");
