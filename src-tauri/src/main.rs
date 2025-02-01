@@ -17,11 +17,7 @@ struct NetworkInterface {
 
 // Path to save JSON file (to the root of your repository)
 fn get_data_file_path() -> PathBuf {
-    // Get the current working directory (the root of your repo)
-    let current_dir = env::current_dir().expect("Failed to get current directory");
-
-    // Return the path to the JSON file in the root of the repo
-    current_dir.join("network_interfaces.json")
+    env::current_dir().expect("Failed to get current directory").join("network_interfaces.json")
 }
 
 // List network interfaces
@@ -30,7 +26,6 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
     let mut interfaces = Vec::new();
 
     for iface in datalink::interfaces() {
-        let name = &iface.name;
         let interface_type = if iface.is_up() {
             if iface.is_loopback() {
                 "Wi-Fi"
@@ -43,7 +38,6 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
         let status = if iface.is_up() { "Active" } else { "Inactive" };
         let mac_address = iface.mac.map(|mac| mac.to_string());
 
-        // Extract IPv4 and IPv6 addresses
         let ipv4_address = iface.ips.iter().find_map(|ip| {
             if ip.is_ipv4() {
                 Some(ip.ip().to_string())
@@ -53,7 +47,7 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
         });
 
         interfaces.push(NetworkInterface {
-            name: name.to_string(),
+            name: iface.name.clone(),
             interface_type: interface_type.to_string(),
             status: status.to_string(),
             mac_address,
@@ -67,36 +61,55 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
 // Save interfaces in a JSON file
 #[command]
 fn save_network_interfaces(interfaces: Vec<NetworkInterface>) -> Result<(), String> {
-    // Get the correct file path where JSON should be saved
-    let file_path = get_data_file_path(); // Get path in root repo
-    println!("Saving to file: {:?}", file_path); // Log the path
-
-    // Serialize the network interfaces to JSON
+    let file_path = get_data_file_path();
     let json_data = serde_json::to_string_pretty(&interfaces)
         .map_err(|e| format!("Failed to serialize data: {}", e))?;
 
-    // Write the JSON data to the file
-    fs::write(&file_path, json_data).map_err(|e| format!("Failed to write to file: {}", e))?;
-
-    Ok(())
+    fs::write(&file_path, json_data).map_err(|e| format!("Failed to write to file: {}", e))
 }
 
 // Load interfaces from a JSON file
+// It reads the saved network interfaces from the JSON file
 #[command]
 fn load_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
-    let file_path = get_data_file_path(); // Get path in root repo
+    let file_path = get_data_file_path();
 
     if !file_path.exists() {
-        return Ok(Vec::new()); // Return empty if the file doesn't exist
+        return Ok(Vec::new()); // Return empty if file doesn’t exist
     }
 
     let json_data =
         fs::read_to_string(&file_path).map_err(|e| format!("Failed to read file: {}", e))?;
 
-    let interfaces: Vec<NetworkInterface> = serde_json::from_str(&json_data)
-        .map_err(|e| format!("Failed to deserialize data: {}", e))?;
+    serde_json::from_str(&json_data).map_err(|e| format!("Failed to deserialize data: {}", e))
+}
 
-    Ok(interfaces)
+// Update the IPv4 address of a network interface and save to the JSON file
+#[command]
+fn update_ipv4_address(index: usize, ipv4_address: Option<String>) -> Result<(), String> {
+    let mut interfaces = load_network_interfaces()?; // Load existing interfaces
+
+    if index >= interfaces.len() {
+        return Err("Invalid interface index".to_string());
+    }
+
+    interfaces[index].ipv4_address = ipv4_address; // Update IPv4
+
+    save_network_interfaces(interfaces) // Save changes
+}
+
+// Remove only the IPv4 address (sets it to "N/A") and save the changes
+#[command]
+fn delete_ipv4_address(index: usize) -> Result<(), String> {
+    let mut interfaces = load_network_interfaces()?; // Load existing interfaces
+
+    if index >= interfaces.len() {
+        return Err("Invalid interface index".to_string());
+    }
+
+    interfaces[index].ipv4_address = Some("N/A".to_string()); // Set IPv4 to "N/A"
+
+    save_network_interfaces(interfaces) // Save changes
 }
 
 fn main() {
@@ -104,8 +117,10 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             list_network_interfaces,
             save_network_interfaces,
-            load_network_interfaces
+            load_network_interfaces,
+            update_ipv4_address,
+            delete_ipv4_address
         ])
         .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .expect("Error while running Tauri application");
 }
