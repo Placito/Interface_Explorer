@@ -1,0 +1,12 @@
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/libignore-fbd73020545c36c2.rmeta: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/default_types.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/dir.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/gitignore.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/overrides.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/pathutil.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/types.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/walk.rs
+
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/ignore-fbd73020545c36c2.d: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/default_types.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/dir.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/gitignore.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/overrides.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/pathutil.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/types.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/walk.rs
+
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/lib.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/default_types.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/dir.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/gitignore.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/overrides.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/pathutil.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/types.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/ignore-0.4.23/src/walk.rs:

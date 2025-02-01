@@ -1,0 +1,10 @@
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/libpnet_datalink-f3bee04561524ee0.rmeta: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bindings/mod.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bindings/bpf.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bpf.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/unix_interfaces.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/dummy.rs
+
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/pnet_datalink-f3bee04561524ee0.d: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bindings/mod.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bindings/bpf.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bpf.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/unix_interfaces.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/dummy.rs
+
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/lib.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bindings/mod.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bindings/bpf.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/bpf.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/unix_interfaces.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/pnet_datalink-0.32.0/src/dummy.rs:

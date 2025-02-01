@@ -1,0 +1,10 @@
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/libtauri_build-d74a810ca979312e.rmeta: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/allowlist.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/static_vcruntime.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/window-app-manifest.xml
+
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/libtauri_build-d74a810ca979312e.rlib: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/allowlist.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/static_vcruntime.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/window-app-manifest.xml
+
+/Users/mariana/Documents/GitHub/Interface_Explorer/src-tauri/target/debug/deps/tauri_build-d74a810ca979312e.d: /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/lib.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/allowlist.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/static_vcruntime.rs /Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/window-app-manifest.xml
+
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/lib.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/allowlist.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/static_vcruntime.rs:
+/Users/mariana/.cargo/registry/src/index.crates.io-6f17d22bba15001f/tauri-build-1.5.6/src/window-app-manifest.xml:
