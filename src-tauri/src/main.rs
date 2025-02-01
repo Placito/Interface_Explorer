@@ -1,9 +1,9 @@
+use pnet::datalink;
+use serde::{Deserialize, Serialize};
 use std::env;
 use std::fs;
 use std::path::PathBuf;
-use serde::{Serialize, Deserialize};
-use tauri::command;
-use pnet::datalink; // For listing network interfaces
+use tauri::command; // For listing network interfaces
 
 // Network data structure
 #[derive(Serialize, Deserialize)]
@@ -18,8 +18,7 @@ struct NetworkInterface {
 // Path to save JSON file (to the root of your repository)
 fn get_data_file_path() -> PathBuf {
     // Get the current working directory (the root of your repo)
-    let current_dir = env::current_dir()
-        .expect("Failed to get current directory");
+    let current_dir = env::current_dir().expect("Failed to get current directory");
 
     // Return the path to the JSON file in the root of the repo
     current_dir.join("network_interfaces.json")
@@ -41,12 +40,17 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
         } else {
             "Unknown"
         };
-        let status = if iface.is_up() { "active" } else { "inactive" };
+        let status = if iface.is_up() { "Active" } else { "Inactive" };
         let mac_address = iface.mac.map(|mac| mac.to_string());
 
         // Extract IPv4 and IPv6 addresses
-        let ipv4_address = iface.ips.iter()
-            .find_map(|ip| if ip.is_ipv4() { Some(ip.ip().to_string()) } else { None });
+        let ipv4_address = iface.ips.iter().find_map(|ip| {
+            if ip.is_ipv4() {
+                Some(ip.ip().to_string())
+            } else {
+                None
+            }
+        });
 
         interfaces.push(NetworkInterface {
             name: name.to_string(),
@@ -60,7 +64,6 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
     Ok(interfaces)
 }
 
-
 // Save interfaces in a JSON file
 #[command]
 fn save_network_interfaces(interfaces: Vec<NetworkInterface>) -> Result<(), String> {
@@ -73,8 +76,7 @@ fn save_network_interfaces(interfaces: Vec<NetworkInterface>) -> Result<(), Stri
         .map_err(|e| format!("Failed to serialize data: {}", e))?;
 
     // Write the JSON data to the file
-    fs::write(&file_path, json_data)
-        .map_err(|e| format!("Failed to write to file: {}", e))?;
+    fs::write(&file_path, json_data).map_err(|e| format!("Failed to write to file: {}", e))?;
 
     Ok(())
 }
@@ -88,8 +90,8 @@ fn load_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
         return Ok(Vec::new()); // Return empty if the file doesn't exist
     }
 
-    let json_data = fs::read_to_string(&file_path)
-        .map_err(|e| format!("Failed to read file: {}", e))?;
+    let json_data =
+        fs::read_to_string(&file_path).map_err(|e| format!("Failed to read file: {}", e))?;
 
     let interfaces: Vec<NetworkInterface> = serde_json::from_str(&json_data)
         .map_err(|e| format!("Failed to deserialize data: {}", e))?;
