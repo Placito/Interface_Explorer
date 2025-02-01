@@ -6,6 +6,7 @@ function App() {
   const [interfaces, setInterfaces] = useState([]);
   const [isPanelVisible, setIsPanelVisible] = useState(false); // Panel visibility for interfaces table
   const [activeButton, setActiveButton] = useState(null);
+  const [activeInput, setActiveInput] = useState(null); // track active input
   const [filteredInterfaces, setFilteredInterfaces] = useState([]);
   const [query, setQuery] = useState(""); // Single query state for search
   const [selectedInterface, setSelectedInterface] = useState(null); // Track selected interface
@@ -156,10 +157,11 @@ function App() {
   
 
   // Enable editing mode for a specific row
-const handleEditClick = (index, ipv4Value) => {
-  setEditableIpv4s((prev) => ({ ...prev, [index]: true }));
-  setIpv4Temp(ipv4Value || ""); // Store current IPv4 value
-};
+  const handleEditClick = (index, ipv4Value) => {
+    setEditableIpv4s((prev) => ({ ...prev, [index]: true }));
+    setIpv4Temp(ipv4Value || ""); // Store current IPv4 value
+    setActiveInput(index); // Set the active input to the clicked index
+  };
 
 const handleInputChange = (e) => {
   const { name, value } = e.target;
@@ -167,6 +169,7 @@ const handleInputChange = (e) => {
     ...newInterface,
     [name]: value,
   });
+  setActiveInput(inputName);
 };
 
 // Handle update on input change
@@ -419,7 +422,7 @@ const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
       autoFocus
     />
   ) : (
-    <span onClick={() => handleEditClick(index, iface.ipv4_address)}>
+    <span >
       {iface.ipv4_address || "N/A"}
     </span>
   )}
@@ -428,10 +431,7 @@ const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
                       <td>
                         <div className="button_Actions">
                           <button
-                             onClick={() => {
-                              handleUpdate(iface.ipv4Temp);
-                            }}
-                            className="button_Icon"
+                             onClick={() => handleEditClick(index, iface.ipv4_address)} className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
                           >
                             <i className="fa-solid fa-pen-to-square"></i>
                           </button>

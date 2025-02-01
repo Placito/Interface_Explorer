@@ -209,3 +209,15 @@ h1 {
   width: 100%;
   margin-top: 5px;
 }
+
+/* style for the update input */
+input.active {
+  border: 2px solid #007bff;
+  background-color: #f0f8ff;
+}
+
+span.active {
+  color: #007bff;
+  font-weight: bold;
+}
+
