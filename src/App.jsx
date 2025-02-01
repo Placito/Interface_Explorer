@@ -161,6 +161,14 @@ const handleEditClick = (index, ipv4Value) => {
   setIpv4Temp(ipv4Value || ""); // Store current IPv4 value
 };
 
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  setNewInterface({
+    ...newInterface,
+    [name]: value,
+  });
+};
+
 // Handle update on input change
 const handleUpdate = (e, index) => {
   setIpv4Temp(e.target.value); // Update temp IPv4 state
