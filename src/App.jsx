@@ -19,6 +19,8 @@ function App() {
     ip_address: "",
     ipv4_address: "",
   });
+  const [editableIpv4s, setEditableIpv4s] = useState({}); // Track which interface is editable
+  const [ipv4Temp, setIpv4Temp] = useState(newInterface.ipv4_address); // Temporary state for IPv4
 
   // Fetch network interfaces
   const fetchInterfaces = async () => {
@@ -87,6 +89,14 @@ function App() {
     }
   };
 
+  // Handle key down event for Enter key for the editable IPv4 field
+  const handleKeyDownIPv4 = (e, ifaceIndex) => {
+    if (e.key === "Enter" && editableIpv4s[ifaceIndex]) {
+      // When Enter is pressed, save the new IPv4 address
+      handleSaveIpv4(ifaceIndex, ipv4Temp);
+    }
+  };
+
   // Toggle the visibility of the panel
   const togglePanelVisibility = () => {
     if (isFormVisible) {
@@ -142,55 +152,45 @@ function App() {
   };
 
   // Function for delete
-  const handleDelete = (ifaceToDelete) => {
-    // Remove the interface from the list
-    const updatedInterfaces = filteredInterfaces.filter(
-      (iface) => iface !== ifaceToDelete
+  const handleDeleteIPv4 = (ifaceToUpdate) => {
+    const updatedInterfaces = filteredInterfaces.map((iface) =>
+      iface === ifaceToUpdate ? { ...iface, ipv4_address: "N/A" } : iface
     );
+  
     setFilteredInterfaces(updatedInterfaces);
     setInterfaces(updatedInterfaces); // Update the original list if needed
   };
+  
 
   // Function for update
-  const handleUpdate = (ifaceToUpdate) => {
-    const updatedName = prompt("Enter the new name:", ifaceToUpdate.name);
-    if (updatedName) {
-      const updatedInterfaces = filteredInterfaces.map((iface) =>
-        iface === ifaceToUpdate ? { ...iface, name: updatedName } : iface
-      );
-      setFilteredInterfaces(updatedInterfaces);
-      setInterfaces(updatedInterfaces); // Update the original list if needed
-    }
+  const handleUpdate = (e, ifaceToUpdate) => {
+    const { name, value } = e.target; // Get the input field name and value
+    const updatedInterfaces = filteredInterfaces.map((iface) =>
+      iface === ifaceToUpdate ? { ...iface, [name]: value } : iface
+    );
+  
+    setFilteredInterfaces(updatedInterfaces);
+    setInterfaces(updatedInterfaces); // Update the original list if needed
   };
-
-  // Toggle form visibility
-  const toggleFormVisibility = () => {
-    setIsFormVisible(!isFormVisible);
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewInterface({
-      ...newInterface,
-      [name]: value,
+  
+  // button click handlers to toggle the editability for the specific interface
+  const handleSaveIpv4 = (ifaceIndex, newIpv4) => {
+    // Save the new IPv4 and reset the edit mode for this interface
+    const updatedInterfaces = filteredInterfaces.map((iface, index) => {
+      if (index === ifaceIndex) {
+        return { ...iface, ipv4_address: newIpv4 };
+      }
+      return iface;
     });
+  
+    setFilteredInterfaces(updatedInterfaces);
+    setEditableIpv4s((prevState) => ({
+      ...prevState,
+      [ifaceIndex]: false, // Disable edit mode after saving
+    }));
   };
-
-  const handleAddInterface = () => {
-    // Handle the form submission logic here
-    console.log("Adding new interface:", newInterface);
-    // Reset form and hide it
-    setNewInterface({
-      name: "",
-      interface_type: "",
-      status: "",
-      mac_address: "",
-      ip_address: "",
-      ipv4_address: "",
-    });
-    setIsFormVisible(false); // Hide form after submission
-  };
-
+  
+  
   return (
     <div className="center">
       <div className="p-4">
@@ -399,7 +399,7 @@ function App() {
                     <th>MAC</th>
                     <th>IP</th>
                     <th>IPv4</th>
-                    <th>Actions</th> {/* New column for buttons */}
+                    <th>Actions</th> 
                   </tr>
                 </thead>
                 <tbody>
@@ -410,19 +410,38 @@ function App() {
                       <td>{iface.status}</td>
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
-                      <td>{iface.ipv4_address || "N/A"}</td>
                       <td>
-                      <div className="button_Actions">
-
-                        <button onClick={() => handleUpdate(iface)} className="button_Icon">
-                        <i className="fa-solid fa-pen-to-square"></i>
-                        </button>
-                        <button onClick={() => handleDelete(iface)} className="button_Icon">
-                        <i className="fa-solid fa-trash-can"></i>
-                        </button>
+                        {editableIpv4s[index] ? (
+                          <input
+                            type="text"
+                            value={ipv4Temp}
+                            onChange={(e) => handleUpdate(e, iface)} // Update on input change
+                            placeholder="IPv4 address"
+                            onKeyDown={(e) => handleKeyDownIPv4(e, index)} 
+                          />
+                        ) : (
+                          <span>{iface.ipv4_address || "N/A"}</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="button_Actions">
+                          <button
+                             onClick={() => {
+                              handleUpdate(iface.ipv4Temp);
+                            }}
+                            className="button_Icon"
+                          >
+                            <i className="fa-solid fa-pen-to-square"></i>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteIPv4(iface)}
+                            className="button_Icon"
+                          >
+                            <i className="fa-solid fa-trash-can"></i>
+                          </button>
                         </div>
                       </td>
-                    </tr>
+                      </tr>
                   ))}
                 </tbody>
               </table>
