@@ -56,3 +56,12 @@ Make sure you have the following installed on your system:
 
 ---
 
+### For Development
+
+1. Install Dependencies using Bun:
+   ``bun install``
+2. Build the project:
+   ``cargo build``
+3. Start development server:
+   ``bun run tauri dev``
+
