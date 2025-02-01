@@ -60,8 +60,8 @@ Make sure you have the following installed on your system:
 
 1. Install Dependencies using Bun:
    ``bun install``
-2. Build the project:
-   ``cargo build``
+2. Build the project: (running cargo buil without changing to same directory of cargo.toml file)
+   ``cargo build --manifest-path src-tauri/Cargo.toml``
 3. Start development server:
    ``bun run tauri dev``
 

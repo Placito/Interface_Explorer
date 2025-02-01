@@ -4,7 +4,7 @@ import "./styles.css"; // Import the CSS file
 
 function App() {
   const [interfaces, setInterfaces] = useState([]);
-  const [isPanelVisible, setIsPanelVisible] = useState(false);
+  const [isPanelVisible, setIsPanelVisible] = useState(false); // Panel visibility for interfaces table
   const [activeButton, setActiveButton] = useState(null);
   const [filteredInterfaces, setFilteredInterfaces] = useState([]);
   const [query, setQuery] = useState(""); // Single query state for search
@@ -89,15 +89,26 @@ function App() {
 
   // Toggle the visibility of the panel
   const togglePanelVisibility = () => {
-    setIsPanelVisible((prev) => !prev);
+    if (isFormVisible) {
+      setIsFormVisible(false); // Close the form if it's open
+    } else {
+      setIsPanelVisible((prev) => !prev); // Toggle the visibility of the interfaces table
+    }
     setSelectedInterface(null); // Clear selected interface when toggling visibility
     setQuery(""); // Reset search query
-    setFilteredInterfaces(interfaces); // Reset the filtered list
+    setFilteredInterfaces(interfaces); // Reset filtered list
   };
 
   // Set the clicked button as active
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
+  };
+
+  // Handle the "Add Interface" button click
+  const handleAddInterfaceClick = () => {
+    setIsFormVisible(true); // Show the form
+    setIsPanelVisible(false); // Hide the interfaces table
+    setActiveButton("save");
   };
 
   // Fetch interfaces when the component mounts
@@ -115,7 +126,6 @@ function App() {
       console.error("Error saving interfaces:", error);
     }
   };
-
 
   // Highlight the matched text in the query
   const highlightMatch = (text) => {
@@ -192,7 +202,8 @@ function App() {
               togglePanelVisibility(); // Toggle the visibility of the panel
               handleButtonClick("display"); // Track the active button
               // Call saveInterfaces only when the panel is shown
-              if (!isPanelVisible) { // Only save when panel is being shown
+              if (!isPanelVisible) {
+                // Only save when panel is being shown
                 saveInterfaces();
               }
             }}
@@ -204,7 +215,7 @@ function App() {
           </button>
           <button
             onClick={() => {
-              toggleFormVisibility(); // Correctly toggle form visibility
+              handleAddInterfaceClick();
               handleButtonClick("save");
             }}
             className={`button ${activeButton === "save" ? "active" : ""}`}
@@ -394,26 +405,21 @@ function App() {
                 <tbody>
                   {filteredInterfaces.map((iface, index) => (
                     <tr key={index}>
-                      <td>{iface.name}</td>
+                      <td>{highlightMatch(iface.name)}</td>
                       <td>{iface.interface_type}</td>
                       <td>{iface.status}</td>
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
                       <td>{iface.ipv4_address || "N/A"}</td>
                       <td>
-                        <div className="button_Actions">
-                          <button
-                            className="button_Icon"
-                            onClick={() => handleUpdate(iface)}
-                          >
-                            <i className="fa-solid fa-pen-to-square"></i>
-                          </button>
-                          <button
-                            className="button_Icon"
-                            onClick={() => handleDelete(iface)}
-                          >
-                            <i className="fa-solid fa-trash-can"></i>
-                          </button>
+                      <div className="button_Actions">
+
+                        <button onClick={() => handleUpdate(iface)} className="button_Icon">
+                        <i className="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onClick={() => handleDelete(iface)} className="button_Icon">
+                        <i className="fa-solid fa-trash-can"></i>
+                        </button>
                         </div>
                       </td>
                     </tr>
@@ -421,7 +427,7 @@ function App() {
                 </tbody>
               </table>
             ) : (
-              <p>No interfaces found</p>
+              <p>No interfaces found.</p>
             )}
           </div>
         )}
