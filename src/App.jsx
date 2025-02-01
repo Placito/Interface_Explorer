@@ -23,7 +23,6 @@ function App() {
   const [editableIpv4s, setEditableIpv4s] = useState({}); // Track which interface is editable
   const [ipv4Temp, setIpv4Temp] = useState(!""); // Store temp IPv4 value
 
-
   // Fetch network interfaces
   const fetchInterfaces = async () => {
     try {
@@ -150,11 +149,10 @@ function App() {
     const updatedInterfaces = filteredInterfaces.map((iface) =>
       iface === ifaceToUpdate ? { ...iface, ipv4_address: "N/A" } : iface
     );
-  
+
     setFilteredInterfaces(updatedInterfaces);
     setInterfaces(updatedInterfaces); // Update the original list if needed
   };
-  
 
   // Enable editing mode for a specific row
   const handleEditClick = (index, ipv4Value) => {
@@ -163,34 +161,33 @@ function App() {
     setActiveInput(index); // Set the active input to the clicked index
   };
 
-const handleInputChange = (e) => {
-  const { name, value } = e.target;
-  setNewInterface({
-    ...newInterface,
-    [name]: value,
-  });
-  setActiveInput(inputName);
-};
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewInterface({
+      ...newInterface,
+      [name]: value,
+    });
+    setActiveInput(inputName);
+  };
 
-// Handle update on input change
-const handleUpdate = (e, index) => {
-  setIpv4Temp(e.target.value); // Update temp IPv4 state
-};
+  // Handle update on input change
+  const handleUpdate = (e, index) => {
+    setIpv4Temp(e.target.value); // Update temp IPv4 state
+  };
 
-// Save updated IPv4 and exit edit mode
-const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
-  if (e.key === "Enter") {
-    const updatedInterfaces = filteredInterfaces.map((iface, i) =>
-      i === index ? { ...iface, ipv4_address: ipv4Temp } : iface
-    );
+  // Save updated IPv4 and exit edit mode
+  const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
+    if (e.key === "Enter") {
+      const updatedInterfaces = filteredInterfaces.map((iface, i) =>
+        i === index ? { ...iface, ipv4_address: ipv4Temp } : iface
+      );
 
-    setFilteredInterfaces(updatedInterfaces);
-    setInterfaces(updatedInterfaces); // Update the original list
-    setEditableIpv4s((prev) => ({ ...prev, [index]: false })); // Exit edit mode
-  }
-};
-  
-  
+      setFilteredInterfaces(updatedInterfaces);
+      setInterfaces(updatedInterfaces); // Update the original list
+      setEditableIpv4s((prev) => ({ ...prev, [index]: false })); // Exit edit mode
+    }
+  };
+
   return (
     <div className="center">
       <div className="p-4">
@@ -396,10 +393,10 @@ const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
                     <th>Name</th>
                     <th>Type</th>
                     <th>Status</th>
-                    <th>MAC</th>
-                    <th>IP</th>
-                    <th>IPv4</th>
-                    <th>Actions</th> 
+                    <th title="Media Access Control">MAC</th>
+                    <th title="IP address">IP</th>
+                    <th title="Internet Protocol version 4">IPv4</th>
+                    <th title="Actions performe on the IPv4 atribute">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -411,27 +408,37 @@ const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
                       <td>
-  {editableIpv4s[index] ? (
-    <input
-      type="text"
-      value={ipv4Temp}
-      onChange={(e) => handleUpdate(e, index)} // Update on input change
-      placeholder="IPv4 address"
-      onKeyDown={(e) => handleKeyDownIPv4(e, index, iface)} // Save on Enter key press
-      onBlur={() => setEditableIpv4s((prev) => ({ ...prev, [index]: false }))} // Close input when clicking outside
-      autoFocus
-    />
-  ) : (
-    <span >
-      {iface.ipv4_address || "N/A"}
-    </span>
-  )}
-</td>
+                        {editableIpv4s[index] ? (
+                          <input
+                            type="text"
+                            value={ipv4Temp}
+                            onChange={(e) => handleUpdate(e, index)} // Update on input change
+                            placeholder="IPv4 address"
+                            onKeyDown={(e) =>
+                              handleKeyDownIPv4(e, index, iface)
+                            } // Save on Enter key press
+                            onBlur={() =>
+                              setEditableIpv4s((prev) => ({
+                                ...prev,
+                                [index]: false,
+                              }))
+                            } // Close input when clicking outside
+                            autoFocus
+                          />
+                        ) : (
+                          <span>{iface.ipv4_address || "N/A"}</span>
+                        )}
+                      </td>
 
                       <td>
                         <div className="button_Actions">
                           <button
-                             onClick={() => handleEditClick(index, iface.ipv4_address)} className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
+                            onClick={() =>
+                              handleEditClick(index, iface.ipv4_address)
+                            }
+                            className={`button_Icon nputFormatted ${
+                              activeInput === "display" ? "active" : ""
+                            }`}
                           >
                             <i className="fa-solid fa-pen-to-square"></i>
                           </button>
@@ -443,7 +450,7 @@ const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
                           </button>
                         </div>
                       </td>
-                      </tr>
+                    </tr>
                   ))}
                 </tbody>
               </table>
