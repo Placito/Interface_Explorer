@@ -114,6 +114,25 @@ function App() {
     setActiveButton("save");
   };
 
+  // Inside the submit handler (when user submits the form to add a new interface)
+const handleAddInterface = async () => {
+  try {
+    // You can either add this new interface directly to the list here
+    const updatedInterfaces = [...interfaces, newInterface];
+
+    // Save the updated list of interfaces to the backend
+    await invoke("save_network_interfaces", { interfaces: updatedInterfaces });
+
+    // Update the frontend state with the new interface list
+    setInterfaces(updatedInterfaces);
+    setFilteredInterfaces(updatedInterfaces); // If needed, also update the filtered list
+
+    console.log("New interface added and saved successfully!");
+  } catch (error) {
+    console.error("Error adding new interface:", error);
+  }
+};
+
   // Fetch interfaces when the component mounts
   useEffect(() => {
     fetchInterfaces();
@@ -145,14 +164,24 @@ function App() {
   };
 
   // Function for delete
-  const handleDeleteIPv4 = (ifaceToUpdate) => {
+  const handleDeleteIPv4 = async (ifaceToUpdate) => {
     const updatedInterfaces = filteredInterfaces.map((iface) =>
       iface === ifaceToUpdate ? { ...iface, ipv4_address: "N/A" } : iface
     );
-
-    setFilteredInterfaces(updatedInterfaces);
-    setInterfaces(updatedInterfaces); // Update the original list if needed
+  
+    try {
+      // Save the updated list to the backend
+      await invoke("save_network_interfaces", { interfaces: updatedInterfaces });
+  
+      // Update frontend state
+      setFilteredInterfaces(updatedInterfaces);
+      setInterfaces(updatedInterfaces);
+      console.log("IPv4 address deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting IPv4 address:", error);
+    }
   };
+  
 
   // Enable editing mode for a specific row
   const handleEditClick = (index, ipv4Value) => {
@@ -176,17 +205,29 @@ function App() {
   };
 
   // Save updated IPv4 and exit edit mode
-  const handleKeyDownIPv4 = (e, index, ifaceToUpdate) => {
+  const handleKeyDownIPv4 = async (e, index, ifaceToUpdate) => {
     if (e.key === "Enter") {
       const updatedInterfaces = filteredInterfaces.map((iface, i) =>
         i === index ? { ...iface, ipv4_address: ipv4Temp } : iface
       );
-
-      setFilteredInterfaces(updatedInterfaces);
-      setInterfaces(updatedInterfaces); // Update the original list
-      setEditableIpv4s((prev) => ({ ...prev, [index]: false })); // Exit edit mode
+  
+      try {
+        // Send the updated list back to the backend to save it
+        await invoke("save_network_interfaces", { interfaces: updatedInterfaces });
+  
+        // Update frontend state
+        setFilteredInterfaces(updatedInterfaces);
+        setInterfaces(updatedInterfaces);
+  
+        // Exit editing mode for this interface
+        setEditableIpv4s((prev) => ({ ...prev, [index]: false }));
+        console.log("IPv4 address updated successfully!");
+      } catch (error) {
+        console.error("Error updating IPv4 address:", error);
+      }
     }
   };
+  
 
   return (
     <div className="center">
