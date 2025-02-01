@@ -107,31 +107,51 @@ function App() {
     setActiveButton(buttonName);
   };
 
-  // Handle the "Add Interface" button click
   const handleAddInterfaceClick = () => {
-    setIsFormVisible(true); // Show the form
-    setIsPanelVisible(false); // Hide the interfaces table
+    setIsFormVisible(true); // Ensure the form appears
+    setIsPanelVisible(false); // Hide the interfaces table when adding a new one
     setActiveButton("save");
+  
+    // Reset form inputs to ensure a clean form
+    setNewInterface({
+      name: "",
+      interface_type: "",
+      status: "",
+      mac_address: "",
+      ip_address: "",
+      ipv4_address: "",
+    });
   };
 
+  
   // Inside the submit handler (when user submits the form to add a new interface)
-const handleAddInterface = async () => {
-  try {
-    // You can either add this new interface directly to the list here
-    const updatedInterfaces = [...interfaces, newInterface];
-
-    // Save the updated list of interfaces to the backend
-    await invoke("save_network_interfaces", { interfaces: updatedInterfaces });
-
-    // Update the frontend state with the new interface list
-    setInterfaces(updatedInterfaces);
-    setFilteredInterfaces(updatedInterfaces); // If needed, also update the filtered list
-
-    console.log("New interface added and saved successfully!");
-  } catch (error) {
-    console.error("Error adding new interface:", error);
-  }
-};
+  const handleAddInterface = async () => {
+  
+    try {
+      const updatedInterfaces = [...interfaces, newInterface];
+  
+      await invoke("save_network_interfaces", { interfaces: updatedInterfaces });
+  
+      setInterfaces(updatedInterfaces);
+      setFilteredInterfaces(updatedInterfaces);
+  
+      // Reset form after successful submission
+      setNewInterface({
+        name: "",
+        interface_type: "",
+        status: "",
+        mac_address: "",
+        ip_address: "",
+        ipv4_address: "",
+      });
+  
+      console.log("New interface added successfully!");
+    } catch (error) {
+      console.error("Error adding new interface:", error);
+    }
+  };
+  
+  
 
   // Fetch interfaces when the component mounts
   useEffect(() => {
@@ -196,7 +216,7 @@ const handleAddInterface = async () => {
       ...newInterface,
       [name]: value,
     });
-    setActiveInput(inputName);
+    setActiveInput(name);
   };
 
   // Handle update on input change
@@ -252,10 +272,7 @@ const handleAddInterface = async () => {
               : "Show Network Interfaces"}
           </button>
           <button
-            onClick={() => {
-              handleAddInterfaceClick();
-              handleButtonClick("save");
-            }}
+            onClick={handleAddInterfaceClick} 
             className={`button ${activeButton === "save" ? "active" : ""}`}
           >
             Add Interface
@@ -412,9 +429,16 @@ const handleAddInterface = async () => {
                     </tr>
                     <tr>
                       <td colSpan="2">
+                      <div className="button_container">
                         <button type="submit" className="button">
-                          Add Interface
+                          Save Interface
                         </button>
+                        <button
+                          onClick={() => setIsFormVisible(false)}
+                          className="button" >
+                            Cancel
+                          </button>
+                      </div>
                       </td>
                     </tr>
                   </tbody>

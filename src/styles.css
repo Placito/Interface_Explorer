@@ -211,6 +211,13 @@ h1 {
   margin-top: 5px;
 }
 
+.button_container {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  gap: 10px;
+} 
+
 /* style for the update input */
 input.active {
   border: 2px solid #007bff;
