@@ -387,7 +387,6 @@ function App() {
                       <input
                         type="text"
                         name="gateway"
-                        value={tempValues.gateway}
                         onChange={handleInputChange}
                         placeholder="Gateway"
                         onKeyDown={(e) => handleKeyDownField(e, 0, "gateway")} // Save on Enter key press
@@ -421,7 +420,6 @@ function App() {
                       <input
                         type="text"
                         name="dns"
-                        value={tempValues.dns}
                         onChange={handleInputChange}
                         placeholder="DNS"
                         onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
@@ -524,10 +522,10 @@ function App() {
                     <th>Type</th>
                     <th>Status</th>
                     <th title="Media Access Control">MAC</th>
+                    <th title="IP address">IP</th>
                     <th>Gateway</th>
                     <th title="Domain Name System">DNS</th>
                     <th title="Internet Protocol version 4">IPv4</th>
-                    <th title="IP address">IP</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -543,10 +541,10 @@ function App() {
                       <td>{iface.interface_type}</td>
                       <td>{iface.status}</td>
                       <td>{iface.mac_address || "N/A"}</td>
+                      <td>{iface.ip_address || "N/A"}</td>
                       <td>{iface.gateway || "N/A"}</td>
                       <td>{iface.dns || "N/A"}</td>
                       <td>{iface.ipv4_address || "N/A"}</td>
-                      <td>{iface.ip_address || "N/A"}</td>
                     </tr>
                   ))}
                 </tbody>

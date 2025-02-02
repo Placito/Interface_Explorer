@@ -5,15 +5,21 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": "N/A",
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      "j",
+      "hg"
+    ],
+    "dns": [
+      "hj",
+      "f"
+    ]
   },
   {
     "name": "gif0",
     "interface_type": "Unknown",
     "status": "Inactive",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": "",
+    "ipv4_address": null,
     "gateway": [],
     "dns": []
   },
