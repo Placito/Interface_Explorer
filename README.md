@@ -50,32 +50,29 @@ Make sure you have the following installed on your system:
    ```bash
    git clone https://github.com/yourusername/Interface_Explorer.git
    cd Interface_Explorer
+
+2. check if Cargo is Installed, if not:
+   ```bash
+   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh source $HOME/.cargo/env
+   ```
+
 2. Install Dependencies using Bun:
-   ``bun install``
-3. Start development server:
-   ``bun run tauri dev``
-
----
-
-### For Development
-
-1. Install Dependencies using Bun:
    ```bash
    bun install
    ```
-2. Build the project: (running cargo build without changing to the same directory of Cargo.toml file)
+3. Build the project: (running cargo build without changing to the same directory of Cargo.toml file)
 
-   2.1. Just compile Rust backend
+   3.1. Just compile Rust backend
    ```bash
    cargo build --manifest-path src-tauri/Cargo.toml
    ```
 
-   2.2. When you are ready to release the full app
+   3.2. When you are ready to release the full app
    ```bash
    cargo tauri build --manifest-path src-tauri/Cargo.toml
    ```
 
-3. Start development server:
+4. Start development server:
    ```bash
    bun run tauri dev
    ```
