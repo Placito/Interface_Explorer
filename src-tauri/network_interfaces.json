@@ -5,8 +5,12 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": "127.0.0.1",
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      "gh"
+    ],
+    "dns": [
+      "j"
+    ]
   },
   {
     "name": "gif0",
@@ -112,7 +116,7 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "80:a9:97:2c:28:41",
-    "ipv4_address": "192.168.1.68",
+    "ipv4_address": null,
     "gateway": [],
     "dns": []
   },

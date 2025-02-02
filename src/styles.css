@@ -206,3 +206,8 @@ span.active {
   font-weight: bold;
 }
 
+.clickable:hover {
+  cursor: pointer;
+  background-color: rgb(41, 41, 42);
+  color: #fff;
+}

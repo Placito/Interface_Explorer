@@ -17,7 +17,8 @@ function App() {
     gateway: "",
     dns: "",
   });
-  const inputRef = useRef(null); // Create a ref for the input element
+  // useRef is used to create a reference to the input element. The focusInput function uses this reference to focus the input element when the button is clicked.
+  const inputRef = useRef(null); 
 
   const fetchInterfaces = async () => {
     try {
@@ -94,7 +95,7 @@ function App() {
 
   const saveInterfaces = async () => {
     try {
-      await invoke("save_network_interfaces", { interfaces: interfaces });
+      await invoke("save_network_interfaces", { interfaces });
       console.log("Interfaces saved successfully!");
     } catch (error) {
       console.error("Error saving interfaces:", error);
@@ -154,20 +155,25 @@ function App() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTempValues((prev) => ({ ...prev, [name]: value }));
-
-    // Prevent input field from appearing if ipv4_address is "N/A"
-    if (name === "ipv4_address" && value === "N/A") {
-      setEditableFields((prev) => ({ ...prev, ipv4_address: false }));
-      console.error("Cannot edit. ipv4_address is N/A.");
-    }
   };
 
   const handleKeyDownField = async (e, index, field) => {
     if (e.key === "Enter") {
+      let value = tempValues[field];
+      if (value === "N/A") {
+        console.error(`Cannot update ${field}. Value is "N/A".`);
+        return;
+      }
+  
+      if (field === "gateway" || field === "dns") {
+        const newValues = value.split(",").map((item) => item.trim());
+        value = [...interfaces[index][field], ...newValues];
+      }
+  
       const updatedInterfaces = interfaces.map((iface, i) =>
-        i === index ? { ...iface, [field]: tempValues[field] } : iface
+        i === index ? { ...iface, [field]: value } : iface
       );
-
+  
       try {
         await invoke("save_network_interfaces", {
           interfaces: updatedInterfaces,
@@ -181,7 +187,7 @@ function App() {
         ) {
           setSelectedInterface({
             ...selectedInterface,
-            [field]: tempValues[field],
+            [field]: value,
           });
         }
         console.log(`${field} updated successfully!`);
@@ -238,14 +244,6 @@ function App() {
       console.error("No interface selected or invalid index");
     }
     console.log("Interfaces:", interfaces);
-  };
-
-  const handleAddClickAll = (index) => {
-    console.log("Function handleAddClickAll called with index:", index);
-
-    handleAddClickGateway(index);
-    handleAddClickDns(index);
-    handleAddClickIpv4(index);
   };
 
   return (
@@ -363,12 +361,14 @@ function App() {
                         selectedInterface.gateway.length > 0
                           ? selectedInterface.gateway.join(", ")
                           : "N/A"}
-                        <i
-                          title="Add new entrie"
-                          className="fa-solid fa-circle-plus"
-                          onClick={() => handleAddClickGateway(0)}
-                          style={{ cursor: "pointer", marginLeft: "5px" }}
-                        ></i>
+                        {selectedInterface.gateway !== "N/A" && (
+                          <i
+                            title="Add new entrie"
+                            className="fa-solid fa-circle-plus"
+                            onClick={() => handleAddClickGateway(0)}
+                            style={{ cursor: "pointer", marginLeft: "5px" }}
+                          ></i>
+                        )}
                       </span>
                     )}
                   </td>
@@ -395,12 +395,14 @@ function App() {
                         selectedInterface.dns.length > 0
                           ? selectedInterface.dns.join(", ")
                           : "N/A"}
-                        <i
-                          title="Add new entrie"
-                          className="fa-solid fa-circle-plus"
-                          onClick={() => handleAddClickDns(0)}
-                          style={{ cursor: "pointer", marginLeft: "5px" }}
-                        ></i>
+                        {selectedInterface.dns !== "N/A" && (
+                          <i
+                            title="Add new entrie"
+                            className="fa-solid fa-circle-plus"
+                            onClick={() => handleAddClickDns(0)}
+                            style={{ cursor: "pointer", marginLeft: "5px" }}
+                          ></i>
+                        )}
                       </span>
                     )}
                   </td>
@@ -430,7 +432,7 @@ function App() {
                   <td>
                     <div className="button_Actions">
                       <button
-                        onClick={() => handleAddClickAll(0)}
+                        onClick={() => handleAddClickIpv4(0)}
                         className={`button_Icon nputFormatted ${
                           activeInput === "display" ? "active" : ""
                         }`}
@@ -481,152 +483,29 @@ function App() {
                     <th>Type</th>
                     <th>Status</th>
                     <th title="Media Access Control">MAC</th>
-                    <th title="IP address">IP</th>
                     <th>Gateway</th>
                     <th title="Domain Name System">DNS</th>
                     <th title="Internet Protocol version 4">IPv4</th>
-                    <th title="Actions performe on the IPv4 atribute">
-                      Actions
-                    </th>
+                    <th title="IP address">IP</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredInterfaces.map((iface, index) => (
-                    <tr key={index}>
+                    <tr className="clickable"
+                      key={index}
+                      onClick={() => {
+                        setSelectedInterface(iface);
+                        setIsPanelVisible(false); // Ensure the panel with all details is hidden
+                      }}
+                    >
                       <td>{highlightMatch(iface.name, query)}</td>
                       <td>{iface.interface_type}</td>
                       <td>{iface.status}</td>
                       <td>{iface.mac_address || "N/A"}</td>
+                      <td>{iface.gateway || "N/A"}</td>
+                      <td>{iface.dns || "N/A"}</td>
+                      <td>{iface.ipv4_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
-                      <td>
-                        {editableFields.gateway ? (
-                          <input
-                            type="text"
-                            name="gateway"
-                            value={tempValues.gateway}
-                            onChange={handleInputChange}
-                            placeholder="Gateway"
-                            onKeyDown={(e) =>
-                              handleKeyDownField(e, 0, "gateway")
-                            } // Save on Enter key press
-                            onBlur={() =>
-                              setEditableFields((prev) => ({
-                                ...prev,
-                                gateway: false,
-                              }))
-                            } // Close input when clicking outside
-                            autoFocus
-                          />
-                        ) : (
-                          <span>
-                            {iface.gateway && iface.gateway.length > 0
-                              ? iface.gateway.join(", ")
-                              : "N/A"}
-                            <i
-                              title="Add new entrie"
-                              className="fa-solid fa-circle-plus"
-                              onClick={() => handleAddClickGateway(0)}
-                              style={{ cursor: "pointer", marginLeft: "5px" }}
-                            ></i>
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        {editableFields.dns ? (
-                          <input
-                            type="text"
-                            name="dns"
-                            value={tempValues.dns}
-                            onChange={handleInputChange}
-                            placeholder="DNS"
-                            onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
-                            onBlur={() =>
-                              setEditableFields((prev) => ({
-                                ...prev,
-                                dns: false,
-                              }))
-                            } // Close input when clicking outside
-                            autoFocus
-                          />
-                        ) : (
-                          <span>
-                            {iface.dns && iface.dns.length > 0
-                              ? iface.dns.join(", ")
-                              : "N/A"}
-                            <i
-                              title="Add new entrie"
-                              className="fa-solid fa-circle-plus"
-                              onClick={() => handleAddClickDns(0)}
-                              style={{ cursor: "pointer", marginLeft: "5px" }}
-                            ></i>
-                          </span>
-                        )}
-                      </td>
-                      <td>
-                        {editableFields.ipv4_address &&
-                        activeInput === index ? (
-                          <input
-                            type="text"
-                            name="ipv4_address"
-                            value={tempValues.ipv4_address}
-                            onChange={handleInputChange}
-                            placeholder="IPv4 address"
-                            onKeyDown={(e) =>
-                              handleKeyDownField(e, index, "ipv4_address")
-                            } // Save on Enter key press
-                            onBlur={() =>
-                              setEditableFields((prev) => ({
-                                ...prev,
-                                ipv4_address: false,
-                              }))
-                            } // Close input when clicking outside
-                            autoFocus
-                          />
-                        ) : (
-                          <span>{iface.ipv4_address || "N/A"}</span>
-                        )}
-                      </td>
-                      <td>
-                        <div className="button_Actions">
-                          <button
-                            onClick={() => handleAddClickAll(index)}
-                            className={`button_Icon nputFormatted ${
-                              activeInput === "display" ? "active" : ""
-                            }`}
-                          >
-                            <i
-                              title="Add new"
-                              className="fa-regular fa-address-book"
-                            ></i>
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleEditClick(
-                                index,
-                                ["ipv4_address"],
-                                [iface.ipv4_address]
-                              )
-                            }
-                            className={`button_Icon nputFormatted ${
-                              activeInput === index ? "active" : ""
-                            }`}
-                          >
-                            <i
-                              title="Edit"
-                              className="fa-solid fa-pen-to-square"
-                            ></i>
-                          </button>
-                          <button
-                            onClick={() => handleDeleteIPv4(iface)}
-                            className="button_Icon"
-                          >
-                            <i
-                              title="Delete"
-                              className="fa-solid fa-trash-can"
-                            ></i>
-                          </button>
-                        </div>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
