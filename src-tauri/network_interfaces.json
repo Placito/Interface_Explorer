@@ -120,7 +120,7 @@
     "name": "awdl0",
     "interface_type": "Ethernet",
     "status": "Active",
-    "mac_address": "fa:65:ad:13:8b:d2",
+    "mac_address": "32:0d:0a:1f:de:e2",
     "ipv4_address": null,
     "gateway": null,
     "dns": null
@@ -129,7 +129,7 @@
     "name": "llw0",
     "interface_type": "Ethernet",
     "status": "Active",
-    "mac_address": "fa:65:ad:13:8b:d2",
+    "mac_address": "32:0d:0a:1f:de:e2",
     "ipv4_address": null,
     "gateway": null,
     "dns": null
@@ -178,14 +178,5 @@
     "ipv4_address": null,
     "gateway": null,
     "dns": null
-  },
-  {
-    "name": "m",
-    "interface_type": "A",
-    "status": "R",
-    "mac_address": "I",
-    "ipv4_address": "N",
-    "gateway": "A",
-    "dns": "5"
   }
 ]

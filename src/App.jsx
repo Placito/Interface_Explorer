@@ -65,6 +65,17 @@ function App() {
         return iface.interface_type?.toLowerCase().includes("wi-fi");
       if (value === "eth")
         return iface.interface_type?.toLowerCase().includes("eth");
+      // Strictly include only active interfaces if "active" is typed
+      if (value === "active") return iface.status?.toLowerCase() === "active";
+
+      // Strictly include only inactive interfaces if "inactive" is typed
+      if (value === "inactive") return iface.status?.toLowerCase() === "inactive";
+  
+      // Filters for "wifi" or "eth" queries
+      if (value === "wifi") return iface.interface_type?.toLowerCase().includes("wi-fi");
+      if (value === "eth") return iface.interface_type?.toLowerCase().includes("eth");
+  
+      // General match for other queries
       return matchesFilter(iface, value);
     });
 
@@ -152,11 +163,13 @@ function App() {
     }
   };
 
-  const highlightMatch = (text) => {
+  const highlightMatch = (text, query) => {
+    if (!query || !text) return text; // Handle empty values safely
+  
     const regex = new RegExp(`(${query})`, "gi");
     return text.split(regex).map((part, index) =>
       part.toLowerCase() === query.toLowerCase() ? (
-        <span key={index} style={{ backgroundColor: "yellow" }}>
+        <span key={index} style={{ backgroundColor: "yellow", fontWeight: "bold" }}>
           {part}
         </span>
       ) : (
@@ -164,6 +177,12 @@ function App() {
       )
     );
   };
+  
+  const getInterfaceName = (iface) => {
+    if (!iface) return "";
+    return typeof iface.name === "string" ? iface.name : JSON.stringify(iface.name);
+  };
+  
 
   const handleDeleteIPv4 = async (ifaceToUpdate) => {
     const updatedInterfaces = filteredInterfaces.map((iface) =>
@@ -273,21 +292,37 @@ function App() {
                 ref={inputRef} 
               />
               {isDropdownVisible && (
-                <ul className="autocomplete-dropdown">
-                  {filteredInterfaces.map((iface, index) => (
-                    <li
-                      key={index}
-                      onClick={() => {
-                        setSelectedInterface(iface);
-                        setQuery(iface.name);
-                        setIsDropdownVisible(false);
-                      }}
-                    >
-                      {highlightMatch(iface.name)}
-                    </li>
-                  ))}
-                </ul>
-              )}
+  <ul className="autocomplete-dropdown">
+    {filteredInterfaces.map((iface, index) => (
+      <li
+        key={index}
+        onClick={() => {
+          setSelectedInterface(iface);
+          setQuery(iface.name);
+          setIsDropdownVisible(false);
+        }}
+      >
+         {/* Highlight matched text */}
+      {/* Use safe function to get the name */}
+      {highlightMatch(iface.name, query)}
+
+      {/* Highlight extra info dynamically */}
+      {iface.status?.toLowerCase() === "active" && (
+        <span> {highlightMatch("(Active)", query)}</span>
+      )}
+      {iface.status?.toLowerCase() === "inactive" && (
+        <span> {highlightMatch("(Inactive)", query)}</span>
+      )}
+      {iface.interface_type?.toLowerCase().includes("wi-fi") && (
+        <span> {highlightMatch("(Wi-Fi)", query)}</span>
+      )}
+      {iface.interface_type?.toLowerCase().includes("eth") && (
+        <span> {highlightMatch("(Ethernet)", query)}</span>
+      )}
+</li>
+))}
+</ul>
+)}
             </div>
           </div>
         </div>
