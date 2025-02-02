@@ -13,8 +13,8 @@ struct NetworkInterface {
     status: String,
     mac_address: Option<String>,
     ipv4_address: Option<String>,
-    gateway: Option<String>,  // New field for Gateway
-    dns: Option<String>,      // New field for DNS
+    gateway: Option<String>,  
+    dns: Option<String>,     
 }
 
 // Path to save JSON file (to the root of your repository)
@@ -115,21 +115,41 @@ fn delete_ipv4_address(index: usize) -> Result<(), String> {
     save_network_interfaces(interfaces) // Save changes
 }
 
-// Update the Gateway and DNS of a network interface and save to the JSON file
+// function that only adds or updates the gateway, dns, and ipv4_address fields if their current value is "N/A"
 #[command]
-fn update_gateway_dns(index: usize, gateway: Option<String>, dns: Option<String>) -> Result<(), String> {
+fn add_if_na(index: usize, gateway: Option<String>, dns: Option<String>, ipv4_address: Option<String>) -> Result<(), String> {
     let mut interfaces = load_network_interfaces()?; // Load existing interfaces
 
     if index >= interfaces.len() {
         return Err("Invalid interface index".to_string());
     }
 
-    // Update Gateway and DNS
-    interfaces[index].gateway = gateway;
-    interfaces[index].dns = dns;
+    let interface = &mut interfaces[index];
 
-    save_network_interfaces(interfaces) // Save changes
+    // Only update if the value is "N/A"
+    if let Some(gateway_value) = gateway {
+        if interface.gateway == Some("N/A".to_string()) {
+            interface.gateway = Some(gateway_value);
+        }
+    }
+
+    if let Some(dns_value) = dns {
+        if interface.dns == Some("N/A".to_string()) {
+            interface.dns = Some(dns_value);
+        }
+    }
+
+    if let Some(ipv4_value) = ipv4_address {
+        if interface.ipv4_address == Some("N/A".to_string()) {
+            interface.ipv4_address = Some(ipv4_value);
+        }
+    }
+
+    // Save the modified interfaces
+    save_network_interfaces(interfaces)
 }
+
+
 
 fn main() {
     tauri::Builder::default()
@@ -139,7 +159,7 @@ fn main() {
             load_network_interfaces,
             update_ipv4_address,
             delete_ipv4_address,
-            update_gateway_dns  // Add the new command here
+            add_if_na
         ])
         .run(tauri::generate_context!())
         .expect("Error while running Tauri application");
