@@ -1,10 +1,10 @@
 [
   {
     "name": "lo0",
-    "interface_type": "Loopback",
+    "interface_type": "Wi-Fi",
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": "N/A",
+    "ipv4_address": "127.0.0.1",
     "gateway": [],
     "dns": []
   },
@@ -139,7 +139,7 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "7c:c2:c6:30:52:06",
-    "ipv4_address": "N/A",
+    "ipv4_address": "192.168.1.67",
     "gateway": [],
     "dns": []
   },
@@ -148,7 +148,7 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": "N/A",
+    "ipv4_address": null,
     "gateway": [],
     "dns": []
   },
