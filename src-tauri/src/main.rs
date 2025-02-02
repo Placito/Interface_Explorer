@@ -13,8 +13,8 @@ struct NetworkInterface {
     status: String,
     mac_address: Option<String>,
     ipv4_address: Option<String>,
-    gateway: Option<String>,  
-    dns: Option<String>,     
+    gateway: Vec<String>, // A vector to store multiple gateways
+    dns: Vec<String>,  // A vector to store multiple DNS entries  
 }
 
 // Path to save JSON file (to the root of your repository)
@@ -54,8 +54,8 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
             status: status.to_string(),
             mac_address,
             ipv4_address,
-            gateway: None,  // Gateway and DNS can be None for now
-            dns: None,
+            gateway: vec![],  // Initializing empty Vec for gateways
+            dns: vec![], // Initializing empty Vec for DNS entries
         });
     }
 
@@ -68,8 +68,8 @@ fn save_network_interfaces(interfaces: Vec<NetworkInterface>) -> Result<(), Stri
     let file_path = get_data_file_path();
     let json_data = serde_json::to_string_pretty(&interfaces)
         .map_err(|e| format!("Failed to serialize data: {}", e))?;
-
-    fs::write(&file_path, json_data).map_err(|e| format!("Failed to write to file: {}", e))
+    fs::write(&file_path, json_data).map_err(|e| format!("Failed to write to file: {}", e))?;
+    Ok(())
 }
 
 // Load interfaces from a JSON file
@@ -84,6 +84,7 @@ fn load_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
     let json_data =
         fs::read_to_string(&file_path).map_err(|e| format!("Failed to read file: {}", e))?;
 
+    // Load the network_interfaces.json file and deserialize it into a Vec<NetworkInterface>
     serde_json::from_str(&json_data).map_err(|e| format!("Failed to deserialize data: {}", e))
 }
 
@@ -117,7 +118,7 @@ fn delete_ipv4_address(index: usize) -> Result<(), String> {
 
 // function that only adds or updates the gateway, dns, and ipv4_address fields if their current value is "N/A"
 #[command]
-fn add_if_na(index: usize, gateway: Option<String>, dns: Option<String>, ipv4_address: Option<String>) -> Result<(), String> {
+fn add_if_na(index: usize, gateway: Option<Vec<String>>, dns: Option<Vec<String>>, ipv4_address: Option<String>) -> Result<(), String> {
     let mut interfaces = load_network_interfaces()?; // Load existing interfaces
 
     if index >= interfaces.len() {
@@ -127,15 +128,15 @@ fn add_if_na(index: usize, gateway: Option<String>, dns: Option<String>, ipv4_ad
     let interface = &mut interfaces[index];
 
     // Only update if the value is "N/A"
-    if let Some(gateway_value) = gateway {
-        if interface.gateway == Some("N/A".to_string()) {
-            interface.gateway = Some(gateway_value);
+    if let Some(gateway_values) = gateway {
+        if interface.gateway.contains(&"N/A".to_string()) {
+            interface.gateway = gateway_values;
         }
     }
 
-    if let Some(dns_value) = dns {
-        if interface.dns == Some("N/A".to_string()) {
-            interface.dns = Some(dns_value);
+    if let Some(dns_values) = dns {
+        if interface.dns.contains(&"N/A".to_string()) {
+            interface.dns = dns_values;
         }
     }
 
@@ -148,8 +149,6 @@ fn add_if_na(index: usize, gateway: Option<String>, dns: Option<String>, ipv4_ad
     // Save the modified interfaces
     save_network_interfaces(interfaces)
 }
-
-
 
 fn main() {
     tauri::Builder::default()

@@ -1,12 +1,12 @@
 [
   {
     "name": "lo0",
-    "interface_type": "Wi-Fi",
+    "interface_type": "Loopback",
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": "127.0.0.1",
-    "gateway": null,
-    "dns": null
+    "ipv4_address": "N/A",
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "gif0",
@@ -14,8 +14,8 @@
     "status": "Inactive",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "stf0",
@@ -23,8 +23,8 @@
     "status": "Inactive",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "anpi0",
@@ -32,8 +32,8 @@
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:66",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "anpi1",
@@ -41,8 +41,8 @@
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:67",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "en4",
@@ -50,8 +50,8 @@
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:46",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "en5",
@@ -59,8 +59,8 @@
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:47",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "en1",
@@ -68,8 +68,8 @@
     "status": "Active",
     "mac_address": "36:64:78:2f:62:c0",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "en2",
@@ -77,8 +77,8 @@
     "status": "Active",
     "mac_address": "36:64:78:2f:62:c4",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "en3",
@@ -86,8 +86,8 @@
     "status": "Active",
     "mac_address": "36:64:78:2f:62:c8",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "bridge0",
@@ -95,8 +95,8 @@
     "status": "Active",
     "mac_address": "36:64:78:2f:62:c0",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "ap1",
@@ -104,8 +104,8 @@
     "status": "Active",
     "mac_address": "a2:a9:97:2c:28:41",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "en0",
@@ -113,8 +113,8 @@
     "status": "Active",
     "mac_address": "80:a9:97:2c:28:41",
     "ipv4_address": "192.168.1.68",
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "awdl0",
@@ -122,8 +122,8 @@
     "status": "Active",
     "mac_address": "32:0d:0a:1f:de:e2",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "llw0",
@@ -131,26 +131,26 @@
     "status": "Active",
     "mac_address": "32:0d:0a:1f:de:e2",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "en6",
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "7c:c2:c6:30:52:06",
-    "ipv4_address": "192.168.1.67",
-    "gateway": null,
-    "dns": null
+    "ipv4_address": "N/A",
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "utun0",
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "ipv4_address": "N/A",
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "utun1",
@@ -158,8 +158,8 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "utun2",
@@ -167,8 +167,8 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "utun3",
@@ -176,7 +176,7 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": null,
-    "dns": null
+    "gateway": [],
+    "dns": []
   }
 ]
