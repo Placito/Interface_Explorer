@@ -11,19 +11,8 @@ function App() {
   const [query, setQuery] = useState("");
   const [selectedInterface, setSelectedInterface] = useState(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [newInterface, setNewInterface] = useState({
-    name: "",
-    interface_type: "",
-    status: "",
-    mac_address: "",
-    ip_address: "",
-    ipv4_address: "",
-  });
   const [editableIpv4s, setEditableIpv4s] = useState({});
   const [ipv4Temp, setIpv4Temp] = useState(""); // Fixed to an empty string
-  const [gateway, setGateway] = useState('');
-  const [dns, setDns] = useState('');
   const inputRef = useRef(null);  // Create a ref for the input element
 
   const fetchInterfaces = async () => {
@@ -89,65 +78,19 @@ function App() {
       setSelectedInterface(selected);
       setQuery(selected.name);
       setIsDropdownVisible(false);
+      setIsPanelVisible(false); // Ensure the panel with all details is hidden
     }
   };
 
   const togglePanelVisibility = () => {
-    if (isFormVisible) {
-      setIsFormVisible(false);
-    } else {
-      setIsPanelVisible((prev) => !prev);
-    }
     setSelectedInterface(null);
     setQuery("");
     setFilteredInterfaces(interfaces);
+    setIsPanelVisible((prev) => !prev);
   };
 
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
-  };
-
-  const handleAddInterfaceClick = () => {
-    setIsFormVisible(true);
-    setIsPanelVisible(false);
-    setActiveButton("save");
-
-    setNewInterface({
-      name: "",
-      interface_type: "",
-      status: "",
-      mac_address: "",
-      ip_address: "",
-      ipv4_address: "",
-      gateway: "",
-      dns: "",
-    });
-  };
-
-  const handleAddInterface = async () => {
-    try {
-      const updatedInterfaces = [...interfaces, newInterface];
-      await invoke("save_network_interfaces", {
-        interfaces: updatedInterfaces,
-      });
-      setInterfaces(updatedInterfaces);
-      setFilteredInterfaces(updatedInterfaces);
-
-      setNewInterface({
-        name: "",
-        interface_type: "",
-        status: "",
-        mac_address: "",
-        ip_address: "",
-        ipv4_address: "",
-        gateway: "",
-        dns: "",
-      });
-
-      console.log("New interface added successfully!");
-    } catch (error) {
-      console.error("Error adding new interface:", error);
-    }
   };
 
   useEffect(() => {
@@ -178,12 +121,6 @@ function App() {
     );
   };
   
-  const getInterfaceName = (iface) => {
-    if (!iface) return "";
-    return typeof iface.name === "string" ? iface.name : JSON.stringify(iface.name);
-  };
-  
-
   const handleDeleteIPv4 = async (ifaceToUpdate) => {
     const updatedInterfaces = filteredInterfaces.map((iface) =>
       iface === ifaceToUpdate ? { ...iface, ipv4_address: "N/A" } : iface
@@ -220,7 +157,7 @@ function App() {
     setIpv4Temp(e.target.value);
   };
 
-  const handleKeyDownIPv4 = async (e, index, ifaceToUpdate) => {
+  const handleKeyDownIPv4 = async (e, index) => {
     if (e.key === "Enter") {
       const updatedInterfaces = filteredInterfaces.map((iface, i) =>
         i === index ? { ...iface, ipv4_address: ipv4Temp } : iface
@@ -240,21 +177,10 @@ function App() {
     }
   };
 
-  // function to handle the gateway input - Gateways provide connectivity between two or more networks, convert data and information sent from a network into a format compatible with the receiving network.
-  const handleGatewayChange = (e) => {
-    setGateway(e.target.value);  // Update gateway state
-  };
-
-  // function to handle the DNS (Domain Name System) input
-  const handleDnsChange = (e) => {
-    setDns(e.target.value);  // Update DNS state
-  };
-
   return (
     <div className="center">
       <div className="p-4">
         <h1>Network Interface Details</h1>
-
         <div className="button-container">
           <button
             onClick={() => {
@@ -270,12 +196,6 @@ function App() {
               ? "Hide Network Interfaces"
               : "Show Network Interfaces"}
           </button>
-          <button
-            onClick={handleAddInterfaceClick}
-            className={`button ${activeButton === "save" ? "active" : ""}`}
-          >
-            Add Interface
-          </button>
         </div>
 
         <div className="filters-container">
@@ -289,40 +209,37 @@ function App() {
                 value={query}
                 onChange={handleFilterChange}
                 onKeyDown={handleKeyDown}
-                ref={inputRef} 
+                ref={inputRef}
               />
               {isDropdownVisible && (
-  <ul className="autocomplete-dropdown">
-    {filteredInterfaces.map((iface, index) => (
-      <li
-        key={index}
-        onClick={() => {
-          setSelectedInterface(iface);
-          setQuery(iface.name);
-          setIsDropdownVisible(false);
-        }}
-      >
-         {/* Highlight matched text */}
-      {/* Use safe function to get the name */}
-      {highlightMatch(iface.name, query)}
-
-      {/* Highlight extra info dynamically */}
-      {iface.status?.toLowerCase() === "active" && (
-        <span> {highlightMatch("(Active)", query)}</span>
-      )}
-      {iface.status?.toLowerCase() === "inactive" && (
-        <span> {highlightMatch("(Inactive)", query)}</span>
-      )}
-      {iface.interface_type?.toLowerCase().includes("wi-fi") && (
-        <span> {highlightMatch("(Wi-Fi)", query)}</span>
-      )}
-      {iface.interface_type?.toLowerCase().includes("eth") && (
-        <span> {highlightMatch("(Ethernet)", query)}</span>
-      )}
-</li>
-))}
-</ul>
-)}
+                <ul className="autocomplete-dropdown">
+                  {filteredInterfaces.map((iface, index) => (
+                    <li
+                      key={index}
+                      onClick={() => {
+                        setSelectedInterface(iface);
+                        setQuery(iface.name);
+                        setIsDropdownVisible(false);
+                        setIsPanelVisible(false); // Ensure the panel with all details is hidden
+                      }}
+                    >
+                      {highlightMatch(iface.name, query)}
+                      {iface.status?.toLowerCase() === "active" && (
+                        <span> {highlightMatch("(Active)", query)}</span>
+                      )}
+                      {iface.status?.toLowerCase() === "inactive" && (
+                        <span> {highlightMatch("(Inactive)", query)}</span>
+                      )}
+                      {iface.interface_type?.toLowerCase().includes("wi-fi") && (
+                        <span> {highlightMatch("(Wi-Fi)", query)}</span>
+                      )}
+                      {iface.interface_type?.toLowerCase().includes("eth") && (
+                        <span> {highlightMatch("(Ethernet)", query)}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </div>
         </div>
@@ -340,9 +257,7 @@ function App() {
                   <th>Gateway</th>
                   <th title="Domain Name System">DNS</th>
                   <th title="Internet Protocol version 4">IPv4</th>
-                  <th title="Actions performe on the IPv4 atribute">
-                      Actions
-                  </th>
+                  <th title="Actions performe on the IPv4 atribute">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -352,198 +267,46 @@ function App() {
                   <td>{selectedInterface.status}</td>
                   <td>{selectedInterface.mac_address || "N/A"}</td>
                   <td>{selectedInterface.ip_address || "N/A"}</td>
-                  <td>{selectedInterface.gateway|| "N/A"}</td>
+                  <td>{selectedInterface.gateway || "N/A"}</td>
                   <td>{selectedInterface.dns || "N/A"}</td>
                   <td>{selectedInterface.ipv4_address || "N/A"}</td>
                   <td>
-                        <div className="button_Actions">
-                          <button
-                            onClick={() =>
-                              handleEditClick(index, iface.ipv4_address)
-                            }
-                            className={`button_Icon nputFormatted ${
-                              activeInput === "display" ? "active" : ""
-                            }`}
-                          >
-                            <i className="fa-solid fa-pen-to-square"></i>
-                          </button>
-                          <button
-                            onClick={() => handleDeleteIPv4(iface)}
-                            className="button_Icon"
-                          >
-                            <i className="fa-solid fa-trash-can"></i>
-                          </button>
-                        </div>
-                      </td>
+                    <div className="button_Actions">
+                      <button
+                        onClick={() => handleEditClick(index, selectedInterface.ipv4_address)}
+                        className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
+                      >
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </button>
+                      <button
+                        onClick={() => handleDeleteIPv4(selectedInterface)}
+                        className="button_Icon"
+                      >
+                        <i className="fa-solid fa-trash-can"></i>
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
         )}
 
-        {isFormVisible && (
-          <div className="add-interface-form">
-            <h2>Add New Interface</h2>
-            <div>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleAddInterface();
-                }}
-              >
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <label htmlFor="name">Name</label>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="name"
-                          value={newInterface.name}
-                          onChange={handleInputChange}
-                          placeholder="name"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label htmlFor="interface_type">Interface Type</label>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="interface_type"
-                          value={newInterface.interface_type}
-                          onChange={handleInputChange}
-                          placeholder="type of interface"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label htmlFor="status">Status</label>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="status"
-                          value={newInterface.status}
-                          onChange={handleInputChange}
-                          placeholder="Status (active/inactive)"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label htmlFor="mac_address">MAC</label>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="mac_address"
-                          value={newInterface.mac_address}
-                          onChange={handleInputChange}
-                          placeholder="MAC (Media Access Control)"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label htmlFor="ip_address">IP Address</label>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="ip_address"
-                          value={newInterface.ip_address}
-                          onChange={handleInputChange}
-                          placeholder="IP address"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <label htmlFor="ipv4_address">IPv4 Address</label>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="ipv4_address"
-                          value={newInterface.ipv4_address}
-                          onChange={handleInputChange}
-                          placeholder="IPv4 address"
-                        />
-                      </td>
-                      </tr>
-                      <tr>
-                      <td>
-                        <label htmlFor="gateway">Gateway</label>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          name="gateway"
-                          value={newInterface.gateway}
-                          onChange={handleInputChange}
-                          placeholder="Gateway"
-                        />
-                      </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <label htmlFor="dns">DNS</label>
-                        </td>
-                        <td>
-                          <input
-                            type="text"
-                            name="dns"
-                            value={newInterface.dns}
-                            onChange={handleInputChange}
-                            placeholder="DNS (Domain Name System)"
-                          />
-                        </td>
-                      </tr>
-                    <tr>
-                      <td colSpan="2">
-                        <div className="button_container">
-                          <button type="submit" className="button">
-                            Save Interface
-                          </button>
-                          <button
-                            onClick={() => setIsFormVisible(false)}
-                            className="button"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {isPanelVisible && (
-          <div >
+        {isPanelVisible && !selectedInterface && (
+          <div>
             {filteredInterfaces.length > 0 ? (
               <table>
                 <thead>
                   <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th>Status</th>
-                  <th title="Media Access Control">MAC</th>
-                  <th title="IP address">IP</th>
-                  <th>Gateway</th>
-                  <th title="Domain Name System">DNS</th>
-                  <th title="Internet Protocol version 4">IPv4</th>
-                  <th title="Actions performe on the IPv4 atribute">
-                      Actions
-                  </th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th title="Media Access Control">MAC</th>
+                    <th title="IP address">IP</th>
+                    <th>Gateway</th>
+                    <th title="Domain Name System">DNS</th>
+                    <th title="Internet Protocol version 4">IPv4</th>
+                    <th title="Actions performe on the IPv4 atribute">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -554,7 +317,7 @@ function App() {
                       <td>{iface.status}</td>
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
-                      <td>{iface.gateway|| "N/A"}</td>
+                      <td>{iface.gateway || "N/A"}</td>
                       <td>{iface.dns || "N/A"}</td>
                       <td>
                         {editableIpv4s[index] ? (
@@ -563,9 +326,7 @@ function App() {
                             value={ipv4Temp}
                             onChange={(e) => handleUpdate(e, index)} // Update on input change
                             placeholder="IPv4 address"
-                            onKeyDown={(e) =>
-                              handleKeyDownIPv4(e, index, iface)
-                            } // Save on Enter key press
+                            onKeyDown={(e) => handleKeyDownIPv4(e, index)} // Save on Enter key press
                             onBlur={() =>
                               setEditableIpv4s((prev) => ({
                                 ...prev,
@@ -578,16 +339,11 @@ function App() {
                           <span>{iface.ipv4_address || "N/A"}</span>
                         )}
                       </td>
-
                       <td>
                         <div className="button_Actions">
                           <button
-                            onClick={() =>
-                              handleEditClick(index, iface.ipv4_address)
-                            }
-                            className={`button_Icon nputFormatted ${
-                              activeInput === "display" ? "active" : ""
-                            }`}
+                            onClick={() => handleEditClick(index, iface.ipv4_address)}
+                            className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
                           >
                             <i className="fa-solid fa-pen-to-square"></i>
                           </button>
