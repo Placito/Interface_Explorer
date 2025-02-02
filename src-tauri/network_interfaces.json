@@ -4,23 +4,16 @@
     "interface_type": "Wi-Fi",
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": "127.0.0.1fdgh",
-    "gateway": [
-      "vfg",
-      "ghj"
-    ],
-    "dns": [
-      "g",
-      "h",
-      "g"
-    ]
+    "ipv4_address": "N/A",
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "gif0",
     "interface_type": "Unknown",
     "status": "Inactive",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": null,
+    "ipv4_address": "",
     "gateway": [],
     "dns": []
   },

@@ -120,24 +120,30 @@ function App() {
     );
   };
 
-  const handleDeleteIPv4 = async (ifaceToUpdate) => {
-    const updatedInterfaces = interfaces.map((iface) =>
-      iface === ifaceToUpdate ? { ...iface, ipv4_address: "N/A" } : iface
-    );
+  const handleDeleteIPv4 = async (index) => {
+    console.log("Function handleDeleteIPv4 called with index:", index);
 
-    try {
-      await invoke("save_network_interfaces", {
-        interfaces: updatedInterfaces,
-      });
-      setFilteredInterfaces(updatedInterfaces);
-      setInterfaces(updatedInterfaces);
-      if (selectedInterface === ifaceToUpdate) {
-        setSelectedInterface({ ...ifaceToUpdate, ipv4_address: "N/A" });
+    if (typeof index === "number" && index >= 0 && index < interfaces.length) {
+      try {
+        await invoke("delete_ipv4_address", { index });
+        console.log("IPv4 address deleted successfully!");
+
+        // Update the state to reflect the changes in the UI
+        const updatedInterfaces = interfaces.map((iface, i) =>
+          i === index ? { ...iface, ipv4_address: "N/A" } : iface
+        );
+        setInterfaces(updatedInterfaces);
+        setFilteredInterfaces(updatedInterfaces);
+        if (selectedInterface && selectedInterface.name === interfaces[index].name) {
+          setSelectedInterface({ ...selectedInterface, ipv4_address: "N/A" });
+        }
+      } catch (error) {
+        console.error("Error deleting IPv4 address:", error);
       }
-      console.log("IPv4 address deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting IPv4 address:", error);
+    } else {
+      console.error("No interface selected or invalid index");
     }
+    console.log("Interfaces:", interfaces);
   };
 
   const handleEditClick = (index, fields, values) => {
@@ -381,6 +387,7 @@ function App() {
                       <input
                         type="text"
                         name="gateway"
+                        value={tempValues.gateway}
                         onChange={handleInputChange}
                         placeholder="Gateway"
                         onKeyDown={(e) => handleKeyDownField(e, 0, "gateway")} // Save on Enter key press
@@ -414,6 +421,7 @@ function App() {
                       <input
                         type="text"
                         name="dns"
+                        value={tempValues.dns}
                         onChange={handleInputChange}
                         placeholder="DNS"
                         onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
@@ -493,7 +501,7 @@ function App() {
                         </button>
                       )}
                       <button
-                        onClick={() => handleDeleteIPv4(selectedInterface)}
+                        onClick={() => handleDeleteIPv4(interfaces.findIndex(iface => iface.name === selectedInterface.name))}
                         className="button_Icon"
                       >
                         <i title="Delete" className="fa-solid fa-trash-can"></i>
