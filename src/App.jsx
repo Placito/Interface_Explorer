@@ -122,7 +122,7 @@ function App() {
   };
   
   const handleDeleteIPv4 = async (ifaceToUpdate) => {
-    const updatedInterfaces = filteredInterfaces.map((iface) =>
+    const updatedInterfaces = interfaces.map((iface) =>
       iface === ifaceToUpdate ? { ...iface, ipv4_address: "N/A" } : iface
     );
 
@@ -132,6 +132,9 @@ function App() {
       });
       setFilteredInterfaces(updatedInterfaces);
       setInterfaces(updatedInterfaces);
+      if (selectedInterface === ifaceToUpdate) {
+        setSelectedInterface({ ...ifaceToUpdate, ipv4_address: "N/A" });
+      }
       console.log("IPv4 address deleted successfully!");
     } catch (error) {
       console.error("Error deleting IPv4 address:", error);
@@ -159,7 +162,7 @@ function App() {
 
   const handleKeyDownIPv4 = async (e, index) => {
     if (e.key === "Enter") {
-      const updatedInterfaces = filteredInterfaces.map((iface, i) =>
+      const updatedInterfaces = interfaces.map((iface, i) =>
         i === index ? { ...iface, ipv4_address: ipv4Temp } : iface
       );
 
@@ -170,6 +173,9 @@ function App() {
         setFilteredInterfaces(updatedInterfaces);
         setInterfaces(updatedInterfaces);
         setEditableIpv4s((prev) => ({ ...prev, [index]: false }));
+        if (selectedInterface && selectedInterface.ipv4_address === interfaces[index].ipv4_address) {
+          setSelectedInterface({ ...selectedInterface, ipv4_address: ipv4Temp });
+        }
         console.log("IPv4 address updated successfully!");
       } catch (error) {
         console.error("Error updating IPv4 address:", error);
@@ -269,11 +275,30 @@ function App() {
                   <td>{selectedInterface.ip_address || "N/A"}</td>
                   <td>{selectedInterface.gateway || "N/A"}</td>
                   <td>{selectedInterface.dns || "N/A"}</td>
-                  <td>{selectedInterface.ipv4_address || "N/A"}</td>
+                  <td>
+                    {editableIpv4s[0] ? (
+                      <input
+                        type="text"
+                        value={ipv4Temp}
+                        onChange={(e) => handleUpdate(e, 0)} // Update on input change
+                        placeholder="IPv4 address"
+                        onKeyDown={(e) => handleKeyDownIPv4(e, 0)} // Save on Enter key press
+                        onBlur={() =>
+                          setEditableIpv4s((prev) => ({
+                            ...prev,
+                            [0]: false,
+                          }))
+                        } // Close input when clicking outside
+                        autoFocus
+                      />
+                    ) : (
+                      <span>{selectedInterface.ipv4_address || "N/A"}</span>
+                    )}
+                  </td>
                   <td>
                     <div className="button_Actions">
                       <button
-                        onClick={() => handleEditClick(index, selectedInterface.ipv4_address)}
+                        onClick={() => handleEditClick(0, selectedInterface.ipv4_address)}
                         className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
                       >
                         <i className="fa-solid fa-pen-to-square"></i>

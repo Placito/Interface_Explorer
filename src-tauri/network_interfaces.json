@@ -4,7 +4,7 @@
     "interface_type": "Wi-Fi",
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": "127.0.0.1",
+    "ipv4_address": "N/A",
     "gateway": null,
     "dns": null
   },
