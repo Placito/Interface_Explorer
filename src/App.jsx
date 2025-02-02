@@ -234,11 +234,49 @@ function App() {
       const interfaceData = interfaces[index];
       console.log("Interface Data:", interfaceData);
 
-      if (interfaceData.ipv4_address !== "N/A") {
-        handleEditClick(index, ["ipv4_address"], [interfaceData.ipv4_address]);
+      if (interfaceData.ipv4_address === "N/A") {
+        handleEditClick(index, ["ipv4_address"], [""]);
         console.log("Add button clicked for ipv4_address");
       } else {
-        console.error("Cannot add. ipv4_address is N/A.");
+        console.error("Cannot add. ipv4_address is not N/A.");
+      }
+    } else {
+      console.error("No interface selected or invalid index");
+    }
+    console.log("Interfaces:", interfaces);
+  };
+
+  const handleUpdateClickIpv4 = async (index) => {
+    console.log("Function handleUpdateClickIpv4 called with index:", index);
+
+    if (typeof index === "number" && index >= 0 && index < interfaces.length) {
+      const interfaceData = interfaces[index];
+      console.log("Interface Data:", interfaceData);
+
+      if (interfaceData.ipv4_address !== "N/A") {
+        handleEditClick(index, ["ipv4_address"], [interfaceData.ipv4_address]);
+        console.log("Update button clicked for ipv4_address");
+
+        // Update the IPv4 address in the backend
+        try {
+          await invoke("update_ipv4_address", {
+            index,
+            ipv4_address: tempValues.ipv4_address,
+          });
+          console.log("IPv4 address updated successfully!");
+
+          // Update the state to reflect the changes in the UI
+          const updatedInterfaces = interfaces.map((iface, i) =>
+            i === index ? { ...iface, ipv4_address: tempValues.ipv4_address } : iface
+          );
+          setInterfaces(updatedInterfaces);
+          setFilteredInterfaces(updatedInterfaces);
+          setSelectedInterface(updatedInterfaces[index]);
+        } catch (error) {
+          console.error("Error updating IPv4 address:", error);
+        }
+      } else {
+        console.error("Cannot update. ipv4_address is N/A.");
       }
     } else {
       console.error("No interface selected or invalid index");
@@ -343,7 +381,6 @@ function App() {
                       <input
                         type="text"
                         name="gateway"
-                        value={tempValues.gateway}
                         onChange={handleInputChange}
                         placeholder="Gateway"
                         onKeyDown={(e) => handleKeyDownField(e, 0, "gateway")} // Save on Enter key press
@@ -377,7 +414,6 @@ function App() {
                       <input
                         type="text"
                         name="dns"
-                        value={tempValues.dns}
                         onChange={handleInputChange}
                         placeholder="DNS"
                         onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
@@ -431,34 +467,31 @@ function App() {
                   </td>
                   <td>
                     <div className="button_Actions">
-                      <button
-                        onClick={() => handleAddClickIpv4(0)}
-                        className={`button_Icon nputFormatted ${
-                          activeInput === "display" ? "active" : ""
-                        }`}
-                      >
-                        <i
-                          title="Add new"
-                          className="fa-regular fa-address-book"
-                        ></i>
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleEditClick(
-                            0,
-                            ["ipv4_address"],
-                            [selectedInterface.ipv4_address]
-                          )
-                        }
-                        className={`button_Icon nputFormatted ${
-                          activeInput === "display" ? "active" : ""
-                        }`}
-                      >
-                        <i
-                          title="Edit"
-                          className="fa-solid fa-pen-to-square"
-                        ></i>
-                      </button>
+                      {selectedInterface.ipv4_address === "N/A" ? (
+                        <button
+                          onClick={() => handleAddClickIpv4(interfaces.findIndex(iface => iface.name === selectedInterface.name))}
+                          className={`button_Icon nputFormatted ${
+                            activeInput === "display" ? "active" : ""
+                          }`}
+                        >
+                          <i
+                            title="Add new"
+                            className="fa-regular fa-address-book"
+                          ></i>
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => handleUpdateClickIpv4(interfaces.findIndex(iface => iface.name === selectedInterface.name))}
+                          className={`button_Icon nputFormatted ${
+                            activeInput === "display" ? "active" : ""
+                          }`}
+                        >
+                          <i
+                            title="Edit"
+                            className="fa-solid fa-pen-to-square"
+                          ></i>
+                        </button>
+                      )}
                       <button
                         onClick={() => handleDeleteIPv4(selectedInterface)}
                         className="button_Icon"
