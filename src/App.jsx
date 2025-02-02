@@ -19,6 +19,7 @@ function App() {
   });
   // useRef is used to create a reference to the input element. The focusInput function uses this reference to focus the input element when the button is clicked.
   const inputRef = useRef(null); 
+  const [selectedInterfaceIndex, setSelectedInterfaceIndex] = useState(null); // Add state for selected interface index
 
   /**
  * Fetches the list of network interfaces from the backend.
@@ -465,7 +466,7 @@ const handleAddClickDns = (index) => {
                         name="gateway"
                         onChange={handleInputChange}
                         placeholder="Gateway"
-                        onKeyDown={(e) => handleKeyDownField(e, 0, "gateway")} // Save on Enter key press
+                        onKeyDown={(e) => handleKeyDownField(e, selectedInterfaceIndex, "gateway")} // Save on Enter key press
                         onBlur={() =>
                           setEditableFields((prev) => ({
                             ...prev,
@@ -484,7 +485,7 @@ const handleAddClickDns = (index) => {
                           <i
                             title="Add new entrie"
                             className="fa-solid fa-circle-plus"
-                            onClick={() => handleAddClickGateway(0)}
+                            onClick={() => handleAddClickGateway(selectedInterfaceIndex)}
                             style={{ cursor: "pointer", marginLeft: "5px" }}
                           ></i>
                         )}
@@ -498,7 +499,7 @@ const handleAddClickDns = (index) => {
                         name="dns"
                         onChange={handleInputChange}
                         placeholder="DNS"
-                        onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
+                        onKeyDown={(e) => handleKeyDownField(e, selectedInterfaceIndex, "dns")} // Save on Enter key press
                         onBlur={() =>
                           setEditableFields((prev) => ({
                             ...prev,
@@ -517,7 +518,7 @@ const handleAddClickDns = (index) => {
                           <i
                             title="Add new entrie"
                             className="fa-solid fa-circle-plus"
-                            onClick={() => handleAddClickDns(0)}
+                            onClick={() => handleAddClickDns(selectedInterfaceIndex)}
                             style={{ cursor: "pointer", marginLeft: "5px" }}
                           ></i>
                         )}
@@ -533,7 +534,7 @@ const handleAddClickDns = (index) => {
                         onChange={handleInputChange}
                         placeholder="IPv4 address"
                         onKeyDown={(e) =>
-                          handleKeyDownField(e, 0, "ipv4_address")
+                          handleKeyDownField(e, selectedInterfaceIndex, "ipv4_address")
                         } // Save on Enter key press
                         onBlur={() =>
                           setEditableFields((prev) => ({
@@ -551,7 +552,7 @@ const handleAddClickDns = (index) => {
                     <div className="button_Actions">
                       {selectedInterface.ipv4_address === "N/A" ? (
                         <button
-                          onClick={() => handleAddClickIpv4(interfaces.findIndex(iface => iface.name === selectedInterface.name))}
+                          onClick={() => handleAddClickIpv4(selectedInterfaceIndex)}
                           className={`button_Icon nputFormatted ${
                             activeInput === "display" ? "active" : ""
                           }`}
@@ -563,7 +564,7 @@ const handleAddClickDns = (index) => {
                         </button>
                       ) : (
                         <button
-                          onClick={() => handleUpdateClickIpv4(interfaces.findIndex(iface => iface.name === selectedInterface.name))}
+                          onClick={() => handleUpdateClickIpv4(selectedInterfaceIndex)}
                           className={`button_Icon nputFormatted ${
                             activeInput === "display" ? "active" : ""
                           }`}
@@ -575,7 +576,7 @@ const handleAddClickDns = (index) => {
                         </button>
                       )}
                       <button
-                        onClick={() => handleDeleteIPv4(interfaces.findIndex(iface => iface.name === selectedInterface.name))}
+                        onClick={() => handleDeleteIPv4(selectedInterfaceIndex)}
                         className="button_Icon"
                       >
                         <i title="Delete" className="fa-solid fa-trash-can"></i>
@@ -611,6 +612,9 @@ const handleAddClickDns = (index) => {
                       onClick={() => {
                         setSelectedInterface(iface);
                         setIsPanelVisible(false); // Ensure the panel with all details is hidden
+                        setSelectedInterfaceIndex(
+        interfaces.findIndex((i) => i.name === iface.name)
+      ); // Set the index of the selected interface
                       }}
                     >
                       <td>{highlightMatch(iface.name, query)}</td>
