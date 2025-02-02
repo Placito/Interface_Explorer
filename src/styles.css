@@ -70,7 +70,12 @@ th {
 
 td {
   border-top: 1px solid rgb(84, 31, 47);
-  cursor: pointer
+  cursor: pointer;
+}
+
+td span {
+  display: flex;
+  flex-direction: row;
 }
 
 .no-interfaces {
@@ -168,7 +173,6 @@ h1 {
   color: #fff;
   padding: 8px;
   margin: 0;
-  width: 100px;
 } 
 
 .add-interface-form table td button {

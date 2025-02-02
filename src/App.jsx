@@ -341,108 +341,104 @@ function App() {
                   <td>{selectedInterface.mac_address || "N/A"}</td>
                   <td>{selectedInterface.ip_address || "N/A"}</td>
                   <td>
-                    {editableFields.gateway ? (
-                      <input
-                        type="text"
-                        name="gateway"
-                        value={tempValues.gateway}
-                        onChange={handleInputChange}
-                        placeholder="Gateway"
-                        onKeyDown={(e) => handleKeyDownField(e, 0, "gateway")} // Save on Enter key press
-                        onBlur={() =>
-                          setEditableFields((prev) => ({
-                            ...prev,
-                            gateway: false,
-                          }))
-                        } // Close input when clicking outside
-                        autoFocus
-                      />
-                    ) : (
-                      <span>{selectedInterface.gateway || "N/A"}</span>
-                    )}
-                  </td>
-                  <td>
-                    {editableFields.dns ? (
-                      <input
-                        type="text"
-                        name="dns"
-                        value={tempValues.dns}
-                        onChange={handleInputChange}
-                        placeholder="DNS"
-                        onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
-                        onBlur={() =>
-                          setEditableFields((prev) => ({
-                            ...prev,
-                            dns: false,
-                          }))
-                        } // Close input when clicking outside
-                        autoFocus
-                      />
-                    ) : (
-                      <span>{selectedInterface.dns || "N/A"}</span>
-                    )}
-                  </td>
-                  <td>
-                    {editableFields.ipv4_address ? (
-                      <input
-                        type="text"
-                        name="ipv4_address"
-                        value={tempValues.ipv4_address}
-                        onChange={handleInputChange}
-                        placeholder="IPv4 address"
-                        onKeyDown={(e) =>
-                          handleKeyDownField(e, 0, "ipv4_address")
-                        } // Save on Enter key press
-                        onBlur={() =>
-                          setEditableFields((prev) => ({
-                            ...prev,
-                            ipv4_address: false,
-                          }))
-                        } // Close input when clicking outside
-                        autoFocus
-                      />
-                    ) : (
-                      <span>{selectedInterface.ipv4_address || "N/A"}</span>
-                    )}
-                  </td>
-                  <td>
-                    <div className="button_Actions">
-                      <button
-                        onClick={() => handleAddClickAll(0)}
-                        className={`button_Icon nputFormatted ${
-                          activeInput === "display" ? "active" : ""
-                        }`}
-                      >
-                        <i
-                          title="Add new"
-                          className="fa-regular fa-address-book"
-                        ></i>
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleEditClick(
-                            0,
-                            ["ipv4_address"],
-                            [selectedInterface.ipv4_address]
-                          )
-                        }
-                        className={`button_Icon nputFormatted ${
-                          activeInput === "display" ? "active" : ""
-                        }`}
-                      >
-                        <i
-                          title="Edit"
-                          className="fa-solid fa-pen-to-square"
-                        ></i>
-                      </button>
-                      <button
-                        onClick={() => handleDeleteIPv4(selectedInterface)}
-                        className="button_Icon"
-                      >
-                        <i title="Delete" className="fa-solid fa-trash-can"></i>
-                      </button>
-                    </div>
-                  </td>
+  {editableFields.gateway ? (
+    <input
+      type="text"
+      name="gateway"
+      value={tempValues.gateway}
+      onChange={handleInputChange}
+      placeholder="Gateway"
+      onKeyDown={(e) => handleKeyDownField(e, 0, "gateway")} // Save on Enter key press
+      onBlur={() =>
+        setEditableFields((prev) => ({
+          ...prev,
+          gateway: false,
+        }))
+      } // Close input when clicking outside
+      autoFocus
+    />
+  ) : (
+    <span>
+      {selectedInterface.gateway || "N/A"}
+      <i
+        className="fa-solid fa-circle-plus"
+        onClick={() => handleAddClickGateway(0)}
+        style={{ cursor: "pointer", marginLeft: "5px" }}
+      ></i>
+    </span>
+  )}
+</td>
+<td>
+  {editableFields.dns ? (
+    <input
+      type="text"
+      name="dns"
+      value={tempValues.dns}
+      onChange={handleInputChange}
+      placeholder="DNS"
+      onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
+      onBlur={() =>
+        setEditableFields((prev) => ({
+          ...prev,
+          dns: false,
+        }))
+      } // Close input when clicking outside
+      autoFocus
+    />
+  ) : (
+    <span>
+      {selectedInterface.dns || "N/A"}
+      <i
+        className="fa-solid fa-circle-plus"
+        onClick={() => handleAddClickDns(0)}
+        style={{ cursor: "pointer", marginLeft: "5px" }}
+      ></i>
+    </span>
+  )}
+</td>
+<td>
+  {editableFields.ipv4_address ? (
+    <input
+      type="text"
+      name="ipv4_address"
+      value={tempValues.ipv4_address}
+      onChange={handleInputChange}
+      placeholder="IPv4 address"
+      onKeyDown={(e) => handleKeyDownField(e, 0, "ipv4_address")} // Save on Enter key press
+      onBlur={() =>
+        setEditableFields((prev) => ({
+          ...prev,
+          ipv4_address: false,
+        }))
+      } // Close input when clicking outside
+      autoFocus
+    />
+  ) : (
+    <span>{selectedInterface.ipv4_address || "N/A"}</span>
+  )}
+</td>
+<td>
+  <div className="button_Actions">
+    <button
+      onClick={() => handleAddClickAll(0)}
+      className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
+    >
+      <i title="Add new" className="fa-regular fa-address-book"></i>
+    </button>
+    <button
+      onClick={() => handleEditClick(0, ["ipv4_address"], [selectedInterface.ipv4_address])}
+      className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
+    >
+      <i title="Edit" className="fa-solid fa-pen-to-square"></i>
+    </button>
+    <button
+      onClick={() => handleDeleteIPv4(selectedInterface)}
+      className="button_Icon"
+    >
+      <i title="Delete" className="fa-solid fa-trash-can"></i>
+    </button>
+  </div>
+</td>
                 </tr>
               </tbody>
             </table>
@@ -477,50 +473,60 @@ function App() {
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
                       <td>
-                        {editableFields.gateway && activeInput === index ? (
-                          <input
-                            type="text"
-                            name="gateway"
-                            value={tempValues.gateway}
-                            onChange={handleInputChange}
-                            placeholder="Gateway"
-                            onKeyDown={(e) =>
-                              handleKeyDownField(e, index, "gateway")
-                            } // Save on Enter key press
-                            onBlur={() =>
-                              setEditableFields((prev) => ({
-                                ...prev,
-                                gateway: false,
-                              }))
-                            } // Close input when clicking outside
-                            autoFocus
-                          />
-                        ) : (
-                          <span>{iface.gateway || "N/A"}</span>
-                        )}
+                      {editableFields.gateway ? (
+    <input
+      type="text"
+      name="gateway"
+      value={tempValues.gateway}
+      onChange={handleInputChange}
+      placeholder="Gateway"
+      onKeyDown={(e) => handleKeyDownField(e, 0, "gateway")} // Save on Enter key press
+      onBlur={() =>
+        setEditableFields((prev) => ({
+          ...prev,
+          gateway: false,
+        }))
+      } // Close input when clicking outside
+      autoFocus
+    />
+  ) : (
+    <span>
+      {iface.gateway || "N/A"}
+      <i
+        className="fa-solid fa-circle-plus"
+        onClick={() => handleAddClickGateway(0)}
+        style={{ cursor: "pointer", marginLeft: "5px" }}
+      ></i>
+    </span>
+  )}
                       </td>
                       <td>
-                        {editableFields.dns && activeInput === index ? (
-                          <input
-                            type="text"
-                            name="dns"
-                            value={tempValues.dns}
-                            onChange={handleInputChange}
-                            placeholder="DNS"
-                            onKeyDown={(e) =>
-                              handleKeyDownField(e, index, "dns")
-                            } // Save on Enter key press
-                            onBlur={() =>
-                              setEditableFields((prev) => ({
-                                ...prev,
-                                dns: false,
-                              }))
-                            } // Close input when clicking outside
-                            autoFocus
-                          />
-                        ) : (
-                          <span>{iface.dns || "N/A"}</span>
-                        )}
+                      {editableFields.dns ? (
+    <input
+      type="text"
+      name="dns"
+      value={tempValues.dns}
+      onChange={handleInputChange}
+      placeholder="DNS"
+      onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
+      onBlur={() =>
+        setEditableFields((prev) => ({
+          ...prev,
+          dns: false,
+        }))
+      } // Close input when clicking outside
+      autoFocus
+    />
+  ) : (
+    <span>
+      {iface.dns || "N/A"}
+      <i
+        className="fa-solid fa-circle-plus"
+        onClick={() => handleAddClickDns(0)}
+        style={{ cursor: "pointer", marginLeft: "5px" }}
+      ></i>
+    </span>
+  )}
                       </td>
                       <td>
                         {editableFields.ipv4_address &&
