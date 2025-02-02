@@ -15,9 +15,9 @@ function App() {
   const [tempValues, setTempValues] = useState({
     ipv4_address: "",
     gateway: "",
-    dns: ""
+    dns: "",
   });
-  const inputRef = useRef(null);  // Create a ref for the input element
+  const inputRef = useRef(null); // Create a ref for the input element
 
   const fetchInterfaces = async () => {
     try {
@@ -52,10 +52,13 @@ function App() {
 
     const filtered = interfaces.filter((iface) => {
       if (value === "active") return iface.status?.toLowerCase() === "active";
-      if (value === "inactive") return iface.status?.toLowerCase() === "inactive";
-      if (value === "wifi") return iface.interface_type?.toLowerCase().includes("wi-fi");
-      if (value === "eth") return iface.interface_type?.toLowerCase().includes("eth");
-  
+      if (value === "inactive")
+        return iface.status?.toLowerCase() === "inactive";
+      if (value === "wifi")
+        return iface.interface_type?.toLowerCase().includes("wi-fi");
+      if (value === "eth")
+        return iface.interface_type?.toLowerCase().includes("eth");
+
       // General match for other queries
       return matchesFilter(iface, value);
     });
@@ -100,11 +103,14 @@ function App() {
 
   const highlightMatch = (text, query) => {
     if (!query || !text) return text; // Handle empty values safely
-  
+
     const regex = new RegExp(`(${query})`, "gi");
     return text.split(regex).map((part, index) =>
       part.toLowerCase() === query.toLowerCase() ? (
-        <span key={index} style={{ backgroundColor: "yellow", fontWeight: "bold" }}>
+        <span
+          key={index}
+          style={{ backgroundColor: "yellow", fontWeight: "bold" }}
+        >
           {part}
         </span>
       ) : (
@@ -112,7 +118,7 @@ function App() {
       )
     );
   };
-  
+
   const handleDeleteIPv4 = async (ifaceToUpdate) => {
     const updatedInterfaces = interfaces.map((iface) =>
       iface === ifaceToUpdate ? { ...iface, ipv4_address: "N/A" } : iface
@@ -148,6 +154,12 @@ function App() {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTempValues((prev) => ({ ...prev, [name]: value }));
+  
+    // Prevent input field from appearing if ipv4_address is "N/A"
+    if (name === "ipv4_address" && value === "N/A") {
+      setEditableFields((prev) => ({ ...prev, ipv4_address: false }));
+      console.error("Cannot edit. ipv4_address is N/A.");
+    }
   };
 
   const handleKeyDownField = async (e, index, field) => {
@@ -163,8 +175,14 @@ function App() {
         setFilteredInterfaces(updatedInterfaces);
         setInterfaces(updatedInterfaces);
         setEditableFields((prev) => ({ ...prev, [field]: false }));
-        if (selectedInterface && selectedInterface[field] === interfaces[index][field]) {
-          setSelectedInterface({ ...selectedInterface, [field]: tempValues[field] });
+        if (
+          selectedInterface &&
+          selectedInterface[field] === interfaces[index][field]
+        ) {
+          setSelectedInterface({
+            ...selectedInterface,
+            [field]: tempValues[field],
+          });
         }
         console.log(`${field} updated successfully!`);
       } catch (error) {
@@ -173,12 +191,61 @@ function App() {
     }
   };
 
-  const handleAddClick = (index) => {
-    if (index !== null && index !== undefined) {
-      handleEditClick(index, ["gateway", "dns", "ipv4_address"], [interfaces[index].gateway, interfaces[index].dns, interfaces[index].ipv4_address]);
+  const handleAddClickGateway = (index) => {
+    console.log("Function handleAddClickGateway called with index:", index);
+  
+    if (typeof index === "number" && index >= 0 && index < interfaces.length) {
+      const interfaceData = interfaces[index];
+      console.log("Interface Data:", interfaceData);
+  
+      handleEditClick(index, ["gateway"], [interfaceData.gateway]);
+      console.log("Add button clicked for gateway");
     } else {
-      console.error("No interface selected");
+      console.error("No interface selected or invalid index");
     }
+    console.log("Interfaces:", interfaces);
+  };
+  
+  const handleAddClickDns = (index) => {
+    console.log("Function handleAddClickDns called with index:", index);
+  
+    if (typeof index === "number" && index >= 0 && index < interfaces.length) {
+      const interfaceData = interfaces[index];
+      console.log("Interface Data:", interfaceData);
+  
+      handleEditClick(index, ["dns"], [interfaceData.dns]);
+      console.log("Add button clicked for dns");
+    } else {
+      console.error("No interface selected or invalid index");
+    }
+    console.log("Interfaces:", interfaces);
+  };
+  
+  const handleAddClickIpv4 = (index) => {
+    console.log("Function handleAddClickIpv4 called with index:", index);
+  
+    if (typeof index === "number" && index >= 0 && index < interfaces.length) {
+      const interfaceData = interfaces[index];
+      console.log("Interface Data:", interfaceData);
+  
+      if (interfaceData.ipv4_address !== "N/A") {
+        handleEditClick(index, ["ipv4_address"], [interfaceData.ipv4_address]);
+        console.log("Add button clicked for ipv4_address");
+      } else {
+        console.error("Cannot add. ipv4_address is N/A.");
+      }
+    } else {
+      console.error("No interface selected or invalid index");
+    }
+    console.log("Interfaces:", interfaces);
+  };
+
+  const handleAddClickAll = (index) => {
+    console.log("Function handleAddClickAll called with index:", index);
+  
+    handleAddClickGateway(index);
+    handleAddClickDns(index);
+    handleAddClickIpv4(index);
   };
 
   return (
@@ -234,7 +301,9 @@ function App() {
                       {iface.status?.toLowerCase() === "inactive" && (
                         <span> {highlightMatch("(Inactive)", query)}</span>
                       )}
-                      {iface.interface_type?.toLowerCase().includes("wi-fi") && (
+                      {iface.interface_type
+                        ?.toLowerCase()
+                        .includes("wi-fi") && (
                         <span> {highlightMatch("(Wi-Fi)", query)}</span>
                       )}
                       {iface.interface_type?.toLowerCase().includes("eth") && (
@@ -321,7 +390,9 @@ function App() {
                         value={tempValues.ipv4_address}
                         onChange={handleInputChange}
                         placeholder="IPv4 address"
-                        onKeyDown={(e) => handleKeyDownField(e, 0, "ipv4_address")} // Save on Enter key press
+                        onKeyDown={(e) =>
+                          handleKeyDownField(e, 0, "ipv4_address")
+                        } // Save on Enter key press
                         onBlur={() =>
                           setEditableFields((prev) => ({
                             ...prev,
@@ -337,32 +408,38 @@ function App() {
                   <td>
                     <div className="button_Actions">
                       <button
+                        onClick={() => handleAddClickAll(0)}
+                        className={`button_Icon nputFormatted ${
+                          activeInput === "display" ? "active" : ""
+                        }`}
+                      >
+                        <i
+                          title="Add new"
+                          className="fa-regular fa-address-book"
+                        ></i>
+                      </button>
+                      <button
                         onClick={() =>
-                          handleAddClick(
+                          handleEditClick(
                             0,
-                            ["gateway"],
-                            [selectedInterface.gateway],
-                            ["dns"],
-                            [selectedInterface.dns],
                             ["ipv4_address"],
                             [selectedInterface.ipv4_address]
                           )
                         }
-                        className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
+                        className={`button_Icon nputFormatted ${
+                          activeInput === "display" ? "active" : ""
+                        }`}
                       >
-                        <i className="fa-regular fa-address-book"></i>
-                      </button>
-                      <button
-                        onClick={() => handleEditClick(0, ["ipv4_address"], [selectedInterface.ipv4_address])}
-                        className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
-                      >
-                        <i className="fa-solid fa-pen-to-square"></i>
+                        <i
+                          title="Edit"
+                          className="fa-solid fa-pen-to-square"
+                        ></i>
                       </button>
                       <button
                         onClick={() => handleDeleteIPv4(selectedInterface)}
                         className="button_Icon"
                       >
-                        <i className="fa-solid fa-trash-can"></i>
+                        <i title="Delete" className="fa-solid fa-trash-can"></i>
                       </button>
                     </div>
                   </td>
@@ -386,7 +463,9 @@ function App() {
                     <th>Gateway</th>
                     <th title="Domain Name System">DNS</th>
                     <th title="Internet Protocol version 4">IPv4</th>
-                    <th title="Actions performe on the IPv4 atribute">Actions</th>
+                    <th title="Actions performe on the IPv4 atribute">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -405,7 +484,9 @@ function App() {
                             value={tempValues.gateway}
                             onChange={handleInputChange}
                             placeholder="Gateway"
-                            onKeyDown={(e) => handleKeyDownField(e, index, "gateway")} // Save on Enter key press
+                            onKeyDown={(e) =>
+                              handleKeyDownField(e, index, "gateway")
+                            } // Save on Enter key press
                             onBlur={() =>
                               setEditableFields((prev) => ({
                                 ...prev,
@@ -426,7 +507,9 @@ function App() {
                             value={tempValues.dns}
                             onChange={handleInputChange}
                             placeholder="DNS"
-                            onKeyDown={(e) => handleKeyDownField(e, index, "dns")} // Save on Enter key press
+                            onKeyDown={(e) =>
+                              handleKeyDownField(e, index, "dns")
+                            } // Save on Enter key press
                             onBlur={() =>
                               setEditableFields((prev) => ({
                                 ...prev,
@@ -440,14 +523,17 @@ function App() {
                         )}
                       </td>
                       <td>
-                        {editableFields.ipv4_address && activeInput === index ? (
+                        {editableFields.ipv4_address &&
+                        activeInput === index ? (
                           <input
                             type="text"
                             name="ipv4_address"
                             value={tempValues.ipv4_address}
                             onChange={handleInputChange}
                             placeholder="IPv4 address"
-                            onKeyDown={(e) => handleKeyDownField(e, index, "ipv4_address")} // Save on Enter key press
+                            onKeyDown={(e) =>
+                              handleKeyDownField(e, index, "ipv4_address")
+                            } // Save on Enter key press
                             onBlur={() =>
                               setEditableFields((prev) => ({
                                 ...prev,
@@ -462,33 +548,42 @@ function App() {
                       </td>
                       <td>
                         <div className="button_Actions">
-                        <button
-                        onClick={() =>
-                          handleAddClick(
-                            index,
-                            ["gateway"],
-                            [iface.gateway],
-                            ["dns"],
-                            [iface.dns],
-                            ["ipv4_address"],
-                            [iface.ipv4_address]
-                          )
-                        }
-                        className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
-                      >
-                        <i className="fa-regular fa-address-book"></i>
-                      </button>
                           <button
-                            onClick={() => handleEditClick(index, ["ipv4_address"], [iface.ipv4_address])}
-                            className={`button_Icon nputFormatted ${activeInput === index ? "active" : ""}`}
+                            onClick={() => handleAddClickAll(index)}
+                            className={`button_Icon nputFormatted ${
+                              activeInput === "display" ? "active" : ""
+                            }`}
                           >
-                            <i className="fa-solid fa-pen-to-square"></i>
+                            <i
+                              title="Add new"
+                              className="fa-regular fa-address-book"
+                            ></i>
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleEditClick(
+                                index,
+                                ["ipv4_address"],
+                                [iface.ipv4_address]
+                              )
+                            }
+                            className={`button_Icon nputFormatted ${
+                              activeInput === index ? "active" : ""
+                            }`}
+                          >
+                            <i
+                              title="Edit"
+                              className="fa-solid fa-pen-to-square"
+                            ></i>
                           </button>
                           <button
                             onClick={() => handleDeleteIPv4(iface)}
                             className="button_Icon"
                           >
-                            <i className="fa-solid fa-trash-can"></i>
+                            <i
+                              title="Delete"
+                              className="fa-solid fa-trash-can"
+                            ></i>
                           </button>
                         </div>
                       </td>
