@@ -11,8 +11,12 @@ function App() {
   const [query, setQuery] = useState("");
   const [selectedInterface, setSelectedInterface] = useState(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const [editableIpv4s, setEditableIpv4s] = useState({});
-  const [ipv4Temp, setIpv4Temp] = useState(""); // Fixed to an empty string
+  const [editableFields, setEditableFields] = useState({});
+  const [tempValues, setTempValues] = useState({
+    ipv4_address: "",
+    gateway: "",
+    dns: ""
+  });
   const inputRef = useRef(null);  // Create a ref for the input element
 
   const fetchInterfaces = async () => {
@@ -48,19 +52,7 @@ function App() {
 
     const filtered = interfaces.filter((iface) => {
       if (value === "active") return iface.status?.toLowerCase() === "active";
-      if (value === "inactive")
-        return iface.status?.toLowerCase() === "inactive";
-      if (value === "wifi")
-        return iface.interface_type?.toLowerCase().includes("wi-fi");
-      if (value === "eth")
-        return iface.interface_type?.toLowerCase().includes("eth");
-      // Strictly include only active interfaces if "active" is typed
-      if (value === "active") return iface.status?.toLowerCase() === "active";
-
-      // Strictly include only inactive interfaces if "inactive" is typed
       if (value === "inactive") return iface.status?.toLowerCase() === "inactive";
-  
-      // Filters for "wifi" or "eth" queries
       if (value === "wifi") return iface.interface_type?.toLowerCase().includes("wi-fi");
       if (value === "eth") return iface.interface_type?.toLowerCase().includes("eth");
   
@@ -141,29 +133,27 @@ function App() {
     }
   };
 
-  const handleEditClick = (index, ipv4Value) => {
-    setEditableIpv4s((prev) => ({ ...prev, [index]: true }));
-    setIpv4Temp(ipv4Value || "");
+  const handleEditClick = (index, fields, values) => {
+    const newEditableFields = {};
+    const newTempValues = {};
+    fields.forEach((field, i) => {
+      newEditableFields[field] = true;
+      newTempValues[field] = values[i] || "";
+    });
+    setEditableFields((prev) => ({ ...prev, ...newEditableFields }));
+    setTempValues((prev) => ({ ...prev, ...newTempValues }));
     setActiveInput(index);
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewInterface({
-      ...newInterface,
-      [name]: value,
-    });
-    setActiveInput(name);
+    setTempValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdate = (e, index) => {
-    setIpv4Temp(e.target.value);
-  };
-
-  const handleKeyDownIPv4 = async (e, index) => {
+  const handleKeyDownField = async (e, index, field) => {
     if (e.key === "Enter") {
       const updatedInterfaces = interfaces.map((iface, i) =>
-        i === index ? { ...iface, ipv4_address: ipv4Temp } : iface
+        i === index ? { ...iface, [field]: tempValues[field] } : iface
       );
 
       try {
@@ -172,14 +162,22 @@ function App() {
         });
         setFilteredInterfaces(updatedInterfaces);
         setInterfaces(updatedInterfaces);
-        setEditableIpv4s((prev) => ({ ...prev, [index]: false }));
-        if (selectedInterface && selectedInterface.ipv4_address === interfaces[index].ipv4_address) {
-          setSelectedInterface({ ...selectedInterface, ipv4_address: ipv4Temp });
+        setEditableFields((prev) => ({ ...prev, [field]: false }));
+        if (selectedInterface && selectedInterface[field] === interfaces[index][field]) {
+          setSelectedInterface({ ...selectedInterface, [field]: tempValues[field] });
         }
-        console.log("IPv4 address updated successfully!");
+        console.log(`${field} updated successfully!`);
       } catch (error) {
-        console.error("Error updating IPv4 address:", error);
+        console.error(`Error updating ${field}:`, error);
       }
+    }
+  };
+
+  const handleAddClick = (index) => {
+    if (index !== null && index !== undefined) {
+      handleEditClick(index, ["gateway", "dns", "ipv4_address"], [interfaces[index].gateway, interfaces[index].dns, interfaces[index].ipv4_address]);
+    } else {
+      console.error("No interface selected");
     }
   };
 
@@ -273,20 +271,61 @@ function App() {
                   <td>{selectedInterface.status}</td>
                   <td>{selectedInterface.mac_address || "N/A"}</td>
                   <td>{selectedInterface.ip_address || "N/A"}</td>
-                  <td>{selectedInterface.gateway || "N/A"}</td>
-                  <td>{selectedInterface.dns || "N/A"}</td>
                   <td>
-                    {editableIpv4s[0] ? (
+                    {editableFields.gateway ? (
                       <input
                         type="text"
-                        value={ipv4Temp}
-                        onChange={(e) => handleUpdate(e, 0)} // Update on input change
-                        placeholder="IPv4 address"
-                        onKeyDown={(e) => handleKeyDownIPv4(e, 0)} // Save on Enter key press
+                        name="gateway"
+                        value={tempValues.gateway}
+                        onChange={handleInputChange}
+                        placeholder="Gateway"
+                        onKeyDown={(e) => handleKeyDownField(e, 0, "gateway")} // Save on Enter key press
                         onBlur={() =>
-                          setEditableIpv4s((prev) => ({
+                          setEditableFields((prev) => ({
                             ...prev,
-                            [0]: false,
+                            gateway: false,
+                          }))
+                        } // Close input when clicking outside
+                        autoFocus
+                      />
+                    ) : (
+                      <span>{selectedInterface.gateway || "N/A"}</span>
+                    )}
+                  </td>
+                  <td>
+                    {editableFields.dns ? (
+                      <input
+                        type="text"
+                        name="dns"
+                        value={tempValues.dns}
+                        onChange={handleInputChange}
+                        placeholder="DNS"
+                        onKeyDown={(e) => handleKeyDownField(e, 0, "dns")} // Save on Enter key press
+                        onBlur={() =>
+                          setEditableFields((prev) => ({
+                            ...prev,
+                            dns: false,
+                          }))
+                        } // Close input when clicking outside
+                        autoFocus
+                      />
+                    ) : (
+                      <span>{selectedInterface.dns || "N/A"}</span>
+                    )}
+                  </td>
+                  <td>
+                    {editableFields.ipv4_address ? (
+                      <input
+                        type="text"
+                        name="ipv4_address"
+                        value={tempValues.ipv4_address}
+                        onChange={handleInputChange}
+                        placeholder="IPv4 address"
+                        onKeyDown={(e) => handleKeyDownField(e, 0, "ipv4_address")} // Save on Enter key press
+                        onBlur={() =>
+                          setEditableFields((prev) => ({
+                            ...prev,
+                            ipv4_address: false,
                           }))
                         } // Close input when clicking outside
                         autoFocus
@@ -298,7 +337,23 @@ function App() {
                   <td>
                     <div className="button_Actions">
                       <button
-                        onClick={() => handleEditClick(0, selectedInterface.ipv4_address)}
+                        onClick={() =>
+                          handleAddClick(
+                            0,
+                            ["gateway"],
+                            [selectedInterface.gateway],
+                            ["dns"],
+                            [selectedInterface.dns],
+                            ["ipv4_address"],
+                            [selectedInterface.ipv4_address]
+                          )
+                        }
+                        className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
+                      >
+                        <i className="fa-regular fa-address-book"></i>
+                      </button>
+                      <button
+                        onClick={() => handleEditClick(0, ["ipv4_address"], [selectedInterface.ipv4_address])}
                         className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
                       >
                         <i className="fa-solid fa-pen-to-square"></i>
@@ -337,25 +392,66 @@ function App() {
                 <tbody>
                   {filteredInterfaces.map((iface, index) => (
                     <tr key={index}>
-                      <td>{highlightMatch(iface.name)}</td>
+                      <td>{highlightMatch(iface.name, query)}</td>
                       <td>{iface.interface_type}</td>
                       <td>{iface.status}</td>
                       <td>{iface.mac_address || "N/A"}</td>
                       <td>{iface.ip_address || "N/A"}</td>
-                      <td>{iface.gateway || "N/A"}</td>
-                      <td>{iface.dns || "N/A"}</td>
                       <td>
-                        {editableIpv4s[index] ? (
+                        {editableFields.gateway && activeInput === index ? (
                           <input
                             type="text"
-                            value={ipv4Temp}
-                            onChange={(e) => handleUpdate(e, index)} // Update on input change
-                            placeholder="IPv4 address"
-                            onKeyDown={(e) => handleKeyDownIPv4(e, index)} // Save on Enter key press
+                            name="gateway"
+                            value={tempValues.gateway}
+                            onChange={handleInputChange}
+                            placeholder="Gateway"
+                            onKeyDown={(e) => handleKeyDownField(e, index, "gateway")} // Save on Enter key press
                             onBlur={() =>
-                              setEditableIpv4s((prev) => ({
+                              setEditableFields((prev) => ({
                                 ...prev,
-                                [index]: false,
+                                gateway: false,
+                              }))
+                            } // Close input when clicking outside
+                            autoFocus
+                          />
+                        ) : (
+                          <span>{iface.gateway || "N/A"}</span>
+                        )}
+                      </td>
+                      <td>
+                        {editableFields.dns && activeInput === index ? (
+                          <input
+                            type="text"
+                            name="dns"
+                            value={tempValues.dns}
+                            onChange={handleInputChange}
+                            placeholder="DNS"
+                            onKeyDown={(e) => handleKeyDownField(e, index, "dns")} // Save on Enter key press
+                            onBlur={() =>
+                              setEditableFields((prev) => ({
+                                ...prev,
+                                dns: false,
+                              }))
+                            } // Close input when clicking outside
+                            autoFocus
+                          />
+                        ) : (
+                          <span>{iface.dns || "N/A"}</span>
+                        )}
+                      </td>
+                      <td>
+                        {editableFields.ipv4_address && activeInput === index ? (
+                          <input
+                            type="text"
+                            name="ipv4_address"
+                            value={tempValues.ipv4_address}
+                            onChange={handleInputChange}
+                            placeholder="IPv4 address"
+                            onKeyDown={(e) => handleKeyDownField(e, index, "ipv4_address")} // Save on Enter key press
+                            onBlur={() =>
+                              setEditableFields((prev) => ({
+                                ...prev,
+                                ipv4_address: false,
                               }))
                             } // Close input when clicking outside
                             autoFocus
@@ -366,9 +462,25 @@ function App() {
                       </td>
                       <td>
                         <div className="button_Actions">
+                        <button
+                        onClick={() =>
+                          handleAddClick(
+                            index,
+                            ["gateway"],
+                            [iface.gateway],
+                            ["dns"],
+                            [iface.dns],
+                            ["ipv4_address"],
+                            [iface.ipv4_address]
+                          )
+                        }
+                        className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
+                      >
+                        <i className="fa-regular fa-address-book"></i>
+                      </button>
                           <button
-                            onClick={() => handleEditClick(index, iface.ipv4_address)}
-                            className={`button_Icon nputFormatted ${activeInput === "display" ? "active" : ""}`}
+                            onClick={() => handleEditClick(index, ["ipv4_address"], [iface.ipv4_address])}
+                            className={`button_Icon nputFormatted ${activeInput === index ? "active" : ""}`}
                           >
                             <i className="fa-solid fa-pen-to-square"></i>
                           </button>
