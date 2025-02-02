@@ -4,14 +4,18 @@
     "interface_type": "Wi-Fi",
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": "N/A",
+    "ipv4_address": "tfu",
     "gateway": [
       "j",
-      "hg"
+      "h",
+      "jh",
+      "gf"
     ],
     "dns": [
-      "hj",
-      "f"
+      "h",
+      "h",
+      "bn",
+      "gh"
     ]
   },
   {
@@ -28,7 +32,7 @@
     "interface_type": "Unknown",
     "status": "Inactive",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": null,
+    "ipv4_address": "",
     "gateway": [],
     "dns": []
   },
@@ -37,7 +41,7 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:66",
-    "ipv4_address": null,
+    "ipv4_address": "uy",
     "gateway": [],
     "dns": []
   },
@@ -55,7 +59,7 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:46",
-    "ipv4_address": null,
+    "ipv4_address": "N/A",
     "gateway": [],
     "dns": []
   },
@@ -64,7 +68,7 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:47",
-    "ipv4_address": null,
+    "ipv4_address": "N/A",
     "gateway": [],
     "dns": []
   },
