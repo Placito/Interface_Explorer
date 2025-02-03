@@ -311,16 +311,16 @@ const handleAddClickDns = (index) => {
  */
   const handleAddClickIpv4 = (index) => {
     console.log("Function handleAddClickIpv4 called with index:", index);
-
+  
     if (typeof index === "number" && index >= 0 && index < interfaces.length) {
       const interfaceData = interfaces[index];
       console.log("Interface Data:", interfaceData);
-
-      if (interfaceData.ipv4_address === "N/A") {
+  
+      if (interfaceData.ipv4_address === "N/A" || interfaceData.ipv4_address === null || interfaceData.ipv4_address === "") {
         handleEditClick(index, ["ipv4_address"], [""]);
         console.log("Add button clicked for ipv4_address");
       } else {
-        console.error("Cannot add. ipv4_address is not N/A.");
+        console.error("Cannot add. ipv4_address is not N/A, null, or empty.");
       }
     } else {
       console.error("No interface selected or invalid index");
@@ -405,7 +405,7 @@ const handleAddClickDns = (index) => {
                 ref={inputRef}
               />
               {isDropdownVisible ? (
-                <ul className="autocomplete-dropdown">
+                <ul className="autocomplete-dropdown" style={{ width: inputRef.current?.offsetWidth }}>
                   {filteredInterfaces.map((iface, index) => (
                     <li
                       key={index}
@@ -530,63 +530,62 @@ const handleAddClickDns = (index) => {
                               )}
                             </td>
                             <td>
-                              {editableFields.ipv4_address ? (
-                                <input
-                                  type="text"
-                                  name="ipv4_address"
-                                  value={tempValues.ipv4_address}
-                                  onChange={handleInputChange}
-                                  placeholder="IPv4 address"
-                                  onKeyDown={(e) =>
-                                    handleKeyDownField(e, selectedInterfaceIndex, "ipv4_address")
-                                  } // Save on Enter key press
-                                  onBlur={() =>
-                                    setEditableFields((prev) => ({
-                                      ...prev,
-                                      ipv4_address: false,
-                                    }))
-                                  } // Close input when clicking outside
-                                  autoFocus
-                                />
-                              ) : (
-                                <span>{selectedInterface.ipv4_address || "N/A"}</span>
-                              )}
-                            </td>
-                            <td>
-                              <div className="button_Actions">
-                                {selectedInterface.ipv4_address === "N/A" ? (
-                                  <button
-                                    onClick={() => handleAddClickIpv4(selectedInterfaceIndex)}
-                                    className={`button_Icon nputFormatted ${
-                                      activeInput === "display" ? "active" : ""
-                                    }`}
-                                  >
-                                    <i
-                                      title="Add new"
-                                      className="fa-regular fa-address-book"
-                                    ></i>
-                                  </button>
-                                ) : (
-                                  <button
-                                    onClick={() => handleUpdateClickIpv4(selectedInterfaceIndex)}
-                                    className={`button_Icon nputFormatted ${
-                                      activeInput === "display" ? "active" : ""
-                                    }`}
-                                  >
-                                    <i
-                                      title="Edit"
-                                      className="fa-solid fa-pen-to-square"
-                                    ></i>
-                                  </button>
-                                )}
-                                <button
-                                  onClick={() => handleDeleteIPv4(selectedInterfaceIndex)}
-                                  className="button_Icon"
-                                >
-                                  <i title="Delete" className="fa-solid fa-trash-can"></i>
-                                </button>
-                              </div>
-                            </td>
+  {editableFields.ipv4_address ? (
+    <input
+      type="text"
+      name="ipv4_address"
+      value={tempValues.ipv4_address}
+      onChange={handleInputChange}
+      placeholder="IPv4 address"
+      onKeyDown={(e) => handleKeyDownField(e, selectedInterfaceIndex, "ipv4_address")} // Save on Enter key press
+      onBlur={() =>
+        setEditableFields((prev) => ({
+          ...prev,
+          ipv4_address: false,
+        }))
+      } // Close input when clicking outside
+      autoFocus
+      style={{ width: "150px" }} // Set smaller width for the input field
+    />
+  ) : (
+    <span>{selectedInterface.ipv4_address === "N/A" || selectedInterface.ipv4_address === null || selectedInterface.ipv4_address === "" ? "N/A" : selectedInterface.ipv4_address}</span>
+  )}
+</td>
+<td>
+  <div className="button_Actions">
+    {selectedInterface.ipv4_address === "N/A" || selectedInterface.ipv4_address === null || selectedInterface.ipv4_address === "" ? (
+      <button
+        onClick={() => handleAddClickIpv4(selectedInterfaceIndex)}
+        className={`button_Icon nputFormatted ${
+          activeInput === "display" ? "active" : ""
+        }`}
+      >
+        <i
+          title="Add new"
+          className="fa-regular fa-address-book"
+        ></i>
+      </button>
+    ) : (
+      <button
+        onClick={() => handleUpdateClickIpv4(selectedInterfaceIndex)}
+        className={`button_Icon nputFormatted ${
+          activeInput === "display" ? "active" : ""
+        }`}
+      >
+        <i
+          title="Edit"
+          className="fa-solid fa-pen-to-square"
+        ></i>
+      </button>
+    )}
+    <button
+      onClick={() => handleDeleteIPv4(selectedInterfaceIndex)}
+      className="button_Icon"
+    >
+      <i title="Delete" className="fa-solid fa-trash-can"></i>
+    </button>
+  </div>
+</td>
                           </tr>
                         </tbody>
                       </table>
