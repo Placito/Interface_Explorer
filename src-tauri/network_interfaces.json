@@ -49,7 +49,7 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:46",
-    "ipv4_address": "kj",
+    "ipv4_address": null,
     "gateway": [],
     "dns": []
   },

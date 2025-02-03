@@ -58,7 +58,9 @@ Make sure you have the following installed on your system:
 
 ---
 
-### Setup & Build Instructions for GitHub Codespaces
+### Setup & Build Instructions for GitHub Codespaces 
+(Tauri is a cross-platform framework, meaning it supports building applications for various operating systems. However, if you're using GitHub Codespaces, there are certain limitations. While you can view and interact with the project in the browser, the list of interfaces might not be visible, as Codespaces doesn't fully replicate the local environment required to view them. To see the interfaces locally, you may need to run the project on your local machine.)
+
 1. Install Bun
 Bun is a fast JavaScript runtime and package manager. Install it by running:
 
