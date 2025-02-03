@@ -4,13 +4,9 @@
     "interface_type": "Wi-Fi",
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": "N/A",
-    "gateway": [
-      "l"
-    ],
-    "dns": [
-      "j"
-    ]
+    "ipv4_address": "127.0.0.1",
+    "gateway": [],
+    "dns": []
   },
   {
     "name": "gif0",
@@ -124,7 +120,7 @@
     "name": "awdl0",
     "interface_type": "Ethernet",
     "status": "Active",
-    "mac_address": "32:0d:0a:1f:de:e2",
+    "mac_address": "ee:c2:97:87:99:d5",
     "ipv4_address": null,
     "gateway": [],
     "dns": []
@@ -133,7 +129,7 @@
     "name": "llw0",
     "interface_type": "Ethernet",
     "status": "Active",
-    "mac_address": "32:0d:0a:1f:de:e2",
+    "mac_address": "ee:c2:97:87:99:d5",
     "ipv4_address": null,
     "gateway": [],
     "dns": []
