@@ -18,6 +18,7 @@ Displays all network interfaces (active/inactive) on a system, with the followin
 - **Type** (Wi-Fi/Ethernet)  
 - **Status** (active/inactive)  
 - **MAC Address** (Media Access Control)
+- (optional) **Gateway** (is a device that acts as an access point between different networks) and **DNS** (Domain Name System)
 
 ### 2. **Interface Selection**
 Enables users to select a specific network interface for detailed management.
@@ -50,29 +51,58 @@ Make sure you have the following installed on your system:
    ```bash
    git clone https://github.com/yourusername/Interface_Explorer.git
    cd Interface_Explorer
+3. Install Dependencies using Bun:
+   ``bun install``
+4. Start development server:
+   ``bun run tauri dev``
 
-2. check if Cargo is Installed, if not:
-   ```bash
-   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh source $HOME/.cargo/env
-   ```
+---
 
-2. Install Dependencies using Bun:
+### Setup & Build Instructions for GitHub Codespaces
+1. Install Bun
+Bun is a fast JavaScript runtime and package manager. Install it by running:
+
+```bash
+curl -fsSL https://bun.sh/install | bash
+source ~/.bashrc  # Reload shell configuration´
+````
+
+2. Install Rust & Cargo
+Rust is required for building the Tauri application. Install Rust and Cargo (Rust’s package manager) using:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.bashrc  # Reload shell configuration
+```
+
+3. Install System Dependencies (Linux)
+If you're using GitHub Codespaces or a Linux system, install GTK dependencies for Tauri:
+
+```bash
+sudo apt update && sudo apt install -y libgtk-3-dev pkg-config
+```
+
+
+### Building the Project
+
+
+1. Install Dependencies using Bun:
    ```bash
    bun install
    ```
-3. Build the project: (running cargo build without changing to the same directory of Cargo.toml file)
+2. Build the project: (running cargo build without changing to the same directory of Cargo.toml file)
 
-   3.1. Just compile Rust backend
+   2.1. Just compile Rust backend
    ```bash
    cargo build --manifest-path src-tauri/Cargo.toml
    ```
 
-   3.2. When you are ready to release the full app
+   2.2. When you are ready to release the full app
    ```bash
    cargo tauri build --manifest-path src-tauri/Cargo.toml
    ```
 
-4. Start development server:
+3. Start development server:
    ```bash
    bun run tauri dev
    ```
