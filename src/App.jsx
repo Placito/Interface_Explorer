@@ -439,7 +439,7 @@ const handleAddClickDns = (index) => {
           </div>
         </div>
 
-        {selectedInterface && (
+        {selectedInterface ? (
           <div className="selected-interface-details">
             <table>
               <thead>
@@ -591,6 +591,8 @@ const handleAddClickDns = (index) => {
               </tbody>
             </table>
           </div>
+        ) : (
+          query && <div>No interfaces available to select</div>
         )}
 
         {isPanelVisible && !selectedInterface && (
