@@ -82,6 +82,9 @@ const handleFilterChange = (e) => {
 
   setFilteredInterfaces(filtered);
   setIsDropdownVisible(value.length > 0 && filtered.length > 0);
+  if (filtered.length === 0) {
+    setSelectedInterface(null);
+  }
 };
 
 /**
@@ -592,7 +595,7 @@ const handleAddClickDns = (index) => {
             </table>
           </div>
         ) : (
-          query && <div>No interfaces available to select</div>
+          !isDropdownVisible && query && !isPanelVisible && <div>No interfaces available to select</div>
         )}
 
         {isPanelVisible && !selectedInterface && (
