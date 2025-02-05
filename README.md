@@ -49,7 +49,7 @@ Make sure you have the following installed on your system:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/Interface_Explorer.git
+   git clone https://github.com/Placito/Interface_Explorer.git
    cd Interface_Explorer
 3. Install Dependencies using Bun:
    ``bun install``
