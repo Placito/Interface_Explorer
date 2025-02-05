@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   text-align: center;
+  padding: 20px;  
 }
 
 /* Button styles */
@@ -53,9 +54,10 @@
 }
 
 /* Table Styles */
-table {
-  width: 100%;
+.table-details {
+  width: 50vw; /* Ensures table takes up 50% of the viewport width */
   border-collapse: collapse;
+  margin: 0 auto; /* Centers the table horizontally */
   z-index: 1;
 }
 
@@ -72,7 +74,6 @@ th {
 td {
   border-top: 1px solid rgb(84, 31, 47);
   cursor: pointer;
-  width: fit-content  !important;
 }
 
 td span {
@@ -146,48 +147,6 @@ h1 {
 }
 
 /* styles for the adding form */
-.add-interface-form {
-  width: 100%;
-}
-
-.add-interface-form table {
-  border-collapse: collapse;
-}
-
-.add-interface-form table td {
-  padding: 0px;
-  background-color: rgb(84, 31, 47);
-  text-align: left;
-}
-
-.add-interface-form table td input {
-  width: 92%;
-  padding: 8px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.add-interface-form table td label {
-  font-weight: bold;
-  display: block;
-  color: #fff;
-  padding: 8px;
-  margin: 0;
-} 
-
-.add-interface-form table td button {
-  padding: 10px 15px;
-  background-color: rgb(198, 29, 33);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 5px;
-}
-
 .button_container {
   display: flex;
   flex-direction: row;
@@ -216,4 +175,51 @@ span.active {
   color: #000;
   cursor: pointer;
   margin-Left: 5px;
+}
+
+/* style SettingsGateway page */
+
+.Gateway-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline; 
+  margin: 0 10vw;
+}
+
+h2 {
+  margin: auto;
+}
+.Gateway-table {
+  width: 50vw; /* Ensures table takes up 50% of the viewport width */
+  border-collapse: collapse;
+  margin: 0 auto; 
+  text-align: center; 
+  z-index: 1;
+}
+
+.Link-home {
+  background-color: rgb(84, 31, 47);
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
+  position: fixed;
+  bottom: 20px; 
+  right: 20px;  
+  display: flex;
+  justify-content: center;  
+  align-items: center;      
+}
+
+.Gateway-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 10vw;
+}
+
+.Gateway-header {
+  margin-left: 10vw;
 }

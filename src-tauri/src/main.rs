@@ -4,6 +4,15 @@ use std::env;
 use std::fs;
 use std::path::PathBuf;
 use tauri::command;
+use std::process::Command;
+
+// Gateway data structure
+#[derive(Serialize, Deserialize)]
+struct Gateway {
+    name: String,
+    ip: String,
+    subnet_mask: String,
+}
 
 // Network data structure
 #[derive(Serialize, Deserialize)]
@@ -13,7 +22,7 @@ struct NetworkInterface {
     status: String,
     mac_address: Option<String>,
     ipv4_address: Option<String>,
-    gateway: Vec<String>, // A vector to store multiple gateways
+    gateway: Vec<Gateway>, // A vector to store multiple gateways
     dns: Vec<String>,  // A vector to store multiple DNS entries  
 }
 
@@ -48,18 +57,82 @@ fn list_network_interfaces() -> Result<Vec<NetworkInterface>, String> {
             }
         });
 
+        // Fetch gateway and DNS information
+        let gateway = get_gateway(&iface.name);
+        let dns = get_dns();
+
         interfaces.push(NetworkInterface {
             name: iface.name.clone(),
             interface_type: interface_type.to_string(),
             status: status.to_string(),
             mac_address,
             ipv4_address,
-            gateway: vec![],  // Initializing empty Vec for gateways
-            dns: vec![], // Initializing empty Vec for DNS entries
+            gateway,
+            dns,
         });
     }
 
     Ok(interfaces)
+}
+
+// Function to get gateway information
+fn get_gateway(interface_name: &str) -> Vec<Gateway> {
+    let output = Command::new("sh")
+        .arg("-c")
+        .arg(format!("ip route show dev {}", interface_name))
+        .output()
+        .expect("Failed to execute command");
+
+    let output_str = String::from_utf8_lossy(&output.stdout);
+    let mut gateways = Vec::new();
+
+    for line in output_str.lines() {
+        if line.contains("default via") {
+            if let Some(gateway_ip) = line.split_whitespace().nth(2) {
+                gateways.push(Gateway {
+                    name: "Default".to_string(),
+                    ip: gateway_ip.to_string(),
+                    subnet_mask: "255.255.255.0".to_string(), // Example subnet mask
+                });
+            }
+        }
+    }
+
+    if gateways.is_empty() {
+        gateways.push(Gateway {
+            name: "N/A".to_string(),
+            ip: "N/A".to_string(),
+            subnet_mask: "N/A".to_string(),
+        });
+    }
+
+    gateways
+}
+
+// Function to get DNS information
+fn get_dns() -> Vec<String> {
+    let output = Command::new("sh")
+        .arg("-c")
+        .arg("cat /etc/resolv.conf")
+        .output()
+        .expect("Failed to execute command");
+
+    let output_str = String::from_utf8_lossy(&output.stdout);
+    let mut dns_servers = Vec::new();
+
+    for line in output_str.lines() {
+        if line.starts_with("nameserver") {
+            if let Some(dns) = line.split_whitespace().nth(1) {
+                dns_servers.push(dns.to_string());
+            }
+        }
+    }
+
+    if dns_servers.is_empty() {
+        dns_servers.push("N/A".to_string());
+    }
+
+    dns_servers
 }
 
 // Save interfaces in a JSON file
@@ -118,7 +191,7 @@ fn delete_ipv4_address(index: usize) -> Result<(), String> {
 
 // function that only adds or updates the gateway, dns, and ipv4_address fields if their current value is "N/A"
 #[command]
-fn add_if_na(index: usize, gateway: Option<Vec<String>>, dns: Option<Vec<String>>, ipv4_address: Option<String>) -> Result<(), String> {
+fn add_if_na(index: usize, gateway: Option<Vec<Gateway>>, dns: Option<Vec<String>>, ipv4_address: Option<String>) -> Result<(), String> {
     let mut interfaces = load_network_interfaces()?; // Load existing interfaces
 
     if index >= interfaces.len() {
@@ -129,7 +202,7 @@ fn add_if_na(index: usize, gateway: Option<Vec<String>>, dns: Option<Vec<String>
 
     // Only update if the value is "N/A"
     if let Some(gateway_values) = gateway {
-        if interface.gateway.contains(&"N/A".to_string()) {
+        if interface.gateway.iter().any(|g| g.name == "N/A") {
             interface.gateway = gateway_values;
         }
     }
