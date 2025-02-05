@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api";
 import React, { useState, useRef, useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 function App() {
   const [interfaces, setInterfaces] = useState([]);
@@ -389,7 +390,6 @@ const handleAddClickDns = (index) => {
               : "Show Network Interfaces"}
           </button>
         </div>
-
         <div className="filters-container">
           <h3>Select an Interface:</h3>
           <div className="filters">
@@ -462,71 +462,24 @@ const handleAddClickDns = (index) => {
                             <td>{selectedInterface.mac_address || "N/A"}</td>
                             <td>{selectedInterface.ip_address || "N/A"}</td>
                             <td>
-                              {editableFields.gateway ? (
-                                <input
-                                  type="text"
-                                  name="gateway"
-                                  value={tempValues.gateway}
-                                  onChange={handleInputChange}
-                                  placeholder="Gateway"
-                                  onKeyDown={(e) => handleKeyDownField(e, selectedInterfaceIndex, "gateway")} // Save on Enter key press
-                                  onBlur={() =>
-                                    setEditableFields((prev) => ({
-                                      ...prev,
-                                      gateway: false,
-                                    }))
-                                  } // Close input when clicking outside
-                                  autoFocus
-                                />
-                              ) : (
-                                <span>
-                                  {selectedInterface.gateway &&
-                                  selectedInterface.gateway.length > 0
-                                    ? selectedInterface.gateway.join(", ")
-                                    : "N/A"}
-                                  {selectedInterface.gateway !== "N/A" && (
-                                    <i
-                                      title="Add new entry"
-                                      className="fa-solid fa-circle-plus"
-                                      onClick={() => handleAddClickGateway(selectedInterfaceIndex)}
-                                      style={{ cursor: "pointer", marginLeft: "5px" }}
-                                    ></i>
-                                  )}
-                                </span>
-                              )}
+                              {selectedInterface.gateway.join(", ") || "N/A"}
+                              <Link to="/settingsGateway">
+                                <i
+                                  title="Add new entry"
+                                  className="fa-solid fa-circle-plus"
+                                  onClick={() => handleAddClickGateway(selectedInterfaceIndex)}
+                                ></i>
+                              </Link>
                             </td>
                             <td>
-                              {editableFields.dns ? (
-                                <input
-                                  type="text"
-                                  name="dns"
-                                  value={tempValues.dns}
-                                  onChange={handleInputChange}
-                                  placeholder="DNS"
-                                  onKeyDown={(e) => handleKeyDownField(e, selectedInterfaceIndex, "dns")} // Save on Enter key press
-                                  onBlur={() =>
-                                    setEditableFields((prev) => ({
-                                      ...prev,
-                                      dns: false,
-                                    }))
-                                  } // Close input when clicking outside
-                                  autoFocus
-                                />
-                              ) : (
-                                <span>
-                                  {selectedInterface.dns && selectedInterface.dns.length > 0
-                                    ? selectedInterface.dns.join(", ")
-                                    : "N/A"}
-                                  {selectedInterface.dns !== "N/A" && (
-                                    <i
-                                      title="Add new entry"
-                                      className="fa-solid fa-circle-plus"
-                                      onClick={() => handleAddClickDns(selectedInterfaceIndex)}
-                                      style={{ cursor: "pointer", marginLeft: "5px" }}
-                                    ></i>
-                                  )}
-                                </span>
-                              )}
+                              {selectedInterface.dns.join(", ") || "N/A"}
+                              <Link to="/settingsDNS">
+                                <i
+                                  title="Add new entry"
+                                  className="fa-solid fa-circle-plus"
+                                  onClick={() => handleAddClickDns(selectedInterfaceIndex)}
+                                ></i>
+                              </Link>
                             </td>
                             <td>
   {editableFields.ipv4_address ? (

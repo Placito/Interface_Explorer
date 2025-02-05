@@ -211,3 +211,9 @@ span.active {
   background-color: rgb(41, 41, 42);
   color: #fff;
 }
+
+.fa-circle-plus {
+  color: #000;
+  cursor: pointer;
+  margin-Left: 5px;
+}

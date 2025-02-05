@@ -139,7 +139,7 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "80:a9:97:2c:28:41",
-    "ipv4_address": null,
+    "ipv4_address": "192.168.1.68",
     "gateway": [],
     "dns": []
   },
