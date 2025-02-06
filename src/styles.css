@@ -223,3 +223,34 @@ h2 {
 .Gateway-header {
   margin-left: 10vw;
 }
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 60vw;
+}
+
+form div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+form label {
+  background-color: rgb(84, 31, 47);
+  padding: 5px 8px 8px 8px;
+  border-radius: 6px;
+  color: #fff;
+  width: 110px;
+}
+
+form input {
+  align-self: flex-end;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 316px;
+  position: relative;
+  left: -5px;
+}

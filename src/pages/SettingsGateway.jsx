@@ -91,79 +91,82 @@ function SettingsGateway() {
 
   return (
     <div>
+      <div className="Gateway-table">
         <h2>Interface Settings</h2>
+        <br />
+        <table>
+          <thead>
+            <tr>
+              <th>Interface Name</th>
+              <th>IP Address</th>
+              <th>IPv4 Address</th>
+              <th>Subnet Mask</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{selectedInterface?.name || "N/A"}</td>
+              <td>{selectedInterface?.ip_address || "N/A"}</td>
+              <td>{selectedInterface?.ipv4_address || "N/A"}</td>
+              <td>{selectedInterface?.subnet_mask || "N/A"}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <br />
-      <table className="Gateway-table">
-        <thead>
-          <tr>
-            <th>Interface Name</th>
-            <th>IP Address</th>
-            <th>IPv4 Address</th>
-            <th>Subnet Mask</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{selectedInterface?.name || "N/A"}</td>
-            <td>{selectedInterface?.ip_address || "N/A"}</td>
-            <td>{selectedInterface?.ipv4_address || "N/A"}</td>
-            <td>{selectedInterface?.subnet_mask || "N/A"}</td>
-          </tr>
-        </tbody>
-      </table>
-          <div className="Gateway-header">
-            <h3>Add New Gateway:</h3>
-            <form onSubmit={handleSubmit}>
-              <label>
-                Gateway Name:
-                <input
-                  type="text"
-                  value={gatewayName}
-                  onChange={(e) => setGatewayName(e.target.value)}
-                  required
-                />
-              </label>
-              <br />
-              <label>
-                Gateway IP:
-                <input
-                  type="text"
-                  value={gatewayIP}
-                  onChange={(e) => setGatewayIP(e.target.value)}
-                  required
-                />
-              </label>
-              <br />
-              <label>
-                Subnet Mask:
-                <input
-                  type="text"
-                  value={subnetMask}
-                  onChange={(e) => setSubnetMask(e.target.value)}
-                  required
-                />
-              </label>
-              <br />
-              <button className="button" type="submit">
-                Add Gateway
-              </button>
-            </form>
+      <div className="Gateway-header">
+        <h3>Add New Gateway:</h3>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Gateway Name:</label>
+            <input
+              type="text"
+              value={gatewayName}
+              onChange={(e) => setGatewayName(e.target.value)}
+              required
+            />
           </div>
-          <div className="Gateway-list">
-            <h3>Gateways:</h3>
-            <ul>
-              {gateways.map((gateway, index) => (
-                <li key={index}>
-                  {gateway.name} - {gateway.ip} - {gateway.subnetMask}
-                </li>
-              ))}
-            </ul>
+          <br />
+          <div>
+            <label>Gateway IP:</label>
+            <input
+              type="text"
+              value={gatewayIP}
+              onChange={(e) => setGatewayIP(e.target.value)}
+              required
+            />
           </div>
-          <Link className="Link-home" to="/">
-            Go back to Home
-          </Link>
-        </div>
-      );
-    }
+          <br />
+          <div>
+            <label>Subnet Mask:</label>
+            <input
+              type="text"
+              value={subnetMask}
+              onChange={(e) => setSubnetMask(e.target.value)}
+              required
+            />
+          </div>
+          <br />
+          <button className="button" type="submit">
+            Add Gateway
+          </button>
+        </form>
+      </div>
+      <div className="Gateway-list">
+        <h3>Gateways:</h3>
+        <ul>
+          {gateways.map((gateway, index) => (
+            <li key={index}>
+              {gateway.name} - {gateway.ip} - {gateway.subnetMask}
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Link className="Link-home" to="/">
+        Go back to Home
+      </Link>
+    </div>
+  );
+}
 
 export default SettingsGateway;
