@@ -7,14 +7,16 @@
     "ipv4_address": "127.0.0.1",
     "gateway": [
       {
-        "name": "Cc",
-        "ip": "Cc",
-        "subnet_mask": "cc"
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
       }
     ],
     "dns": [
       "2001:8a0:c88c:5f00::1",
-      "192.168.1.254"
+      "192.168.1.254",
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254xdfy"
     ]
   },
   {
@@ -25,24 +27,9 @@
     "ipv4_address": null,
     "gateway": [
       {
-        "name": "G",
-        "ip": "G",
-        "subnet_mask": "G"
-      },
-      {
-        "name": "F",
-        "ip": "F",
-        "subnet_mask": "F"
-      },
-      {
-        "name": "B",
-        "ip": "B",
-        "subnet_mask": "B"
-      },
-      {
-        "name": "B",
-        "ip": "Bn",
-        "subnet_mask": "B"
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
       }
     ],
     "dns": [
@@ -61,6 +48,11 @@
         "name": "N/A",
         "ip": "N/A",
         "subnet_mask": "N/A"
+      },
+      {
+        "name": "F",
+        "ip": "F",
+        "subnet_mask": "F"
       }
     ],
     "dns": [
@@ -79,6 +71,11 @@
         "name": "N/A",
         "ip": "N/A",
         "subnet_mask": "N/A"
+      },
+      {
+        "name": "cnfhjn",
+        "ip": "Fhcdcn",
+        "subnet_mask": "Fhcn"
       }
     ],
     "dns": [
@@ -128,7 +125,13 @@
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:46",
     "ipv4_address": null,
-    "gateway": [],
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
     "dns": [
       "2001:8a0:c88c:5f00::1",
       "192.168.1.254"

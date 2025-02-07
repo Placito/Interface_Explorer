@@ -282,6 +282,24 @@ function App() {
     console.log("Interfaces:", interfaces);
   };
 
+  /**
+ * Handles the click event for adding a DNS entry to an interface.
+ */
+const handleAddClickDns = (index) => {
+  console.log("Function handleAddClickDns called with index:", index);
+
+  if (typeof index === "number" && index >= 0 && index < interfaces.length) {
+    const interfaceData = interfaces[index];
+    console.log("Interface Data:", interfaceData);
+
+    handleEditClick(index, ["dns"], [interfaceData.dns]);
+    console.log("Add button clicked for dns");
+  } else {
+    console.error("No interface selected or invalid index");
+  }
+  console.log("Interfaces:", interfaces);
+};
+
   return (
     <div className="center">
       <div className="p-4">
@@ -404,21 +422,37 @@ function App() {
                               </Link>
                             </td>
                             <td>
-                              {selectedInterface.dns &&
-                              selectedInterface.dns.length > 0
-                                ? selectedInterface.dns.join(", ")
-                                : "N/A"}
-                              <Link
-                                to={{
-                                  pathname: "/settingsDNS",
-                                  state: { selectedInterface },
-                                }}
-                              >
-                                <i
-                                  title="Add new entry"
-                                  className="fa-solid fa-circle-plus"
-                                ></i>
-                              </Link>
+                              {editableFields.dns ? (
+                                <input
+                                  type="text"
+                                  name="dns"
+                                  value={tempValues.dns}
+                                  onChange={handleInputChange}
+                                  placeholder="DNS"
+                                  onKeyDown={(e) => handleKeyDownField(e, selectedInterfaceIndex, "dns")} // Save on Enter key press
+                                  onBlur={() =>
+                                    setEditableFields((prev) => ({
+                                      ...prev,
+                                      dns: false,
+                                    }))
+                                  } // Close input when clicking outside
+                                  autoFocus
+                                />
+                              ) : (
+                                <span>
+                                  {selectedInterface.dns && selectedInterface.dns.length > 0
+                                    ? selectedInterface.dns.join(", ")
+                                    : "N/A"}
+                                  {selectedInterface.dns !== "N/A" && (
+                                    <i
+                                      title="Add new entry"
+                                      className="fa-solid fa-circle-plus"
+                                      onClick={() => handleAddClickDns(selectedInterfaceIndex)}
+                                      style={{ cursor: "pointer", marginLeft: "5px" }}
+                                    ></i>
+                                  )}
+                                </span>
+                              )}
                             </td>
                             <td>
                               {editableFields.ipv4_address ? (
