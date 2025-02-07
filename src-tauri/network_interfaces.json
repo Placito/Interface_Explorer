@@ -5,7 +5,13 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": "127.0.0.1",
-    "gateway": [],
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
     "dns": [
       "2001:8a0:c88c:5f00::1",
       "192.168.1.254"

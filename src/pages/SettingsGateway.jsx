@@ -13,7 +13,7 @@ function SettingsGateway() {
   const [subnetMask, setSubnetMask] = useState(
     selectedInterface?.subnet_mask || ""
   );
-  const [gateways, setGateways] = useState([]);
+  const [gateways, setGateways] = useState({});
 
   // Load gateways from local storage on component mount
   useEffect(() => {
@@ -69,7 +69,7 @@ function SettingsGateway() {
   const saveGatewaysToFile = async (gateways) => {
     try {
       const selectedIndex = selectedInterface?.index ?? 0; // Ensure index is defined
-      await invoke('add_gateways', { index: selectedIndex, newGateways: gateways }); // Use Tauri's invoke function
+      await invoke('add_gateways', { index: selectedIndex, newGateways: gateways[selectedInterface.name] }); // Use Tauri's invoke function
       console.log("Gateways saved to file successfully!");
     } catch (error) {
       console.error("Error saving gateways to file:", error);
@@ -100,7 +100,10 @@ function SettingsGateway() {
       ip: gatewayIP,
       subnet_mask: subnetMask,
     };
-    const updatedGateways = [...gateways, newGateway];
+    const updatedGateways = {
+      ...gateways,
+      [selectedInterface.name]: [...(gateways[selectedInterface.name] || []), newGateway]
+    };
     setGateways(updatedGateways);
 
     console.log("New Gateway Added:", newGateway);
@@ -125,7 +128,7 @@ function SettingsGateway() {
   const handleDeleteGateway = async (index) => {
     console.log("Function handleDeleteGateway called with index:", index);
 
-    if (typeof index === "number" && index >= 0 && index < gateways.length) {
+    if (typeof index === "number" && index >= 0 && index < (gateways[selectedInterface.name] || []).length) {
       try {
         const selectedIndex = selectedInterface?.index ?? 0; // Ensure index is defined
 
@@ -133,7 +136,10 @@ function SettingsGateway() {
         await invoke('delete_gateways', { index: selectedIndex, gatewayIndices: [index] }); // Use Tauri's invoke function
 
         // Remove the gateway from the list
-        const updatedGateways = gateways.filter((_, i) => i !== index);
+        const updatedGateways = {
+          ...gateways,
+          [selectedInterface.name]: gateways[selectedInterface.name].filter((_, i) => i !== index)
+        };
         setGateways(updatedGateways);
 
         // Save the updated gateways to local storage
@@ -147,14 +153,6 @@ function SettingsGateway() {
       console.error("Invalid index");
     }
   };
-
-  // Save selected interface details to local storage
-  useEffect(() => {
-    if (selectedInterface) {
-      localStorage.setItem("selectedInterface", JSON.stringify(selectedInterface));
-    }
-  }, [selectedInterface]);
-  
 
   return (
     <div>
@@ -222,7 +220,7 @@ function SettingsGateway() {
       <div className="Gateway-list">
         <h3>The List of the existing Gateways:</h3>
         <ul>
-          {gateways.map((gateway, index) => (
+          {(gateways[selectedInterface?.name] || []).map((gateway, index) => (
             <li key={index}>
               {gateway.name} - {gateway.ip} - {gateway.subnet_mask}
               <button
