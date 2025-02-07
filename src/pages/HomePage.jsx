@@ -24,8 +24,22 @@ function App() {
     try {
       const result = await invoke("list_network_interfaces");
       console.log(result);
-      setInterfaces(result);
-      setFilteredInterfaces(result);
+
+      // Load gateways from local storage
+      const savedGateways = localStorage.getItem("gateways");
+      const parsedGateways = savedGateways ? JSON.parse(savedGateways) : {};
+
+      // Merge gateways from JSON file and local storage
+      const mergedInterfaces = result.map((iface) => {
+        const localGateways = parsedGateways[iface.name] || [];
+        return {
+          ...iface,
+          gateway: [...iface.gateway, ...localGateways],
+        };
+      });
+
+      setInterfaces(mergedInterfaces);
+      setFilteredInterfaces(mergedInterfaces);
     } catch (error) {
       console.error("Error fetching network interfaces:", error);
     }
@@ -364,17 +378,13 @@ function App() {
                             <td>
                               {selectedInterface.gateway &&
                               selectedInterface.gateway.length > 0 &&
-                              !selectedInterface.gateway.some(
+                              selectedInterface.gateway.some(
                                 (gateway) =>
-                                  gateway.name === "N/A" &&
-                                  gateway.ip === "N/A" &&
-                                  gateway.subnet_mask === "N/A"
+                                  gateway.name !== "N/A" &&
+                                  gateway.ip !== "N/A" &&
+                                  gateway.subnet_mask !== "N/A"
                               )
-                                ? `${selectedInterface.gateway.length} ${
-                                    selectedInterface.gateway.length > 1
-                                      ? "gateways"
-                                      : "gateway"
-                                  }`
+                                ? selectedInterface.gateway.length-1
                                 : "N/A"}
                               <Link
                                 to={{
@@ -541,17 +551,13 @@ function App() {
                                 <td>
                                   {iface.gateway &&
                                   iface.gateway.length > 0 &&
-                                  !iface.gateway.some(
+                                  iface.gateway.some(
                                     (gateway) =>
-                                      gateway.name === "N/A" &&
-                                      gateway.ip === "N/A" &&
-                                      gateway.subnet_mask === "N/A"
+                                      gateway.name !== "N/A" &&
+                                      gateway.ip !== "N/A" &&
+                                      gateway.subnet_mask !== "N/A"
                                   )
-                                    ? `${iface.gateway.length} ${
-                                        iface.gateway.length > 1
-                                          ? "gateways"
-                                          : "gateway"
-                                      }`
+                                    ? iface.gateway.length-1
                                     : "N/A"}
                                 </td>
                                 <td>

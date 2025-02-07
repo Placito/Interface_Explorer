@@ -7,34 +7,9 @@
     "ipv4_address": "127.0.0.1",
     "gateway": [
       {
-        "name": "F",
-        "ip": "F",
-        "subnet_mask": "F"
-      },
-      {
-        "name": "G",
-        "ip": "G",
-        "subnet_mask": "G"
-      },
-      {
-        "name": "N",
-        "ip": "Tt",
-        "subnet_mask": "Dd"
-      },
-      {
-        "name": "L",
-        "ip": "L",
-        "subnet_mask": "L"
-      },
-      {
-        "name": "Dsf",
-        "ip": "fdsf",
-        "subnet_mask": "New"
-      },
-      {
-        "name": "F",
-        "ip": "D",
-        "subnet_mask": "Df"
+        "name": "Cc",
+        "ip": "Cc",
+        "subnet_mask": "cc"
       }
     ],
     "dns": [
@@ -153,13 +128,7 @@
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:46",
     "ipv4_address": null,
-    "gateway": [
-      {
-        "name": "N/A",
-        "ip": "N/A",
-        "subnet_mask": "N/A"
-      }
-    ],
+    "gateway": [],
     "dns": [
       "2001:8a0:c88c:5f00::1",
       "192.168.1.254"
