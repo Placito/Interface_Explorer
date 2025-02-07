@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::env;
 use std::fs;
 use std::path::PathBuf;
-use tauri::command;
 use std::process::Command;
+use tauri::command;
 
 // Gateway data structure
 #[derive(Serialize, Deserialize, Debug, Clone)]
@@ -23,12 +23,14 @@ struct NetworkInterface {
     mac_address: Option<String>,
     ipv4_address: Option<String>,
     gateway: Vec<Gateway>, // A vector to store multiple gateways
-    dns: Vec<String>,  // A vector to store multiple DNS entries  
+    dns: Vec<String>,      // A vector to store multiple DNS entries
 }
 
 // Path to save JSON file (to the root of your repository)
 fn get_data_file_path() -> PathBuf {
-    env::current_dir().expect("Failed to get current directory").join("network_interfaces.json")
+    env::current_dir()
+        .expect("Failed to get current directory")
+        .join("network_interfaces.json")
 }
 
 // List network interfaces
@@ -135,7 +137,6 @@ fn get_dns() -> Vec<String> {
     dns_servers
 }
 
-
 // Save interfaces in a JSON file
 #[command]
 fn save_network_interfaces(interfaces: Vec<NetworkInterface>) -> Result<(), String> {
@@ -192,8 +193,12 @@ fn delete_ipv4_address(index: usize) -> Result<(), String> {
 
 // function that only adds or updates the gateway, dns, and ipv4_address fields if their current value is "N/A"
 #[command]
-fn add_if_na(index: usize, gateway: Option<Vec<Gateway>>, dns: Option<Vec<String>>, ipv4_address: Option<String>) -> Result<(), String> {
-  
+fn add_if_na(
+    index: usize,
+    gateway: Option<Vec<Gateway>>,
+    dns: Option<Vec<String>>,
+    ipv4_address: Option<String>,
+) -> Result<(), String> {
     let mut interfaces = load_network_interfaces()?; // Load existing interfaces
 
     if index >= interfaces.len() {
@@ -236,11 +241,12 @@ fn save_gateways(index: usize, gateways: Vec<Gateway>) -> Result<(), String> {
         return Err("Invalid interface index".to_string());
     }
 
+    println!("interface index: {:?}", index); // Debug log
     interfaces[index].gateway = gateways; // Update gateways
 
-    println!("Updated interfaces: {:?}", interfaces); // Debug log
+    save_network_interfaces(interfaces)?; // Save changes to JSON file
 
-    save_network_interfaces(interfaces) // Save changes
+    Ok(())
 }
 
 // Function to add gateways to a specific network interface

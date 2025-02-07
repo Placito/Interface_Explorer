@@ -277,9 +277,6 @@ function App() {
             onClick={() => {
               togglePanelVisibility();
               handleButtonClick("display");
-              if (!isPanelVisible) {
-                saveInterfaces();
-              }
             }}
             className={`button ${activeButton === "display" ? "active" : ""}`}
           >
@@ -365,27 +362,37 @@ function App() {
                             <td>{selectedInterface.mac_address || "N/A"}</td>
                             <td>{selectedInterface.ip_address || "N/A"}</td>
                             <td>
-    {selectedInterface.gateway &&
-    selectedInterface.gateway.length > 0 &&
-    !selectedInterface.gateway.some(
-      (gateway) =>
-        gateway.name === "N/A" &&
-        gateway.ip === "N/A" &&
-        gateway.subnet_mask === "N/A"
-    )
-      ? `${selectedInterface.gateway.length} ${
-          selectedInterface.gateway.length > 1 ? "gateways" : "gateway"
-        }`
-      : "N/A"}
-    <Link
-      to={{
-        pathname: "/settingsGateway",
-        state: { selectedInterface },
-      }}
-    >
-      <i title="Add new entry" className="fa-solid fa-circle-plus"></i>
-    </Link>
-  </td>
+                              {selectedInterface.gateway &&
+                              selectedInterface.gateway.length > 0 &&
+                              !selectedInterface.gateway.some(
+                                (gateway) =>
+                                  gateway.name === "N/A" &&
+                                  gateway.ip === "N/A" &&
+                                  gateway.subnet_mask === "N/A"
+                              )
+                                ? `${selectedInterface.gateway.length} ${
+                                    selectedInterface.gateway.length > 1
+                                      ? "gateways"
+                                      : "gateway"
+                                  }`
+                                : "N/A"}
+                              <Link
+                                to={{
+                                  pathname: "/settingsGateway",
+                                  state: {
+                                    selectedInterface: {
+                                      ...selectedInterface,
+                                      index: selectedInterfaceIndex,
+                                    },
+                                  },
+                                }}
+                              >
+                                <i
+                                  title="Add new entry"
+                                  className="fa-solid fa-circle-plus"
+                                ></i>
+                              </Link>
+                            </td>
                             <td>
                               {selectedInterface.dns &&
                               selectedInterface.dns.length > 0

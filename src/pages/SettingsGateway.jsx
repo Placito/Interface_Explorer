@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { invoke } from '@tauri-apps/api/tauri'; // Import Tauri's invoke function
+import { invoke } from "@tauri-apps/api/tauri"; // Import Tauri's invoke function
 
 function SettingsGateway() {
   // useLocation hook to access the state passed from the HomePage
@@ -26,7 +26,10 @@ function SettingsGateway() {
   // Save selected interface details to local storage
   useEffect(() => {
     if (selectedInterface) {
-      localStorage.setItem("selectedInterface", JSON.stringify(selectedInterface));
+      localStorage.setItem(
+        "selectedInterface",
+        JSON.stringify(selectedInterface)
+      );
     }
   }, [selectedInterface]);
 
@@ -69,7 +72,10 @@ function SettingsGateway() {
   const saveGatewaysToFile = async (gateways) => {
     try {
       const selectedIndex = selectedInterface?.index ?? 0; // Ensure index is defined
-      await invoke('add_gateways', { index: selectedIndex, newGateways: gateways[selectedInterface.name] }); // Use Tauri's invoke function
+      await invoke("save_gateways", {
+        index: selectedIndex,
+        gateways: gateways[selectedInterface.name],
+      }); // Use Tauri's invoke function
       console.log("Gateways saved to file successfully!");
     } catch (error) {
       console.error("Error saving gateways to file:", error);
@@ -87,7 +93,10 @@ function SettingsGateway() {
     }
 
     // Check if the gateway IP is on the same network as the interface IP
-    if (selectedInterface && isSameNetwork(selectedInterface.ip_address, gatewayIP, subnetMask)) {
+    if (
+      selectedInterface &&
+      isSameNetwork(selectedInterface.ip_address, gatewayIP, subnetMask)
+    ) {
       showAlert(
         "The gateway IP address is in the same network as the interface IP address."
       );
@@ -102,7 +111,10 @@ function SettingsGateway() {
     };
     const updatedGateways = {
       ...gateways,
-      [selectedInterface.name]: [...(gateways[selectedInterface.name] || []), newGateway]
+      [selectedInterface.name]: [
+        ...(gateways[selectedInterface.name] || []),
+        newGateway,
+      ],
     };
     setGateways(updatedGateways);
 
@@ -128,17 +140,26 @@ function SettingsGateway() {
   const handleDeleteGateway = async (index) => {
     console.log("Function handleDeleteGateway called with index:", index);
 
-    if (typeof index === "number" && index >= 0 && index < (gateways[selectedInterface.name] || []).length) {
+    if (
+      typeof index === "number" &&
+      index >= 0 &&
+      index < (gateways[selectedInterface.name] || []).length
+    ) {
       try {
         const selectedIndex = selectedInterface?.index ?? 0; // Ensure index is defined
 
         // Save the updated gateways to a JSON file
-        await invoke('delete_gateways', { index: selectedIndex, gatewayIndices: [index] }); // Use Tauri's invoke function
+        await invoke("delete_gateways", {
+          index: selectedIndex,
+          gatewayIndices: [index],
+        }); // Use Tauri's invoke function
 
         // Remove the gateway from the list
         const updatedGateways = {
           ...gateways,
-          [selectedInterface.name]: gateways[selectedInterface.name].filter((_, i) => i !== index)
+          [selectedInterface.name]: gateways[selectedInterface.name].filter(
+            (_, i) => i !== index
+          ),
         };
         setGateways(updatedGateways);
 
