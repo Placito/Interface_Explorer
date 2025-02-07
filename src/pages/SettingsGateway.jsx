@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import axios from 'axios';
+import { invoke } from '@tauri-apps/api/tauri'; // Import Tauri's invoke function
 
 function SettingsGateway() {
   // useLocation hook to access the state passed from the HomePage
@@ -68,7 +68,8 @@ function SettingsGateway() {
   // Function to save gateways to a JSON file
   const saveGatewaysToFile = async (gateways) => {
     try {
-      await axios.post('/saveGateways', { gateways });
+      const selectedIndex = selectedInterface?.index ?? 0; // Ensure index is defined
+      await invoke('add_gateways', { index: selectedIndex, newGateways: gateways }); // Use Tauri's invoke function
       console.log("Gateways saved to file successfully!");
     } catch (error) {
       console.error("Error saving gateways to file:", error);
@@ -118,22 +119,25 @@ function SettingsGateway() {
 
   /**
    * Handles the click event for deleting the Gateway of an interface.
-   * @param {number} index - The index of the interface.
+
+  * @param {number} index - The index of the gateway to delete.
    */
   const handleDeleteGateway = async (index) => {
     console.log("Function handleDeleteGateway called with index:", index);
 
     if (typeof index === "number" && index >= 0 && index < gateways.length) {
       try {
+        const selectedIndex = selectedInterface?.index ?? 0; // Ensure index is defined
+
+        // Save the updated gateways to a JSON file
+        await invoke('delete_gateways', { index: selectedIndex, gatewayIndices: [index] }); // Use Tauri's invoke function
+
         // Remove the gateway from the list
         const updatedGateways = gateways.filter((_, i) => i !== index);
         setGateways(updatedGateways);
 
         // Save the updated gateways to local storage
         localStorage.setItem("gateways", JSON.stringify(updatedGateways));
-
-        // Save the updated gateways to a JSON file
-        saveGatewaysToFile(updatedGateways);
 
         console.log("Gateway deleted successfully!");
       } catch (error) {

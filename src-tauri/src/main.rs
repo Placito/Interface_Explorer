@@ -7,7 +7,7 @@ use tauri::command;
 use std::process::Command;
 
 // Gateway data structure
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 struct Gateway {
     name: String,
     ip: String,
@@ -15,7 +15,7 @@ struct Gateway {
 }
 
 // Network data structure
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct NetworkInterface {
     name: String,
     interface_type: String,
@@ -135,6 +135,7 @@ fn get_dns() -> Vec<String> {
     dns_servers
 }
 
+
 // Save interfaces in a JSON file
 #[command]
 fn save_network_interfaces(interfaces: Vec<NetworkInterface>) -> Result<(), String> {
@@ -192,6 +193,7 @@ fn delete_ipv4_address(index: usize) -> Result<(), String> {
 // function that only adds or updates the gateway, dns, and ipv4_address fields if their current value is "N/A"
 #[command]
 fn add_if_na(index: usize, gateway: Option<Vec<Gateway>>, dns: Option<Vec<String>>, ipv4_address: Option<String>) -> Result<(), String> {
+  
     let mut interfaces = load_network_interfaces()?; // Load existing interfaces
 
     if index >= interfaces.len() {
@@ -223,6 +225,74 @@ fn add_if_na(index: usize, gateway: Option<Vec<Gateway>>, dns: Option<Vec<String
     save_network_interfaces(interfaces)
 }
 
+// Save gateways in a JSON file
+#[command]
+fn save_gateways(index: usize, gateways: Vec<Gateway>) -> Result<(), String> {
+    println!("Received gateways: {:?}", gateways); // Debug log
+
+    let mut interfaces = load_network_interfaces()?; // Load existing interfaces
+
+    if index >= interfaces.len() {
+        return Err("Invalid interface index".to_string());
+    }
+
+    interfaces[index].gateway = gateways; // Update gateways
+
+    println!("Updated interfaces: {:?}", interfaces); // Debug log
+
+    save_network_interfaces(interfaces) // Save changes
+}
+
+// Function to add gateways to a specific network interface
+#[command]
+fn add_gateways(index: usize, new_gateways: Vec<Gateway>) -> Result<(), String> {
+    let mut interfaces = load_network_interfaces()?; // Load existing interfaces
+
+    if index >= interfaces.len() {
+        return Err("Invalid interface index".to_string());
+    }
+
+    let interface = &mut interfaces[index];
+
+    // Replace "N/A" values with new ones or append new gateways
+    for new_gateway in new_gateways {
+        if let Some(na_gateway) = interface.gateway.iter_mut().find(|g| g.name == "N/A") {
+            *na_gateway = new_gateway;
+        } else {
+            interface.gateway.push(new_gateway.clone());
+        }
+    }
+
+    save_network_interfaces(interfaces)?; // Save changes to JSON file
+
+    Ok(())
+}
+
+// Function to delete gateways from a specific network interface
+#[command]
+fn delete_gateways(index: usize, gateway_indices: Vec<usize>) -> Result<(), String> {
+    let mut interfaces = load_network_interfaces()?; // Load existing interfaces
+
+    if index >= interfaces.len() {
+        return Err("Invalid interface index".to_string());
+    }
+
+    let interface = &mut interfaces[index];
+
+    // Remove gateways by indices
+    for &gateway_index in gateway_indices.iter().rev() {
+        if gateway_index < interface.gateway.len() {
+            interface.gateway.remove(gateway_index);
+        } else {
+            return Err("Invalid gateway index".to_string());
+        }
+    }
+
+    save_network_interfaces(interfaces)?; // Save changes to JSON file
+
+    Ok(())
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
@@ -231,7 +301,10 @@ fn main() {
             load_network_interfaces,
             update_ipv4_address,
             delete_ipv4_address,
-            add_if_na
+            add_if_na,
+            save_gateways,
+            add_gateways,
+            delete_gateways
         ])
         .run(tauri::generate_context!())
         .expect("Error while running Tauri application");
