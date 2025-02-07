@@ -17,14 +17,9 @@ function App() {
     gateway: "",
     dns: "",
   });
-  // useRef is used to create a reference to the input element. The focusInput function uses this reference to focus the input element when the button is clicked.
   const inputRef = useRef(null);
-  const [selectedInterfaceIndex, setSelectedInterfaceIndex] = useState(null); // Add state for selected interface index
+  const [selectedInterfaceIndex, setSelectedInterfaceIndex] = useState(null);
 
-  /**
-   * Fetches the list of network interfaces from the backend.
-   * This function is called when the component is mounted.
-   */
   const fetchInterfaces = async () => {
     try {
       const result = await invoke("list_network_interfaces");
@@ -36,12 +31,6 @@ function App() {
     }
   };
 
-  /**
-   * Checks if any field of the interface matches the filter value.
-   * @param {Object} iface - The network interface object.
-   * @param {string} value - The filter value.
-   * @returns {boolean} - True if any field matches the filter value, false otherwise.
-   */
   const matchesFilter = (iface, value) => {
     const fields = [
       iface.mac_address,
@@ -58,11 +47,6 @@ function App() {
     );
   };
 
-  /**
-   * Handles the change event for the filter input.
-   * Filters the list of interfaces based on the input value.
-   * @param {Object} e - The event object.
-   */
   const handleFilterChange = (e) => {
     const value = e.target.value.trim().toLowerCase();
     setQuery(value);
@@ -76,7 +60,6 @@ function App() {
       if (value === "eth")
         return iface.interface_type?.toLowerCase().includes("eth");
 
-      // General match for other queries
       return matchesFilter(iface, value);
     });
 
@@ -87,24 +70,16 @@ function App() {
     }
   };
 
-  /**
-   * Handles the keydown event for the filter input.
-   * Selects the first filtered interface when the Enter key is pressed.
-   * @param {Object} e - The event object.
-   */
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && filteredInterfaces.length > 0) {
       const selected = filteredInterfaces[0];
       setSelectedInterface(selected);
       setQuery(selected.name);
       setIsDropdownVisible(false);
-      setIsPanelVisible(false); // Ensure the panel with all details is hidden
+      setIsPanelVisible(false);
     }
   };
 
-  /**
-   * Toggles the visibility of the panel displaying network interfaces.
-   */
   const togglePanelVisibility = () => {
     setSelectedInterface(null);
     setQuery("");
@@ -112,25 +87,14 @@ function App() {
     setIsPanelVisible((prev) => !prev);
   };
 
-  /**
-   * Handles the click event for a button.
-   * Sets the active button state.
-   * @param {string} buttonName - The name of the button.
-   */
   const handleButtonClick = (buttonName) => {
     setActiveButton(buttonName);
   };
 
-  /**
-   * Fetches the list of network interfaces when the component is mounted.
-   */
   useEffect(() => {
     fetchInterfaces();
   }, []);
 
-  /**
-   * Saves the list of network interfaces to the backend.
-   */
   const saveInterfaces = async () => {
     try {
       await invoke("save_network_interfaces", { interfaces });
@@ -140,14 +104,8 @@ function App() {
     }
   };
 
-  /**
-   * Highlights the matching part of the text based on the query.
-   * @param {string} text - The text to be highlighted.
-   * @param {string} query - The query to match.
-   * @returns {JSX.Element} - The highlighted text.
-   */
   const highlightMatch = (text, query) => {
-    if (!query || !text) return text; // Handle empty values safely
+    if (!query || !text) return text;
 
     const regex = new RegExp(`(${query})`, "gi");
     return text.split(regex).map((part, index) =>
@@ -164,10 +122,6 @@ function App() {
     );
   };
 
-  /**
-   * Handles the click event for deleting the IPv4 address of an interface.
-   * @param {number} index - The index of the interface.
-   */
   const handleDeleteIPv4 = async (index) => {
     console.log("Function handleDeleteIPv4 called with index:", index);
 
@@ -176,7 +130,6 @@ function App() {
         await invoke("delete_ipv4_address", { index });
         console.log("IPv4 address deleted successfully!");
 
-        // Update the state to reflect the changes in the UI
         const updatedInterfaces = interfaces.map((iface, i) =>
           i === index ? { ...iface, ipv4_address: "N/A" } : iface
         );
@@ -197,12 +150,6 @@ function App() {
     console.log("Interfaces:", interfaces);
   };
 
-  /**
-   * Handles the click event for editing a field of an interface.
-   * @param {number} index - The index of the interface.
-   * @param {Array<string>} fields - The fields to be edited.
-   * @param {Array<string>} values - The values of the fields.
-   */
   const handleEditClick = (index, fields, values) => {
     const newEditableFields = {};
     const newTempValues = {};
@@ -215,23 +162,11 @@ function App() {
     setActiveInput(index);
   };
 
-  /**
-   * Handles the change event for an input field.
-   * Updates the temporary values state.
-   * @param {Object} e - The event object.
-   */
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTempValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * Handles the keydown event for an input field.
-   * Saves the updated value when the Enter key is pressed.
-   * @param {Object} e - The event object.
-   * @param {number} index - The index of the interface.
-   * @param {string} field - The field to be updated.
-   */
   const handleKeyDownField = async (e, index, field) => {
     if (e.key === "Enter") {
       let value = tempValues[field];
@@ -272,29 +207,6 @@ function App() {
     }
   };
 
-
-  /**
-   * Handles the click event for adding a DNS entry to an interface.
-   */
-  // const handleAddClickDns = (index) => {
-  /*   console.log("Function handleAddClickDns called with index:", index);
-
-    if (typeof index === "number" && index >= 0 && index < interfaces.length) {
-      const interfaceData = interfaces[index];
-      console.log("Interface Data:", interfaceData);
-
-      handleEditClick(index, ["dns"], [interfaceData.dns]);
-      console.log("Add button clicked for dns");
-    } else {
-      console.error("No interface selected or invalid index");
-    }
-    console.log("Interfaces:", interfaces);
-  }; */
-
-  /**
-   * Handles the click event for adding an IPv4 address.
-   * This function is called when the add button is clicked.
-   */
   const handleAddClickIpv4 = (index) => {
     console.log("Function handleAddClickIpv4 called with index:", index);
 
@@ -317,11 +229,7 @@ function App() {
     }
     console.log("Interfaces:", interfaces);
   };
-  /**
-   * Handles the click event for updating an IPv4 address.
-   * This function is called when the edit button is clicked.
-   * It checks if the IPv4 address is not "N/A" and allows editing if true.
-   */
+
   const handleUpdateClickIpv4 = async (index) => {
     console.log("Function handleUpdateClickIpv4 called with index:", index);
 
@@ -333,7 +241,6 @@ function App() {
         handleEditClick(index, ["ipv4_address"], [interfaceData.ipv4_address]);
         console.log("Update button clicked for ipv4_address");
 
-        // Update the IPv4 address in the backend
         try {
           await invoke("update_ipv4_address", {
             index,
@@ -341,7 +248,6 @@ function App() {
           });
           console.log("IPv4 address updated successfully!");
 
-          // Update the state to reflect the changes in the UI
           const updatedInterfaces = interfaces.map((iface, i) =>
             i === index
               ? { ...iface, ipv4_address: tempValues.ipv4_address }
@@ -407,10 +313,10 @@ function App() {
                         setSelectedInterface(iface);
                         setQuery(iface.name);
                         setIsDropdownVisible(false);
-                        setIsPanelVisible(false); // Ensure the panel with all details is hidden
+                        setIsPanelVisible(false);
                         setSelectedInterfaceIndex(
                           interfaces.findIndex((i) => i.name === iface.name)
-                        ); // Set the index of the selected interface
+                        );
                       }}
                     >
                       {highlightMatch(iface.name, query)}
@@ -459,28 +365,32 @@ function App() {
                             <td>{selectedInterface.mac_address || "N/A"}</td>
                             <td>{selectedInterface.ip_address || "N/A"}</td>
                             <td>
-                              {selectedInterface.gateway && selectedInterface.gateway.length > 0 && selectedInterface.gateway.some(g => typeof g === 'string' && g.trim())
-                                ? selectedInterface.gateway.join(", ")
-                                : "N/A"}
-                              {/* Link to navigate to SettingsGateway with selectedInterface as state */}
-                              <Link
-                                to={{
-                                  pathname: "/settingsGateway",
-                                  state: { selectedInterface },
-                                }}
-                              >
-                                <i
-                                  title="Add new entry"
-                                  className="fa-solid fa-circle-plus"
-                                ></i>
-                              </Link>
-                            </td>
+    {selectedInterface.gateway &&
+    selectedInterface.gateway.length > 0 &&
+    !selectedInterface.gateway.some(
+      (gateway) =>
+        gateway.name === "N/A" &&
+        gateway.ip === "N/A" &&
+        gateway.subnet_mask === "N/A"
+    )
+      ? `${selectedInterface.gateway.length} ${
+          selectedInterface.gateway.length > 1 ? "gateways" : "gateway"
+        }`
+      : "N/A"}
+    <Link
+      to={{
+        pathname: "/settingsGateway",
+        state: { selectedInterface },
+      }}
+    >
+      <i title="Add new entry" className="fa-solid fa-circle-plus"></i>
+    </Link>
+  </td>
                             <td>
                               {selectedInterface.dns &&
                               selectedInterface.dns.length > 0
                                 ? selectedInterface.dns.join(", ")
                                 : "N/A"}
-                              {/* Link to navigate to SettingsDNS with selectedInterface as state */}
                               <Link
                                 to={{
                                   pathname: "/settingsDNS",
@@ -507,15 +417,15 @@ function App() {
                                       selectedInterfaceIndex,
                                       "ipv4_address"
                                     )
-                                  } // Save on Enter key press
+                                  }
                                   onBlur={() =>
                                     setEditableFields((prev) => ({
                                       ...prev,
                                       ipv4_address: false,
                                     }))
-                                  } // Close input when clicking outside
+                                  }
                                   autoFocus
-                                  style={{ width: "150px" }} // Set smaller width for the input field
+                                  style={{ width: "150px" }}
                                 />
                               ) : (
                                 <span>
@@ -609,12 +519,12 @@ function App() {
                                 key={index}
                                 onClick={() => {
                                   setSelectedInterface(iface);
-                                  setIsPanelVisible(false); // Ensure the panel with all details is hidden
+                                  setIsPanelVisible(false);
                                   setSelectedInterfaceIndex(
                                     interfaces.findIndex(
                                       (i) => i.name === iface.name
                                     )
-                                  ); // Set the index of the selected interface
+                                  );
                                 }}
                               >
                                 <td>{highlightMatch(iface.name, query)}</td>
@@ -622,8 +532,19 @@ function App() {
                                 <td>{iface.status}</td>
                                 <td>{iface.mac_address || "N/A"}</td>
                                 <td>
-                                  {iface.gateway && iface.gateway.length > 0 && iface.gateway.some(g => typeof g === 'string' && g.trim())
-                                    ? iface.gateway.join(", ")
+                                  {iface.gateway &&
+                                  iface.gateway.length > 0 &&
+                                  !iface.gateway.some(
+                                    (gateway) =>
+                                      gateway.name === "N/A" &&
+                                      gateway.ip === "N/A" &&
+                                      gateway.subnet_mask === "N/A"
+                                  )
+                                    ? `${iface.gateway.length} ${
+                                        iface.gateway.length > 1
+                                          ? "gateways"
+                                          : "gateway"
+                                      }`
                                     : "N/A"}
                                 </td>
                                 <td>
