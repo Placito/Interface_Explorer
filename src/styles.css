@@ -216,8 +216,24 @@ h2 {
 .Gateway-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   margin-left: 10vw;
+}
+
+.Gateway-list h3{
+  margin-left: 5vw;
+  margin-bottom: 0;
+}
+
+.Gateway-list li {
+  list-style-type: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 40vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
 }
 
 .Gateway-header {
@@ -253,4 +269,16 @@ form input {
   width: 316px;
   position: relative;
   left: -5px;
+}
+
+.button_Delete {
+  background-color: rgb(198, 29, 33);
+  color: #fff;
+  padding: 5px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 5px;
+  margin-left: 15px;
 }

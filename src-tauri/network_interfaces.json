@@ -54,6 +54,24 @@
     ]
   },
   {
+    "name": "anpi2",
+    "interface_type": "Ethernet",
+    "status": "Active",
+    "mac_address": "b2:0d:fe:23:7c:68",
+    "ipv4_address": null,
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
+  },
+  {
     "name": "anpi1",
     "interface_type": "Ethernet",
     "status": "Active",
@@ -76,24 +94,6 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:66",
-    "ipv4_address": null,
-    "gateway": [
-      {
-        "name": "N/A",
-        "ip": "N/A",
-        "subnet_mask": "N/A"
-      }
-    ],
-    "dns": [
-      "2001:8a0:c88c:5f00::1",
-      "192.168.1.254"
-    ]
-  },
-  {
-    "name": "anpi2",
-    "interface_type": "Ethernet",
-    "status": "Active",
-    "mac_address": "b2:0d:fe:23:7c:68",
     "ipv4_address": null,
     "gateway": [
       {
@@ -252,28 +252,10 @@
     ]
   },
   {
-    "name": "utun0",
-    "interface_type": "Ethernet",
-    "status": "Active",
-    "mac_address": "00:00:00:00:00:00",
-    "ipv4_address": null,
-    "gateway": [
-      {
-        "name": "N/A",
-        "ip": "N/A",
-        "subnet_mask": "N/A"
-      }
-    ],
-    "dns": [
-      "2001:8a0:c88c:5f00::1",
-      "192.168.1.254"
-    ]
-  },
-  {
     "name": "ap1",
     "interface_type": "Ethernet",
     "status": "Active",
-    "mac_address": "da:21:e0:d8:2b:6c",
+    "mac_address": "3a:68:1e:e8:5d:27",
     "ipv4_address": null,
     "gateway": [
       {
@@ -292,6 +274,24 @@
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "80:a9:97:2c:28:41",
+    "ipv4_address": "192.168.1.68",
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
+  },
+  {
+    "name": "utun0",
+    "interface_type": "Ethernet",
+    "status": "Active",
+    "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
     "gateway": [
       {
@@ -309,7 +309,7 @@
     "name": "awdl0",
     "interface_type": "Ethernet",
     "status": "Active",
-    "mac_address": "62:86:37:17:f3:34",
+    "mac_address": "de:e6:21:51:90:a1",
     "ipv4_address": null,
     "gateway": [
       {
@@ -327,7 +327,7 @@
     "name": "llw0",
     "interface_type": "Ethernet",
     "status": "Active",
-    "mac_address": "62:86:37:17:f3:34",
+    "mac_address": "de:e6:21:51:90:a1",
     "ipv4_address": null,
     "gateway": [
       {

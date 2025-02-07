@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import axios from 'axios';
 
 function SettingsGateway() {
   // useLocation hook to access the state passed from the HomePage
@@ -13,6 +14,21 @@ function SettingsGateway() {
     selectedInterface?.subnet_mask || ""
   );
   const [gateways, setGateways] = useState([]);
+
+  // Load gateways from local storage on component mount
+  useEffect(() => {
+    const savedGateways = localStorage.getItem("gateways");
+    if (savedGateways) {
+      setGateways(JSON.parse(savedGateways));
+    }
+  }, []);
+
+  // Save selected interface details to local storage
+  useEffect(() => {
+    if (selectedInterface) {
+      localStorage.setItem("selectedInterface", JSON.stringify(selectedInterface));
+    }
+  }, [selectedInterface]);
 
   // Custom alert function
   const showAlert = (message) => {
@@ -49,6 +65,16 @@ function SettingsGateway() {
     return true;
   };
 
+  // Function to save gateways to a JSON file
+  const saveGatewaysToFile = async (gateways) => {
+    try {
+      await axios.post('/saveGateways', { gateways });
+      console.log("Gateways saved to file successfully!");
+    } catch (error) {
+      console.error("Error saving gateways to file:", error);
+    }
+  };
+
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -59,14 +85,8 @@ function SettingsGateway() {
       return;
     }
 
-    /*  // Check if the selected interface has a valid IP address
-    if (!selectedInterface?.ip_address) {
-      showAlert("Selected interface does not have a valid IP address.");
-      return;
-    } */
-
     // Check if the gateway IP is on the same network as the interface IP
-    if (isSameNetwork(selectedInterface.ip_address, gatewayIP, subnetMask)) {
+    if (selectedInterface && isSameNetwork(selectedInterface.ip_address, gatewayIP, subnetMask)) {
       showAlert(
         "The gateway IP address is in the same network as the interface IP address."
       );
@@ -77,17 +97,60 @@ function SettingsGateway() {
     const newGateway = {
       name: gatewayName,
       ip: gatewayIP,
-      subnetMask,
+      subnet_mask: subnetMask,
     };
-    setGateways([...gateways, newGateway]);
+    const updatedGateways = [...gateways, newGateway];
+    setGateways(updatedGateways);
 
     console.log("New Gateway Added:", newGateway);
+
+    // Save the gateways to local storage
+    localStorage.setItem("gateways", JSON.stringify(updatedGateways));
+
+    // Save the gateways to a JSON file
+    saveGatewaysToFile(updatedGateways);
 
     // Reset form
     setGatewayName("");
     setGatewayIP("");
     setSubnetMask(selectedInterface?.subnet_mask || "");
   };
+
+  /**
+   * Handles the click event for deleting the Gateway of an interface.
+   * @param {number} index - The index of the interface.
+   */
+  const handleDeleteGateway = async (index) => {
+    console.log("Function handleDeleteGateway called with index:", index);
+
+    if (typeof index === "number" && index >= 0 && index < gateways.length) {
+      try {
+        // Remove the gateway from the list
+        const updatedGateways = gateways.filter((_, i) => i !== index);
+        setGateways(updatedGateways);
+
+        // Save the updated gateways to local storage
+        localStorage.setItem("gateways", JSON.stringify(updatedGateways));
+
+        // Save the updated gateways to a JSON file
+        saveGatewaysToFile(updatedGateways);
+
+        console.log("Gateway deleted successfully!");
+      } catch (error) {
+        console.error("Error deleting Gateway:", error);
+      }
+    } else {
+      console.error("Invalid index");
+    }
+  };
+
+  // Save selected interface details to local storage
+  useEffect(() => {
+    if (selectedInterface) {
+      localStorage.setItem("selectedInterface", JSON.stringify(selectedInterface));
+    }
+  }, [selectedInterface]);
+  
 
   return (
     <div>
@@ -153,11 +216,17 @@ function SettingsGateway() {
         </form>
       </div>
       <div className="Gateway-list">
-        <h3>Gateways:</h3>
+        <h3>The List of the existing Gateways:</h3>
         <ul>
           {gateways.map((gateway, index) => (
             <li key={index}>
-              {gateway.name} - {gateway.ip} - {gateway.subnetMask}
+              {gateway.name} - {gateway.ip} - {gateway.subnet_mask}
+              <button
+                onClick={() => handleDeleteGateway(index)}
+                className="button_Delete"
+              >
+                <i title="Delete" className="fa-solid fa-trash-can"></i>
+              </button>
             </li>
           ))}
         </ul>
