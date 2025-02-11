@@ -5,8 +5,19 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": "127.0.0.1",
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254",
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254xdfy"
+    ]
   },
   {
     "name": "gif0",
@@ -14,8 +25,17 @@
     "status": "Inactive",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "stf0",
@@ -23,17 +43,45 @@
     "status": "Inactive",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      },
+      {
+        "name": "F",
+        "ip": "F",
+        "subnet_mask": "F"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
-    "name": "anpi0",
+    "name": "anpi2",
     "interface_type": "Ethernet",
     "status": "Active",
-    "mac_address": "b2:0d:fe:23:7c:66",
+    "mac_address": "b2:0d:fe:23:7c:68",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      },
+      {
+        "name": "cnfhjn",
+        "ip": "Fhcdcn",
+        "subnet_mask": "Fhcn"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "anpi1",
@@ -41,17 +89,53 @@
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:67",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
+  },
+  {
+    "name": "anpi0",
+    "interface_type": "Ethernet",
+    "status": "Active",
+    "mac_address": "b2:0d:fe:23:7c:66",
+    "ipv4_address": null,
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "en4",
     "interface_type": "Ethernet",
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:46",
-    "ipv4_address": "kj",
-    "gateway": [],
-    "dns": []
+    "ipv4_address": null,
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "en5",
@@ -59,8 +143,35 @@
     "status": "Active",
     "mac_address": "b2:0d:fe:23:7c:47",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
+  },
+  {
+    "name": "en7",
+    "interface_type": "Ethernet",
+    "status": "Active",
+    "mac_address": "b2:0d:fe:23:7c:48",
+    "ipv4_address": null,
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "en1",
@@ -68,8 +179,17 @@
     "status": "Active",
     "mac_address": "36:64:78:2f:62:c0",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "en2",
@@ -77,8 +197,17 @@
     "status": "Active",
     "mac_address": "36:64:78:2f:62:c4",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "en3",
@@ -86,8 +215,17 @@
     "status": "Active",
     "mac_address": "36:64:78:2f:62:c8",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "bridge0",
@@ -95,44 +233,17 @@
     "status": "Active",
     "mac_address": "36:64:78:2f:62:c0",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
-  },
-  {
-    "name": "ap1",
-    "interface_type": "Ethernet",
-    "status": "Active",
-    "mac_address": "a2:a9:97:2c:28:41",
-    "ipv4_address": null,
-    "gateway": [],
-    "dns": []
-  },
-  {
-    "name": "en0",
-    "interface_type": "Ethernet",
-    "status": "Active",
-    "mac_address": "80:a9:97:2c:28:41",
-    "ipv4_address": "192.168.1.68",
-    "gateway": [],
-    "dns": []
-  },
-  {
-    "name": "awdl0",
-    "interface_type": "Ethernet",
-    "status": "Active",
-    "mac_address": "ee:c2:97:87:99:d5",
-    "ipv4_address": null,
-    "gateway": [],
-    "dns": []
-  },
-  {
-    "name": "llw0",
-    "interface_type": "Ethernet",
-    "status": "Active",
-    "mac_address": "ee:c2:97:87:99:d5",
-    "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "en6",
@@ -140,8 +251,53 @@
     "status": "Active",
     "mac_address": "7c:c2:c6:30:52:06",
     "ipv4_address": "192.168.1.67",
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
+  },
+  {
+    "name": "ap1",
+    "interface_type": "Ethernet",
+    "status": "Active",
+    "mac_address": "3a:68:1e:e8:5d:27",
+    "ipv4_address": null,
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
+  },
+  {
+    "name": "en0",
+    "interface_type": "Ethernet",
+    "status": "Active",
+    "mac_address": "80:a9:97:2c:28:41",
+    "ipv4_address": "192.168.1.68",
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "utun0",
@@ -149,8 +305,53 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
+  },
+  {
+    "name": "awdl0",
+    "interface_type": "Ethernet",
+    "status": "Active",
+    "mac_address": "de:e6:21:51:90:a1",
+    "ipv4_address": null,
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
+  },
+  {
+    "name": "llw0",
+    "interface_type": "Ethernet",
+    "status": "Active",
+    "mac_address": "de:e6:21:51:90:a1",
+    "ipv4_address": null,
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "utun1",
@@ -158,8 +359,17 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "utun2",
@@ -167,8 +377,17 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   },
   {
     "name": "utun3",
@@ -176,7 +395,16 @@
     "status": "Active",
     "mac_address": "00:00:00:00:00:00",
     "ipv4_address": null,
-    "gateway": [],
-    "dns": []
+    "gateway": [
+      {
+        "name": "N/A",
+        "ip": "N/A",
+        "subnet_mask": "N/A"
+      }
+    ],
+    "dns": [
+      "2001:8a0:c88c:5f00::1",
+      "192.168.1.254"
+    ]
   }
 ]
